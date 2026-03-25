@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OpenClaw — AIのオーケストレーター</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/night.css">
+  <style>
+    :root { --accent: #e879f9; --accent2: #818cf8; --green: #34d399; }
+    .reveal h1, .reveal h2, .reveal h3 { color: var(--accent); }
+    .reveal .hl  { color: var(--accent);  font-weight: bold; }
+    .reveal .hl2 { color: var(--accent2); font-weight: bold; }
+    .reveal .hl3 { color: var(--green);   font-weight: bold; }
+    .reveal table { font-size: 0.72em; }
+    .reveal table th { background: #2d2d4e; color: var(--accent2); }
+    .reveal table td { border-color: #444; }
+    .muted { color: #888; font-size: 0.8em; }
+    .big   { font-size: 1.5em; line-height: 1.4; }
+    .row   { display: flex; gap: 1.5em; justify-content: center; align-items: stretch; }
+    .card  { background: #1a1a35; border: 1px solid #444; border-radius: 8px; padding: 0.9em 1.1em; flex: 1; }
+    .card.hi { border-color: var(--accent); }
+    .card h3 { margin: 0 0 0.5em; font-size: 0.85em; color: var(--accent2); }
+    .arrow { font-size: 1.8em; display: flex; align-items: center; color: #555; }
+    .chat  { background: #111827; border-radius: 8px; padding: 1em 1.2em; font-size: 0.72em; text-align: left; line-height: 1.8; }
+    .chat .u { color: #94a3b8; }
+    .chat .a { color: var(--accent); }
+    .chat .s { color: #64748b; font-style: italic; }
+  </style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+  <!-- 1. タイトル -->
+  <section>
+    <h1>🦞 OpenClaw</h1>
+    <h3>AIを<span class="hl">使う</span>ためのAI</h3>
+    <p class="muted">— Devin でも Copilot でもない、その上のレイヤー —</p>
+  </section>
+
+  <!-- 2. よくある誤解 -->
+  <section>
+    <h2>「Devin と何が違うの？」</h2>
+    <br>
+    <p>これは<span class="hl">比較する問いではない</span></p>
+    <br>
+    <div class="row">
+      <div class="card">
+        <h3>Devin / Codex / Copilot</h3>
+        <p>専門スキルを持つ<strong>職人AI</strong></p>
+        <p class="muted">コードを書く、補完する</p>
+      </div>
+      <div class="card hi">
+        <h3>OpenClaw 🦞</h3>
+        <p>職人AIを束ねる<br><span class="hl">オーケストレーター</span></p>
+        <p class="muted">あなたの代わりに指示を出す</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. タッチポイントの問題 -->
+  <section>
+    <h2>タッチポイントの問題</h2>
+    <br>
+    <p>AI が増えるほど、<span class="hl">使う手間も増える</span></p>
+    <br>
+    <ul style="font-size:0.9em;">
+      <li>GitHub 開いて… Devin にタスク投げて…</li>
+      <li>Copilot でコード書いて…</li>
+      <li>ChatGPT で調べて…</li>
+      <li class="muted">→ 結局、全部自分が操作してる</li>
+    </ul>
+    <br>
+    <p><span class="hl3">OpenClaw はその操作ごと引き受ける</span></p>
+  </section>
+
+  <!-- 4. A2A のイメージ -->
+  <section>
+    <h2>Agent to Agents (A2A)</h2>
+    <pre style="font-size:0.62em; text-align:left; background:#0f172a; padding:1em; border-radius:8px;"><code>
+  あなた
+    │  「このリポジトリのバグ直しといて」
+    ↓  （Discordに一言）
+  ┌─────────────────────┐
+  │   OpenClaw 🦞        │  ← 普段使うチャットに常駐
+  │   オーケストレーター  │
+  └──┬──────┬───────┬───┘
+     ↓      ↓       ↓
+   Devin  GitHub   Slack
+  (実装) (PR作成) (完了通知)
+    </code></pre>
+    <p class="muted">あなたはチャットに一言言うだけ</p>
+  </section>
+
+  <!-- 5. 何が違うか整理 -->
+  <section>
+    <h2>役割の比較</h2>
+    <table>
+      <thead>
+        <tr><th>ツール</th><th>役割</th><th>いる場所</th><th>記憶</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ChatGPT</td><td>Q&amp;A</td><td>ブラウザ</td><td>なし</td></tr>
+        <tr><td>Copilot</td><td>コード補完</td><td>エディタ</td><td>なし</td></tr>
+        <tr><td>Devin</td><td>自律コーディング</td><td>タスク単位</td><td>タスク内</td></tr>
+        <tr style="background:#1e1040;">
+          <td><strong>OpenClaw 🦞</strong></td>
+          <td><span class="hl">オーケストレーター</span></td>
+          <td><span class="hl">生活の中に常駐</span></td>
+          <td><span class="hl">ずっと覚えてる</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="muted">代替ではなく、<strong>上のレイヤー</strong></p>
+  </section>
+
+  <!-- 6. 常駐が生む価値 -->
+  <section>
+    <h2>「常駐」が生む価値</h2>
+    <br>
+    <ul>
+      <li>💬 <span class="hl2">普段使うチャットに居る</span> — Discord / Slack / Telegram</li>
+      <li>🧠 <span class="hl2">文脈を覚えている</span> — 「昨日の話の続きだけど…」が通じる</li>
+      <li>⚡ <span class="hl2">頼んでないのに動く</span> — CI 監視、メール確認、定期タスク</li>
+      <li>🔒 <span class="hl2">ローカルで動く</span> — プライベートな環境もそのまま</li>
+    </ul>
+  </section>
+
+  <!-- 7. デモイメージ -->
+  <section>
+    <h2>実際の会話イメージ</h2>
+    <div class="chat">
+      <p><span class="u">あなた:</span> 昨日のAPIのバグ直してDevinに投げといて</p>
+      <p><span class="a">くろえ:</span> 確認します。リポジトリ見てDevinにタスク作りました 🖤</p>
+      <br>
+      <p><span class="u">あなた:</span> 今夜の予定は？</p>
+      <p><span class="a">くろえ:</span> 19時にミーティングがあります。あと雨が降りそうです。</p>
+      <br>
+      <p><span class="s">（しばらく後、何も言っていないのに）</span></p>
+      <p><span class="a">くろえ:</span> さっきのPR、CIが落ちました。Devinに再指示しますか？</p>
+    </div>
+  </section>
+
+  <!-- 8. まとめ -->
+  <section>
+    <h2>まとめ</h2>
+    <br>
+    <p class="big">OpenClaw は</p>
+    <p class="big"><span class="hl">AIを使うためのAI</span></p>
+    <br>
+    <p>Devin を使う手間ごと、任せられる</p>
+    <p class="muted">あなたのタッチポイントは、チャット一つでいい</p>
+    <br>
+    <p class="muted">https://docs.openclaw.ai</p>
+  </section>
+
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>Reveal.initialize({ hash: true, transition: 'fade' });</script>
+</body>
+</html>
