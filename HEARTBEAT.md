@@ -1,5 +1,15 @@
 # HEARTBEAT.md
 
-# Keep this file empty (or with only comments) to skip heartbeat API calls.
+## 定期タスク
 
-# Add tasks below when you want the agent to check something periodically.
+### git auto-push
+差分があればcommit & pushする。
+
+```bash
+cd /home/komachi/.openclaw/workspace
+if [ -n "$(git status --porcelain)" ]; then
+  git add -A
+  git commit -m "auto: heartbeat sync $(date '+%Y-%m-%d %H:%M')"
+  git push
+fi
+```
