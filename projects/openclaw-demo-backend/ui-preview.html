@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OpenClaw Demo Todo UI Preview</title>
+  <style>
+    body { font-family: Inter, system-ui, sans-serif; background:#0b1020; color:#e6eaff; margin:0; }
+    .wrap { max-width: 860px; margin: 40px auto; padding: 0 16px; }
+    .card { background:#141b34; border:1px solid #273056; border-radius:14px; padding:20px; box-shadow:0 8px 30px rgba(0,0,0,.2); }
+    h1 { margin:0 0 8px; font-size:26px; }
+    .muted{ color:#a7b1d6; margin-bottom:18px; }
+    .row { display:flex; gap:10px; margin-bottom:14px; }
+    input { flex:1; padding:10px 12px; border-radius:10px; border:1px solid #364175; background:#0f1530; color:#e6eaff; }
+    button { border:0; border-radius:10px; padding:10px 14px; cursor:pointer; font-weight:600; }
+    .primary { background:#7c9bff; color:#0b1020; }
+    .secondary { background:#2a335f; color:#e6eaff; }
+    ul { list-style:none; padding:0; margin:0; display:grid; gap:10px; }
+    li { background:#0f1530; border:1px solid #273056; border-radius:12px; padding:12px; display:flex; justify-content:space-between; align-items:center; gap:10px; }
+    .done { text-decoration: line-through; color:#8ea0d9; }
+    .pill { font-size:12px; padding:3px 8px; border-radius:999px; }
+    .pill.ok { background:#1b4d35; color:#8cf2b4; }
+    .pill.ng { background:#4f2a2a; color:#ffadad; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>OpenClaw Demo Todo API</h1>
+      <div class="muted">FastAPI + minimal web UI（勉強会デモ用）</div>
+      <div class="row">
+        <input placeholder="新しいTODO（例: write release note）" value="prepare lightning talk" />
+        <button class="primary">追加</button>
+      </div>
+      <ul>
+        <li>
+          <div>
+            <div>#1 prepare demo</div>
+            <div class="pill ng">open</div>
+          </div>
+          <div><button class="secondary">完了にする</button></div>
+        </li>
+        <li>
+          <div>
+            <div class="done">#2 ship feature</div>
+            <div class="pill ok">done</div>
+          </div>
+          <div><button class="secondary">完了にする</button></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
