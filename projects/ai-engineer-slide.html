@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIを使うためのAI設計</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/night.css">
+  <style>
+    :root {
+      --accent: #60a5fa;   /* blue-400 */
+      --dim:    #93c5fd;   /* blue-300 */
+      --mute:   #64748b;
+    }
+    .reveal h1, .reveal h2, .reveal h3 { color: #e2e8f0; font-weight: 600; }
+    .reveal .hl  { color: var(--accent); font-weight: bold; }
+    .reveal .dim { color: var(--dim); }
+    .muted { color: var(--mute); font-size: 0.82em; }
+    .big   { font-size: 1.35em; line-height: 1.6; }
+    .sm    { font-size: 0.8em; }
+    .row   { display: flex; gap: 1.2em; justify-content: center; align-items: stretch; }
+    .card  { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 0.85em 1em; flex: 1; }
+    .card.hi { border-color: var(--accent); }
+    .card h3 { margin: 0 0 0.5em; font-size: 0.78em; color: var(--dim); text-transform: uppercase; letter-spacing: 0.05em; }
+    .code  { background: #0f172a; border-radius: 8px; padding: 0.9em 1.2em; font-size: 0.6em; text-align: left; line-height: 1.8; font-family: monospace; border: 1px solid #1e3a5f; }
+    .quote { background: #1e293b; border-left: 3px solid var(--accent); padding: 0.7em 1.2em; font-size: 0.88em; text-align: left; border-radius: 0 6px 6px 0; }
+    .timeline { list-style: none; padding: 0; text-align: left; }
+    .timeline li { padding: 0.6em 0 0.6em 1.6em; border-left: 2px solid #334155; position: relative; font-size: 0.82em; }
+    .timeline li::before { content: '○'; position: absolute; left: -0.6em; color: var(--mute); font-size: 0.9em; }
+    .timeline li.now { border-color: var(--accent); }
+    .timeline li.now::before { content: '●'; color: var(--accent); }
+    .warn { background: #1e293b; border: 1px solid #475569; border-radius: 6px; padding: 0.65em 1em; font-size: 0.8em; }
+    table { font-size: 0.74em; }
+    table th { background: #1e293b; color: var(--dim); border-color: #334155; }
+    table td { border-color: #334155; }
+  </style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+  <!-- 1. タイトル -->
+  <section>
+    <h1 style="font-size:1.8em;">AIを使うための<br><span class="hl">AI設計</span></h1>
+    <p class="muted">— A2A オーケストレーターパターン入門 —</p>
+    <br>
+    <p class="muted sm">2026.04 / エンジニア勉強会</p>
+  </section>
+
+  <!-- 2. 出発点 -->
+  <section>
+    <h2>ある人の環境を見て、<span class="hl">未来を感じた</span></h2>
+    <br>
+    <div class="quote">
+      「Devin に指示するのすらめんどいよね？<br>
+      その指示を OpenClaw にやらせようっていう発想。<br>
+      いわゆる A2A（Agent to Agents）。」
+    </div>
+    <br>
+    <p class="muted sm">OpenClaw = Discord 常駐の AI オーケストレーター</p>
+    <br>
+    <p>AIが増えるほど<span class="hl">使う手間も増える</span> — その問いが出発点</p>
+  </section>
+
+  <!-- 3. A2A コンセプト -->
+  <section>
+    <h2>A2A — Agent to Agents</h2>
+    <br>
+    <div class="code">
+あなた
+  │  「このバグ直しといて」（一言）
+  ↓
+┌───────────────────────────────┐
+│  オーケストレーター AI            │  ← ここだけ話しかける
+└──┬──────┬──────┬──────────────┘
+   ↓      ↓      ↓
+ Devin  GitHub  Discord
+(実装) (PR作成) (通知)
+    </div>
+    <br>
+    <p class="sm">専門 AI の<span class="hl">代替ではなく、ハブ</span>になる</p>
+    <p class="muted sm">OpenClaw でこれを体験した — が、2026年初頭に Anthropic の OAuth 禁止で使えなくなった</p>
+  </section>
+
+  <!-- 4. 再構築 -->
+  <section>
+    <h2>Claude Code + MCP で再構築した</h2>
+    <br>
+    <div class="row">
+      <div class="card">
+        <h3>MCP（Model Context Protocol）</h3>
+        <p>AI とツールをつなぐ<span class="hl">標準コンセント</span><br>GitHub / Slack / Discord… 誰でも接続できる</p>
+      </div>
+      <div class="card hi">
+        <h3>Harness Engineering</h3>
+        <p><span class="hl">Agent = Model + Harness</span><br>
+        「AI を使う設計」がエンジニアリングの一分野に<br>
+        人間の暗黙知をハーネスとして外部化する</p>
+      </div>
+    </div>
+    <br>
+    <p class="muted sm">やっていたことが、そういう名前のエンジニアリング分野だったと後から知った</p>
+  </section>
+
+  <!-- 5. 業界が証明した -->
+  <section>
+    <h2>その直後に、<span class="hl">業界が証明した</span></h2>
+    <br>
+    <div class="quote">
+      Claude Managed Agents — 2026.04 発表<br>
+      <span class="muted sm">A2A オーケストレーションがプラットフォーム化</span>
+    </div>
+    <br>
+    <ul class="sm" style="text-align:left; max-width:640px; margin:0 auto;">
+      <li>従来：エージェント実装に数ヶ月のインフラ開発</li>
+      <li>今：タスク + ツール + ガードレール定義だけ</li>
+      <li>マルチエージェント調整が標準 API で実装できる</li>
+      <li>Notion / Rakuten / Asana 等が導入済み</li>
+    </ul>
+    <br>
+    <p class="dim">「Devin への指示もめんどい」という問いは<span class="hl">正しかった</span></p>
+  </section>
+
+  <!-- 6. 設計の本質 -->
+  <section>
+    <h2>設計上の問い</h2>
+    <br>
+    <table>
+      <thead>
+        <tr><th>任せていいこと</th><th>人間が判断すること</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>情報収集・要約</td><td>意思決定・優先度</td></tr>
+        <tr><td>定型タスクの実行</td><td>本番環境への反映</td></tr>
+        <tr><td>初稿・草案の作成</td><td>公開前の最終確認</td></tr>
+        <tr><td>モニタリング・通知</td><td>インシデント対応</td></tr>
+      </tbody>
+    </table>
+    <br>
+    <div class="warn">
+      ⚠ ループ注意 — AI が AI に無限に指示を出さないよう<br>
+      <strong>承認ステップ</strong>か<strong>上限</strong>を設計に組み込む
+    </div>
+  </section>
+
+  <!-- 7. 今すぐ作れるもの -->
+  <section>
+    <h2>今すぐ作れるもの</h2>
+    <br>
+    <div class="row">
+      <div class="card">
+        <h3>セキュリティ監視</h3>
+        <p>使用ライブラリの新着 CVE を毎日チェック → Discord に通知</p>
+        <p class="muted">「Amon2 に脆弱性が出ました」</p>
+      </div>
+      <div class="card">
+        <h3>CI 連携</h3>
+        <p>テスト失敗 → 原因分析 → 修正案を PR コメントに投稿</p>
+        <p class="muted">「このエラーは XXX が原因です」</p>
+      </div>
+      <div class="card">
+        <h3>文脈の継続</h3>
+        <p>「昨日の話の続きで…」が通じる日常アシスタント</p>
+        <p class="muted">会話ログ × 記憶管理</p>
+      </div>
+    </div>
+    <br>
+    <p class="muted sm">共通点：人間のタッチポイントは「一言」だけ</p>
+  </section>
+
+  <!-- 8. まとめ -->
+  <section>
+    <h2>まとめ</h2>
+    <br>
+    <p class="big"><span class="hl">AIの使い方を設計するのも<br>エンジニアの仕事になった</span></p>
+    <br>
+    <ul class="sm" style="text-align:left; max-width:600px; margin:0 auto;">
+      <li>ツールを「使う」のではなく、<strong>ハブを「作る」</strong></li>
+      <li>MCP と Managed Agents で標準化が整ってきた今がチャンス</li>
+      <li>設計の本質は「どこを人間が持つか」</li>
+    </ul>
+    <br>
+    <p class="muted">ループ防止だけ忘れずに</p>
+  </section>
+
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>Reveal.initialize({ hash: true, transition: 'fade' });</script>
+</body>
+</html>
