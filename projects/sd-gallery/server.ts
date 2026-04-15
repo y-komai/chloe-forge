@@ -3,8 +3,8 @@ import { Database } from "bun:sqlite";
 import { readFile } from "fs/promises";
 import { join } from "path";
 
-const DB_PATH    = "/home/komachi/sd-images/gallery.db";
-const IMAGES_DIR = "/home/komachi/sd-images";
+const DB_PATH    = "/mnt/c/Users/ykoma/sd-images/gallery.db";
+const IMAGES_DIR = "/mnt/c/Users/ykoma/sd-images";
 const PORT       = 3210;
 
 // Init DB
