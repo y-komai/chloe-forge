@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIが増えると、逆に大変になる話</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/night.css">
+  <style>
+    :root {
+      --accent: #60a5fa;
+      --dim:    #93c5fd;
+      --mute:   #64748b;
+      --warn:   #f59e0b;
+      --bg-card: #1e293b;
+      --border:  #334155;
+    }
+    .reveal h1, .reveal h2, .reveal h3 { color: #e2e8f0; font-weight: 600; }
+    .reveal .hl  { color: var(--accent); font-weight: bold; }
+    .reveal .dim { color: var(--dim); }
+    .reveal .warn-text { color: var(--warn); }
+    .muted { color: var(--mute); font-size: 0.82em; }
+    .big   { font-size: 1.35em; line-height: 1.6; }
+    .sm    { font-size: 0.8em; }
+    .row   { display: flex; gap: 1.2em; justify-content: center; align-items: stretch; }
+    .card  {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85em 1em;
+      flex: 1;
+    }
+    .card.hi { border-color: var(--accent); }
+    .card h3 {
+      margin: 0 0 0.5em;
+      font-size: 0.78em;
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .quote {
+      background: var(--bg-card);
+      border-left: 3px solid var(--accent);
+      padding: 0.7em 1.2em;
+      font-size: 0.88em;
+      text-align: left;
+      border-radius: 0 6px 6px 0;
+    }
+
+    /* A2A diagram */
+    .diagram {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      margin: 1em auto;
+    }
+    .diagram-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2em;
+    }
+    .diagram-box {
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 0.6em 1.4em;
+      font-size: 0.85em;
+      color: #e2e8f0;
+      text-align: center;
+      min-width: 100px;
+    }
+    .diagram-box.human {
+      border-color: #a78bfa;
+      background: #1e1b4b;
+    }
+    .diagram-box.hub {
+      border-color: var(--accent);
+      background: #172554;
+      font-weight: bold;
+      padding: 0.8em 2em;
+      font-size: 1em;
+    }
+    .diagram-box.tool {
+      border-color: var(--border);
+      font-size: 0.78em;
+    }
+    .diagram-arrow {
+      color: var(--mute);
+      font-size: 1.4em;
+      line-height: 1;
+      padding: 0.2em 0;
+    }
+    .diagram-arrows-down {
+      display: flex;
+      gap: 4.5em;
+      color: var(--mute);
+      font-size: 1.2em;
+      padding: 0.2em 0;
+    }
+    .diagram-label {
+      font-size: 0.65em;
+      color: var(--mute);
+      margin-top: -0.2em;
+    }
+
+    /* pain points */
+    .pain-list {
+      list-style: none;
+      padding: 0;
+      text-align: left;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .pain-list li {
+      padding: 0.5em 0 0.5em 1.8em;
+      position: relative;
+      font-size: 0.88em;
+    }
+    .pain-list li::before {
+      content: '😩';
+      position: absolute;
+      left: 0;
+    }
+
+    /* timeline-like list */
+    .story-list {
+      list-style: none;
+      padding: 0;
+      text-align: left;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .story-list li {
+      padding: 0.5em 0 0.5em 1.6em;
+      border-left: 2px solid var(--border);
+      position: relative;
+      font-size: 0.82em;
+    }
+    .story-list li::before {
+      content: '→';
+      position: absolute;
+      left: -0.7em;
+      color: var(--accent);
+      font-weight: bold;
+    }
+
+    /* logo row */
+    .logo-row {
+      display: flex;
+      gap: 2em;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 0.8em 0;
+    }
+    .logo-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5em 1.2em;
+      font-size: 0.78em;
+      color: var(--dim);
+    }
+  </style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+  <!-- 1. タイトル -->
+  <section>
+    <h1 style="font-size:1.6em;">AIが増えると、<br><span class="hl">逆に大変になる</span>話</h1>
+    <p class="muted">〜 A2A オーケストレーションという考え方 〜</p>
+    <br>
+    <p class="muted sm">2026.04 / エンジニア勉強会<br>y-komai</p>
+  </section>
+
+  <!-- 2. あなたの隣のAI -->
+  <section>
+    <h2>あなたの隣の<span class="hl">AI</span></h2>
+    <br>
+    <p style="font-size:1.1em;">Copilot、使ってますか？</p>
+    <p class="dim sm">Devin 使い始めた人もいる？ChatGPT は日常？</p>
+    <br>
+    <div class="row">
+      <div class="card">
+        <h3>コード補完</h3>
+        <p>GitHub Copilot</p>
+      </div>
+      <div class="card">
+        <h3>自律開発</h3>
+        <p>Devin / Claude Code</p>
+      </div>
+      <div class="card">
+        <h3>汎用チャット</h3>
+        <p>ChatGPT / Claude</p>
+      </div>
+    </div>
+    <br>
+    <p>でも……<span class="hl">切り替えるの、面倒じゃないですか？</span></p>
+  </section>
+
+  <!-- 3. AIが増えると、人間の仕事も増える -->
+  <section>
+    <h2>AIが増えると、<br><span class="hl">人間の仕事も増える</span></h2>
+    <br>
+    <ul class="pain-list">
+      <li>Copilot を開いて指示する</li>
+      <li>Devin を開いて指示する</li>
+      <li>ChatGPT を開いて指示する</li>
+      <li>それぞれのコンテキストを人間が橋渡しする</li>
+    </ul>
+    <br>
+    <div class="quote">
+      AI管理コストのパラドックス：<br>
+      <span class="hl">便利にするために導入したAIを管理する手間</span>が増えていく
+    </div>
+    <br>
+    <p class="dim">ここ、なんとかならないか？</p>
+  </section>
+
+  <!-- 4. そのAIたちに指示するAIがいたら？ -->
+  <section>
+    <h2>そのAIたちに指示する<br><span class="hl">AIがいたら？</span></h2>
+    <br>
+    <div class="diagram">
+      <div class="diagram-box human">🙋 あなた（一言だけ）</div>
+      <div class="diagram-arrow">↓</div>
+      <div class="diagram-box hub">🎯 オーケストレーター AI</div>
+      <div class="diagram-label">タッチポイントはここだけ</div>
+      <div class="diagram-arrows-down">
+        <span>↓</span><span>↓</span><span>↓</span>
+      </div>
+      <div class="diagram-row">
+        <div class="diagram-box tool">Devin<br><span class="muted">実装</span></div>
+        <div class="diagram-box tool">GitHub<br><span class="muted">PR管理</span></div>
+        <div class="diagram-box tool">Web検索<br><span class="muted">調査</span></div>
+      </div>
+    </div>
+    <br>
+    <p class="sm">A2A = <span class="hl">Agent to Agents</span>：AIがAIに指示を出す構造</p>
+  </section>
+
+  <!-- 5. 実際にやってた人がいた -->
+  <section>
+    <h2>実際にやってた人が<span class="hl">いた</span></h2>
+    <br>
+    <div class="quote">
+      「Devin を使うのが悪いんじゃなくて、<br>
+      <span class="hl">OpenClaw から Devin に指示させればいい</span>。」
+    </div>
+    <p class="muted sm" style="text-align:right; max-width:640px; margin:0.3em auto;">— ats san（OpenClaw 開発者）</p>
+    <br>
+    <ul class="story-list">
+      <li><strong>OpenClaw</strong> = Discord 常駐のAIオーケストレーター</li>
+      <li>Discord で話しかけると、GitHub や Devin が動く</li>
+      <li>まさに A2A を実践していた</li>
+      <li class="warn-text">しかし Anthropic の OAuth ポリシー変更で<strong>使用不可</strong>に</li>
+    </ul>
+  </section>
+
+  <!-- 6. なので自分で作った -->
+  <section>
+    <h2>なので<span class="hl">自分で作った</span></h2>
+    <br>
+    <div class="row">
+      <div class="card hi">
+        <h3>Claude Code</h3>
+        <p>Anthropic 公式の<br>開発エージェント</p>
+      </div>
+      <div class="card hi">
+        <h3>MCP</h3>
+        <p>AI とツールをつなぐ<br><span class="hl">標準コンセント</span></p>
+      </div>
+      <div class="card">
+        <h3>Discord</h3>
+        <p>人間との<br>タッチポイント</p>
+      </div>
+    </div>
+    <br>
+    <p class="sm">Discord に話しかけると、<span class="hl">GitHub も Web も動く</span></p>
+    <p class="muted sm">MCP = Model Context Protocol（AIとツールの接続規格。深入りしません）</p>
+  </section>
+
+  <!-- 7. 業界も同じ方向に向かっていた -->
+  <section>
+    <h2>業界も同じ方向に<br><span class="hl">向かっていた</span></h2>
+    <br>
+    <div class="quote">
+      <strong>Claude Managed Agents</strong> — 2026年4月 発表<br>
+      <span class="muted sm">A2A オーケストレーションがプラットフォーム化</span>
+    </div>
+    <br>
+    <div class="logo-row">
+      <div class="logo-item">Notion</div>
+      <div class="logo-item">Rakuten</div>
+      <div class="logo-item">Asana</div>
+      <div class="logo-item">…etc</div>
+    </div>
+    <p class="muted sm">大手企業が本番環境で導入</p>
+    <br>
+    <p class="big"><span class="dim">あの問いは</span><span class="hl">正しかった</span></p>
+  </section>
+
+  <!-- 8. まとめ -->
+  <section>
+    <h2>まとめ</h2>
+    <br>
+    <p class="big">
+      AIを使いこなすには、<br>
+      <span class="hl">AIをどう組み合わせるかを<br>設計する力</span>が必要になる
+    </p>
+    <br>
+    <p style="font-size:1.05em;">それは<span class="hl">エンジニアが得意なこと</span></p>
+    <br><br>
+    <p class="dim" style="font-size:1.1em;">→ 実際に動いてるところを見てもらいましょう</p>
+    <p class="muted sm">（デモへ）</p>
+  </section>
+
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>Reveal.initialize({
+  hash: true,
+  transition: 'fade',
+  slideNumber: true
+});</script>
+</body>
+</html>
