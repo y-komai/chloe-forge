@@ -10,8 +10,10 @@ originSessionId: ac8e1991-a2be-497d-97fe-21a55765626d
 1. **画像の永続化**: WSL `~/sd-images/` → `/mnt/c/Users/ykoma/sd-images/` に移動
    - gallery.dbも一緒に移動
    - server.tsのIMAGES_DIR定数を更新
-2. **Discordログcronにgit pullを追加**: `~/.claude/scripts/discord-log-save.ts` の先頭に `git pull --rebase origin main` を追加（pull→ログ追加→push）
+2. **Discordログcronにgit pullを追加**: `~/.claude/scripts/discord-log-save.ts` の先頭に `git pull origin main` を追加（pull→ログ追加→push）
 3. **sd-galleryの起動元統一**: WSL `~/chloe-forge/` からgit pullしてそこで起動するように変更（`~/.claude/projects/` は使わない）
+
+**デプロイ戦略（決定済み）**: sd-galleryのコードを変更・pushするときは、くろえがそのままSSHでWSLに入りpull + 再起動までやる（常駐プロセスなし、cron不要）
 
 ### SD Gallery 追加機能
 - [ ] **ルームウェアシーン追加**（タンクトップ+ショーパン/ジェラピケ系）
