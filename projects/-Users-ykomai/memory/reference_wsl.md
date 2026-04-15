@@ -36,3 +36,32 @@ scp -i ~/.ssh/id_wsl -P 2222 <local> komachi@192.168.11.40:<remote>
 
 `com.chloe.discord-log-save` は WSL移行に伴い無効化済み（2026-04-15）。
 ファイルは `~/Library/LaunchAgents/com.chloe.discord-log-save.plist` に残っている。
+
+## SD Gallery
+
+- **ギャラリーURL:** `http://192.168.11.40:3210/`
+- **サーバーコード:** `~/chloe-forge/projects/sd-gallery/server.ts`（WSL）
+- **DB:** `/mnt/c/Users/ykoma/sd-images/gallery.db`
+- **画像:** `/mnt/c/Users/ykoma/sd-images/scenes/<slug>/001.png〜010.png`
+- **SD API:** `http://192.168.11.40:7860/`（Windows上のStabilityMatrix/A1111）
+
+### デプロイ手順（コード変更時）
+
+1. Macでコードを変更
+2. `git push origin main`
+3. WSHでpull + サーバー再起動：
+```bash
+ssh -i ~/.ssh/id_wsl -p 2222 komachi@192.168.11.40 \
+  "cd ~/chloe-forge && git pull origin main && fuser -k 3210/tcp 2>/dev/null; sleep 1 && nohup /home/komachi/.bun/bin/bun /home/komachi/chloe-forge/projects/sd-gallery/server.ts >/tmp/sd-gallery.log 2>&1 </dev/null &"
+```
+
+### 画像生成
+
+```bash
+# 生成スクリプトの実行（WSL上で）
+scp -i ~/.ssh/id_wsl -P 2222 /tmp/gen_script.py komachi@192.168.11.40:/tmp/
+ssh -i ~/.ssh/id_wsl -p 2222 komachi@192.168.11.40 \
+  "nohup python3 /tmp/gen_script.py >/tmp/gen.log 2>&1 </dev/null &"
+# 進捗確認
+ssh -i ~/.ssh/id_wsl -p 2222 komachi@192.168.11.40 "tail -5 /tmp/gen.log"
+```
