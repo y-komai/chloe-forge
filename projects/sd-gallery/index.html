@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SD Gallery — くろえ</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #0f0f13; color: #e2e8f0; font-family: system-ui, sans-serif; }
+
+    header { padding: 1.2em 2em; border-bottom: 1px solid #1e293b; display: flex; align-items: center; gap: 0.8em; }
+    header h1 { font-size: 1.1em; color: #60a5fa; font-weight: 600; }
+    .back-btn { background: none; border: 1px solid #334155; border-radius: 6px; color: #94a3b8; padding: 0.3em 0.8em; cursor: pointer; font-size: 0.8em; display: none; }
+    .back-btn:hover { border-color: #60a5fa; color: #60a5fa; }
+
+    /* scene grid */
+    #scene-view .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1em; padding: 1.2em 2em 2em;
+    }
+    .scene-card { cursor: pointer; border-radius: 10px; overflow: hidden; background: #1e293b; border: 1px solid #1e293b; transition: all 0.15s; }
+    .scene-card:hover { border-color: #60a5fa; transform: translateY(-2px); }
+    .scene-card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; background: #0f172a; }
+    .scene-card .label { padding: 0.6em 0.8em; }
+    .scene-card .label .name { font-size: 0.88em; font-weight: 600; color: #e2e8f0; }
+    .scene-card .label .sub { font-size: 0.72em; color: #64748b; margin-top: 0.15em; }
+
+    /* detail view */
+    #detail-view { display: none; padding: 1.2em 2em 2em; }
+    .prompt-box { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 0.8em 1em; margin-bottom: 1.2em; }
+    .prompt-box h3 { font-size: 0.72em; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4em; }
+    .prompt-box p { font-size: 0.75em; color: #94a3b8; line-height: 1.6; word-break: break-word; }
+    .detail-title { font-size: 1.1em; font-weight: 600; margin-bottom: 0.8em; }
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.7em;
+    }
+    .img-item { position: relative; border-radius: 8px; overflow: hidden; cursor: pointer; background: #1e293b; }
+    .img-item img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; transition: transform 0.15s; }
+    .img-item:hover img { transform: scale(1.03); }
+    .img-item .num { position: absolute; top: 0.4em; left: 0.5em; background: rgba(0,0,0,0.6); border-radius: 4px; padding: 0.1em 0.4em; font-size: 0.68em; color: #94a3b8; }
+
+    /* lightbox */
+    #lb { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 100; align-items: center; justify-content: center; }
+    #lb.show { display: flex; }
+    #lb img { max-width: 90vw; max-height: 90vh; border-radius: 8px; object-fit: contain; }
+    #lb-close { position: fixed; top: 1em; right: 1.5em; font-size: 2em; cursor: pointer; color: #64748b; }
+    #lb-close:hover { color: #e2e8f0; }
+
+    .loading { padding: 3em 2em; text-align: center; color: #64748b; }
+  </style>
+</head>
+<body>
+  <header>
+    <button class="back-btn" id="back-btn" onclick="showScenes()">← 戻る</button>
+    <h1 id="header-title">🖼 SD Gallery — くろえ</h1>
+  </header>
+
+  <div id="scene-view">
+    <div class="grid" id="scene-grid"><p class="loading">読み込み中...</p></div>
+  </div>
+
+  <div id="detail-view">
+    <p class="detail-title" id="detail-title"></p>
+    <div class="prompt-box">
+      <h3>Prompt</h3>
+      <p id="detail-prompt"></p>
+    </div>
+    <div class="image-grid" id="image-grid"></div>
+  </div>
+
+  <div id="lb"><span id="lb-close">×</span><img id="lb-img" src="" alt=""></div>
+
+  <script>
+    let scenes = [];
+
+    async function loadScenes() {
+      const res = await fetch('/api/scenes');
+      scenes = await res.json();
+      const grid = document.getElementById('scene-grid');
+      if (!scenes.length) { grid.innerHTML = '<p class="loading">シーンなし</p>'; return; }
+      grid.innerHTML = scenes.map(s => `
+        <div class="scene-card" onclick="showDetail('${s.slug}')">
+          ${s.image_count > 0 ? `<img src="/thumb/${s.slug}" loading="lazy" alt="${s.name}">` : `<div style="aspect-ratio:2/3;background:#0f172a;display:flex;align-items:center;justify-content:center;color:#334155;">no image</div>`}
+          <div class="label">
+            <div class="name">${s.name}</div>
+            <div class="sub">${s.image_count} 枚</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function showDetail(slug) {
+      const scene = scenes.find(s => s.slug === slug);
+      if (!scene) return;
+
+      document.getElementById('scene-view').style.display = 'none';
+      document.getElementById('detail-view').style.display = 'block';
+      document.getElementById('back-btn').style.display = 'inline-block';
+      document.getElementById('header-title').textContent = scene.name;
+      document.getElementById('detail-title').textContent = scene.name;
+      document.getElementById('detail-prompt').textContent = scene.prompt;
+      document.getElementById('image-grid').innerHTML = '<p class="loading">読み込み中...</p>';
+
+      const res = await fetch(`/api/scenes/${slug}/images`);
+      const images = await res.json();
+      if (!images.length) {
+        document.getElementById('image-grid').innerHTML = '<p class="loading">画像なし（生成中かも）</p>';
+        return;
+      }
+      document.getElementById('image-grid').innerHTML = images.map((img, i) => `
+        <div class="img-item" onclick="openLb('/serve/${img.id}')">
+          <img src="/serve/${img.id}" loading="lazy" alt="${img.filepath}">
+          <span class="num">${String(i+1).padStart(2,'0')}</span>
+        </div>
+      `).join('');
+    }
+
+    function showScenes() {
+      document.getElementById('scene-view').style.display = 'block';
+      document.getElementById('detail-view').style.display = 'none';
+      document.getElementById('back-btn').style.display = 'none';
+      document.getElementById('header-title').textContent = '🖼 SD Gallery — くろえ';
+    }
+
+    function openLb(src) {
+      document.getElementById('lb-img').src = src;
+      document.getElementById('lb').classList.add('show');
+    }
+    document.getElementById('lb-close').onclick = () => document.getElementById('lb').classList.remove('show');
+    document.getElementById('lb').onclick = (e) => { if (e.target === e.currentTarget) document.getElementById('lb').classList.remove('show'); };
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('lb').classList.remove('show'); });
+
+    loadScenes();
+  </script>
+</body>
+</html>
