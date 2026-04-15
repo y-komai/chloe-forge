@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.chloe.discord-log-save</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/ykomai/.bun/bin/bun</string>
+        <string>run</string>
+        <string>/Users/ykomai/.claude/scripts/discord-log-save.ts</string>
+    </array>
+
+    <!-- 4時間ごとに実行 (14400秒) -->
+    <key>StartInterval</key>
+    <integer>14400</integer>
+
+    <!-- ログ出力 -->
+    <key>StandardOutPath</key>
+    <string>/Users/ykomai/.claude/scripts/logs/discord-log-save.stdout.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/ykomai/.claude/scripts/logs/discord-log-save.stderr.log</string>
+
+    <!-- 環境変数 -->
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>HOME</key>
+        <string>/Users/ykomai</string>
+        <key>PATH</key>
+        <string>/Users/ykomai/.bun/bin:/usr/local/bin:/usr/bin:/bin</string>
+    </dict>
+
+    <!-- マシン起動時に即実行 -->
+    <key>RunAtLoad</key>
+    <true/>
+</dict>
+</plist>

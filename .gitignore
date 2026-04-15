@@ -1,0 +1,35 @@
+# Claude Code auto-generated
+cache/
+backups/
+chrome/
+downloads/
+file-history/
+history.jsonl
+mcp-needs-auth-cache.json
+paste-cache/
+session-env/
+sessions/
+shell-snapshots/
+telemetry/
+scheduled_tasks.lock
+
+# Session conversation files
+*.jsonl
+tool-results/
+tasks/
+subagents/
+
+# Auto-managed plugin marketplace files
+plugins/marketplaces/
+
+# Discord inbox (attachments)
+channels/discord/inbox/
+
+# Log files
+scripts/logs/
+
+# Secrets
+channels/discord/.env
+
+# OS
+.DS_Store

@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "plugins": {
+    "discord@claude-plugins-official": [
+      {
+        "scope": "project",
+        "installPath": "/Users/ykomai/.claude/plugins/cache/claude-plugins-official/discord/0.0.4",
+        "version": "0.0.4",
+        "installedAt": "2026-04-08T13:52:03.522Z",
+        "lastUpdated": "2026-04-08T13:52:03.522Z",
+        "projectPath": "/Users/ykomai"
+      }
+    ]
+  }
+}
