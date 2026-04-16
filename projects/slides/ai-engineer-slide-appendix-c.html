@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Managed Agents 実装編</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/night.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/monokai.css">
+  <style>
+    :root {
+      --accent: #60a5fa;
+      --dim:    #93c5fd;
+      --mute:   #64748b;
+      --warn:   #f59e0b;
+      --green:  #34d399;
+      --red:    #f87171;
+      --bg-card: #1e293b;
+      --border:  #334155;
+    }
+    .reveal .slides section { font-size: 0.82em; }
+    .reveal h1, .reveal h2, .reveal h3 { color: #e2e8f0; font-weight: 600; }
+    .reveal .hl    { color: var(--accent); font-weight: bold; }
+    .reveal .hlg   { color: var(--green);  font-weight: bold; }
+    .reveal .hlw   { color: var(--warn);   font-weight: bold; }
+    .reveal .hlr   { color: var(--red);    font-weight: bold; }
+    .reveal .dim   { color: var(--dim); }
+    .reveal .muted { color: var(--mute); }
+    .sm { font-size: 0.8em; }
+
+    /* ── 2-col layout ── */
+    .two-col {
+      display: flex;
+      gap: 1.4em;
+      max-width: 960px;
+      margin: 0.5em auto;
+      align-items: flex-start;
+    }
+    .two-col > * { flex: 1; }
+
+    /* ── card ── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.7em 1em;
+    }
+    .card-label {
+      font-size: 0.65em;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.4em;
+      color: var(--mute);
+    }
+
+    /* ── SSH flow ── */
+    .ssh-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5em;
+      flex-wrap: wrap;
+      margin: 0.8em auto;
+      max-width: 860px;
+    }
+    .ssh-node {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5em 0.8em;
+      font-size: 0.78em;
+      text-align: center;
+      min-width: 90px;
+    }
+    .ssh-node.highlight { border-color: var(--green); color: var(--green); }
+    .ssh-arrow { color: var(--mute); font-size: 1.1em; }
+
+    /* ── code block override ── */
+    .reveal pre {
+      margin: 0.4em auto;
+      max-width: 880px;
+      border-radius: 8px;
+      font-size: 0.72em;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.5);
+    }
+    .reveal pre code { padding: 0.8em 1em; line-height: 1.6; }
+    .code-note {
+      font-size: 0.72em;
+      color: var(--mute);
+      text-align: left;
+      max-width: 880px;
+      margin: 0.3em auto 0;
+      padding: 0 0.4em;
+    }
+    .code-note span { color: var(--warn); font-weight: 600; }
+
+    /* ── highlight box ── */
+    .hbox {
+      border-radius: 6px;
+      padding: 0.6em 1em;
+      font-size: 0.82em;
+      max-width: 820px;
+      margin: 0.5em auto;
+      text-align: left;
+      line-height: 1.6;
+    }
+    .hbox.green { background: #071f14; border: 1px solid var(--green); }
+    .hbox.blue  { background: #0e1f35; border: 1px solid var(--accent); }
+    .hbox.warn  { background: #1e1a0a; border: 1px solid var(--warn); }
+    .hbox.red   { background: #1c0e0e; border: 1px solid var(--red); }
+
+    /* ── compare table ── */
+    .cmp-row {
+      display: flex;
+      gap: 1em;
+      max-width: 860px;
+      margin: 0.5em auto;
+    }
+    .cmp-col {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.7em 1em;
+    }
+    .cmp-col.good { border-color: var(--green); }
+    .cmp-col.bad  { border-color: var(--red); }
+    .cmp-title {
+      font-size: 0.68em;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.4em;
+    }
+    .cmp-col.good .cmp-title { color: var(--green); }
+    .cmp-col.bad  .cmp-title { color: var(--red); }
+    .cmp-body { font-size: 0.78em; color: #94a3b8; line-height: 1.7; }
+
+    /* ── pitfall list ── */
+    .pit-list {
+      list-style: none;
+      padding: 0;
+      max-width: 800px;
+      margin: 0.4em auto;
+    }
+    .pit-list li {
+      display: flex;
+      gap: 0.8em;
+      align-items: flex-start;
+      padding: 0.45em 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.82em;
+    }
+    .pit-list li:last-child { border-bottom: none; }
+    .pit-icon { font-size: 0.9em; flex-shrink: 0; width: 1.4em; text-align: center; }
+    .pit-body strong { color: var(--warn); }
+    .pit-body .sub { font-size: 0.82em; color: var(--mute); }
+  </style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+  <!-- C-1. 導入 -->
+  <section>
+    <p style="font-size:0.7em; color:var(--mute); margin-bottom:0.8em; letter-spacing:0.06em; text-transform:uppercase;">Appendix C — 実装編</p>
+    <h1 style="font-size:1.15em; line-height:1.5;">
+      で、<span class="hl">実際どう作るの</span>？
+    </h1>
+    <p style="font-size:0.82em; color:var(--dim); margin-top:0.6em;">Claude Managed Agents で組む最小実装</p>
+    <div class="hbox blue" style="margin-top:1em; text-align:center;">
+      <span style="color:var(--mute);">想定環境：</span>
+      EC2 + オンプレ構成 / ファイルベースログ / Datadog なし / シェルで調査
+    </div>
+    <p style="text-align:center; font-size:0.85em; color:var(--warn); margin-top:0.8em;">
+      「うちローテクすぎて無理かも」と思った人へ——<br>
+      <span class="hlg">道具は SSH と grep で足りる</span>
+    </p>
+  </section>
+
+  <!-- C-2. キーアイデア -->
+  <section>
+    <h2 style="font-size:1.0em; margin-bottom:0.5em;">キーアイデア：<span class="hl">Tool = シェルコマンド</span></h2>
+    <p style="font-size:0.8em; color:#94a3b8; text-align:center; margin-bottom:0.6em;">
+      LLM が「ツールを呼ぶ」= EC2 でシェルを叩ける状態を作る
+    </p>
+    <div class="ssh-flow">
+      <div class="ssh-node highlight">Claude</div>
+      <div class="ssh-arrow">→</div>
+      <div class="ssh-node highlight">tool<br><span style="font-size:0.8em; color:var(--mute);">run_ssh()</span></div>
+      <div class="ssh-arrow">→</div>
+      <div class="ssh-node">SSH</div>
+      <div class="ssh-arrow">→</div>
+      <div class="ssh-node">EC2<br><span style="font-size:0.8em; color:var(--mute);">grep/tail/…</span></div>
+      <div class="ssh-arrow">→</div>
+      <div class="ssh-node">stdout</div>
+      <div class="ssh-arrow">→</div>
+      <div class="ssh-node highlight">Claude<br><span style="font-size:0.8em; color:var(--mute);">解析</span></div>
+    </div>
+    <div class="two-col" style="margin-top:0.6em;">
+      <div class="hbox green">
+        <div style="font-size:0.72em; color:var(--green); font-weight:600; margin-bottom:0.3em; text-transform:uppercase;">定義するのは1関数だけ</div>
+        <code style="font-size:0.85em; color:#e2e8f0;">run_ssh(host, command) → stdout</code>
+      </div>
+      <div class="hbox blue">
+        <div style="font-size:0.72em; color:var(--accent); font-weight:600; margin-bottom:0.3em; text-transform:uppercase;">runbook がそのまま指示書になる</div>
+        <code style="font-size:0.8em; color:#e2e8f0;">tail /var/log/app/error.log | grep ERROR | wc -l</code>
+      </div>
+    </div>
+  </section>
+
+  <!-- C-3. コード例：tool定義 -->
+  <section>
+    <h2 style="font-size:1.0em; margin-bottom:0.4em;">コード例 — <span class="hl">tool 定義</span></h2>
+    <pre><code class="language-python">tools = [{
+    "name": "run_ssh",
+    "description": "Run a read-only shell command on the target EC2 host. "
+                   "Do NOT use destructive commands (rm, kill, shutdown).",
+    "input_schema": {
+        "type": "object",
+        "properties": {
+            "host": {
+                "type": "string",
+                "enum": ["web-01", "web-02", "db-01"]  # 接続先を制限
+            },
+            "command": {
+                "type": "string",
+                "description": "Shell command to execute (read-only)"
+            }
+        },
+        "required": ["host", "command"]
+    }
+}]</code></pre>
+    <div class="code-note">
+      <span>▶ enum</span> でホストを制限 &nbsp;|&nbsp;
+      <span>▶ description</span> に "read-only" と明示してモデルを誘導 &nbsp;|&nbsp;
+      <span>▶ 実装側</span> でもコマンド allowlist を別途かける（次スライド）
+    </div>
+  </section>
+
+  <!-- C-4. コード例：エージェント呼び出し -->
+  <section>
+    <h2 style="font-size:1.0em; margin-bottom:0.4em;">コード例 — <span class="hl">エージェント呼び出し</span></h2>
+    <pre><code class="language-python">import anthropic, subprocess
+
+client = anthropic.Anthropic()
+messages = [{"role": "user", "content": "web-01 でエラー急増アラート。調査して"}]
+
+while True:
+    response = client.messages.create(
+        model="claude-opus-4-7",
+        system="あなたはオンコール初動担当。error.log の急増を調査し、原因と推奨アクションを報告する。",
+        tools=tools,
+        messages=messages,
+        max_tokens=4096,
+    )
+    if response.stop_reason == "end_turn":
+        print(response.content[0].text)  # 調査レポートを Slack へ
+        break
+    # tool_use を実行して結果を返す
+    for block in response.content:
+        if block.type == "tool_use" and block.name == "run_ssh":
+            stdout = run_ssh_safe(block.input["host"], block.input["command"])
+            messages += [
+                {"role": "assistant", "content": response.content},
+                {"role": "user",      "content": [{"type": "tool_result",
+                                                   "tool_use_id": block.id,
+                                                   "content": stdout}]},
+            ]</code></pre>
+    <div class="hbox warn" style="margin-top:0.4em; font-size:0.75em;">
+      <span style="color:var(--warn); font-weight:600;">SDK が担う部分：</span>
+      tool_use_id の紐付け / context の詰め替え / トークン管理 / エラーリカバリー
+      — 自前で書くと200行超える
+    </div>
+  </section>
+
+  <!-- C-5. ローテクだからこそ簡単 -->
+  <section>
+    <h2 style="font-size:1.0em; margin-bottom:0.5em;">ローテクだから<span class="hlg">こそ</span>簡単</h2>
+    <div class="cmp-row">
+      <div class="cmp-col bad">
+        <div class="cmp-title">モダン環境（Datadog / k8s / OTel）</div>
+        <div class="cmp-body">
+          専用クライアント・認証・スキーマ理解が必要<br>
+          MCP サーバーを自前で書く<br>
+          API 変更に追従が必要<br>
+          <span style="color:var(--red);">実装コスト：数日〜</span>
+        </div>
+      </div>
+      <div class="cmp-col good">
+        <div class="cmp-title">ローテク環境（ファイルログ / SSH）</div>
+        <div class="cmp-body">
+          <code>run_ssh</code> を1つ書くだけ<br>
+          LLM が一番得意な入力形式（プレーンテキスト）<br>
+          SSH は成熟・冪等・監査ログが残る<br>
+          <span style="color:var(--green);">実装コスト：数時間</span>
+        </div>
+      </div>
+    </div>
+    <p style="text-align:center; font-size:0.88em; margin-top:0.6em;">
+      <span class="hlg">枯れた道具ほど、エージェントと相性がいい</span>
+    </p>
+  </section>
+
+  <!-- C-6. 落とし穴と次の一歩 -->
+  <section>
+    <h2 style="font-size:1.0em; margin-bottom:0.4em;">現実の<span class="hlr">落とし穴</span>と<span class="hlg">次の一歩</span></h2>
+    <ul class="pit-list">
+      <li>
+        <div class="pit-icon">⚠️</div>
+        <div class="pit-body">
+          <strong>コマンド allowlist 必須</strong>
+          <div class="sub"><code>rm</code> / <code>kill</code> / <code>shutdown</code> / <code>dd</code> は実装側で弾く。description だけに頼らない</div>
+        </div>
+      </li>
+      <li>
+        <div class="pit-icon">⚠️</div>
+        <div class="pit-body">
+          <strong>出力サイズ制限</strong>
+          <div class="sub"><code>run_ssh</code> 側で <code>| head -200</code> を強制注入。大きなログをそのまま返すとトークン爆発</div>
+        </div>
+      </li>
+      <li>
+        <div class="pit-icon">⚠️</div>
+        <div class="pit-body">
+          <strong>タイムアウト設定</strong>
+          <div class="sub">SSH コマンドに timeout 30s を付ける。ハングしたまま API コストが積まれる</div>
+        </div>
+      </li>
+      <li>
+        <div class="pit-icon">📋</div>
+        <div class="pit-body">
+          <strong>監査ログは別チャネルで保存</strong>
+          <div class="sub">Claude が実行したコマンドと stdout を DB に記録。振り返りと信頼構築に必須</div>
+        </div>
+      </li>
+    </ul>
+    <div class="hbox green" style="margin-top:0.5em; text-align:center; font-size:0.82em;">
+      <strong>最初の一歩：</strong>
+      <code>run_ssh</code>（allowlist付）+ Slack 通知だけ。<span class="hlg">今週末に動く</span>スコープ
+    </div>
+  </section>
+
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/highlight/highlight.js"></script>
+<script>Reveal.initialize({
+  hash: true,
+  transition: 'fade',
+  slideNumber: true,
+  width: 1280,
+  height: 720,
+  margin: 0.04,
+  minScale: 0.2,
+  maxScale: 2.0,
+  plugins: [RevealHighlight]
+});</script>
+</body>
+</html>
