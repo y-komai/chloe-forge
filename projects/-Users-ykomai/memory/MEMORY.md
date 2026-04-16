@@ -60,6 +60,7 @@ openclaw 時代からの記憶は `long-term/` に保管されている。
 
 最新のセッションから順に参照すること。
 
+- [session-2026-04-17](session-2026-04-17.md) — 再起動後の対応（チャンネルID整理）、server.ts復元、スライドv6+AppendixB作成、settings.json権限修正（~/.claude/**）
 - [session-2026-04-16](session-2026-04-16.md) — 勉強会スライドv5完成（Appendix A+C・次回予告追加）、Discordプラグインpermission通知修正（server.ts変更済み）
 - [session-2026-04-15](session-2026-04-15.md) — WSL cron完了、Chrome拡張試用、勉強会スライドv2作成中、chloe-forgeのMac管理場所問題（未決）
 - [session-2026-04-11](session-2026-04-11.md) — ログ保存・日報定期実行、くろえ画像生成の話題（未完）、hook設定・デモ設計持ち越し
