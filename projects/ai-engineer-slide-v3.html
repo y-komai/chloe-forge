@@ -154,19 +154,28 @@
 
   <!-- 2. きっかけ：OpenClawとの出会い -->
   <section>
-    <h2>きっかけ：<span class="hl">OpenClaw</span>との出会い</h2>
+    <h2>きっかけ：知人に見せてもらった<span class="hl">デモ</span></h2>
+    <br>
+    <ul class="steps" style="max-width: 820px;">
+      <li>
+        <span class="step-label">見たこと</span>
+        <span>OpenClaw というエージェントが、Discord 上で自律的に動いていた</span>
+      </li>
+      <li>
+        <span class="step-label">衝撃</span>
+        <span>AIが「答える」んじゃなく、<span class="hl">タスクを自分で動いてこなしていた</span></span>
+      </li>
+      <li>
+        <span class="step-label">そして</span>
+        <span>AI が他の AI に指示を出していた——いわゆる <span class="hl">A2A（Agent to Agent）</span></span>
+      </li>
+    </ul>
     <br>
     <div class="quote">
       「Devin に指示するのすらめんどいよね？<br>
-      <span class="hl">その指示を OpenClaw にやらせようっていう発想</span>。<br>
-      いわゆる A2A（Agent to Agents）。」
+      <span class="hl">その指示を OpenClaw にやらせようっていう発想</span>。」
+      <p class="muted sm" style="text-align:right; margin: 0.3em 0 0;">——知人の一言</p>
     </div>
-    <br>
-    <p class="sm" style="text-align:left; max-width:700px; margin:0 auto;">
-      これを聞いたとき、衝撃だった。<br>
-      AIが <strong>「答える道具」</strong> じゃなくて <strong>「動かす存在」</strong> として日常に溶け込んでいる。<br>
-      しかも <span class="hl">AIがAIに指示する</span>。
-    </p>
   </section>
 
   <!-- 3. OpenClawって何をしてたのか -->
@@ -196,24 +205,26 @@
 
   <!-- 4. ここで気づいたこと -->
   <section>
-    <h2>ここで気づいたこと</h2>
+    <h2>使い込んで<span class="hl">気づいたこと</span></h2>
     <br>
     <p class="big" style="text-align:center;">
-      重要なのは<br>
-      <span class="hl">「どう指示するか」</span>じゃなく<br>
-      <span class="hlg">「どんな環境で動かすか」</span>だ
+      モデルの賢さより<br>
+      <span class="hlg">「どんな環境で動かすか」</span>の方が<br>
+      <span class="hl">結果を左右する</span>
     </p>
     <br>
     <div class="quote">
       ツールは何を使えるか、どこで止まるか、<br>
       失敗したらどうするか、何を記憶するか——<br>
-      <span class="hl">この「足場」の設計が結果を決める</span>
+      <span class="hl">この「足場」の設計が効く</span>
     </div>
+    <br>
+    <p class="muted sm" style="text-align:center;">この気づきには、名前がある</p>
   </section>
 
   <!-- 5. ハーネスエンジニアリング -->
   <section>
-    <h2><span class="hl">ハーネスエンジニアリング</span>という発想</h2>
+    <h2><span class="hl">ハーネスエンジニアリング</span></h2>
     <br>
     <div class="harness-wrap">
       <div class="h-box agent">🤖 AI エージェント</div>
@@ -256,7 +267,7 @@
       </thead>
       <tbody>
         <tr><td>ランタイム</td><td>自前フレームワーク</td><td>Anthropic 公式プロダクト</td></tr>
-        <tr><td>オーケストレーター</td><td>くろえ自身が担う</td><td>Claude Code 側が担う</td></tr>
+        <tr><td>オーケストレーター</td><td>自作アシスタント自身が担う</td><td>Claude Code 側が担う</td></tr>
         <tr><td>ハーネスの実体</td><td>openclaw の設定・コード</td><td>CLAUDE.md + memory/ ファイル群</td></tr>
         <tr><td>維持コスト</td><td>自分でフレームワークを育てる</td><td>Anthropic が育てる</td></tr>
       </tbody>
@@ -289,7 +300,32 @@
     </div>
   </section>
 
-  <!-- 8. まとめ -->
+  <!-- 8. で、これからどうする？ -->
+  <section>
+    <h2>で、<span class="hl">これからどうする？</span></h2>
+    <br>
+    <p style="font-size:0.95em; max-width:700px; margin:0 auto; text-align:left;">
+      Claude Managed Agents が登場して、「自前で作らなくていい」時代になってきた。<br>
+      それでも変わらないことがある。
+    </p>
+    <br>
+    <ul class="steps" style="max-width: 820px;">
+      <li>
+        <span class="step-label">変わること</span>
+        <span>オーケストレーションの実装は<span class="hl">プラットフォームが担う</span></span>
+      </li>
+      <li>
+        <span class="step-label">変わらないこと</span>
+        <span><span class="hlg">「何をさせるか・どこで止めるか」の設計</span>は人間がやる</span>
+      </li>
+      <li>
+        <span class="step-label">明日から</span>
+        <span>AIに指示を書く前に、<span class="hl">AIが動ける環境を1つ整えてみる</span></span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- 9. まとめ -->
   <section>
     <h2>まとめ</h2>
     <br>
