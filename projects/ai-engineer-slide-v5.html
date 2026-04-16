@@ -287,6 +287,108 @@
       flex-shrink: 0;
     }
     .story-content strong { color: var(--accent); }
+
+    /* ── Appendix ── */
+    .appendix-label {
+      display: inline-block;
+      font-size: 0.6em;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mute);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.1em 0.5em;
+      margin-bottom: 0.3em;
+      vertical-align: middle;
+    }
+    .harness-example {
+      display: flex;
+      gap: 1.5em;
+      align-items: stretch;
+      max-width: 900px;
+      margin: 0.6em auto;
+    }
+    .he-col {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.9em 1em;
+    }
+    .he-col.self { border-color: var(--accent); }
+    .he-col.world { border-color: var(--green); }
+    .he-col-label {
+      font-size: 0.65em;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.5em;
+    }
+    .he-col.self  .he-col-label { color: var(--accent); }
+    .he-col.world .he-col-label { color: var(--green); }
+    .he-item {
+      display: flex;
+      gap: 0.6em;
+      align-items: flex-start;
+      padding: 0.3em 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.76em;
+    }
+    .he-item:last-child { border-bottom: none; }
+    .he-key {
+      color: var(--dim);
+      flex-shrink: 0;
+      min-width: 90px;
+      font-size: 0.95em;
+    }
+    .he-val { color: #e2e8f0; }
+    .he-world-item {
+      padding: 0.4em 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.76em;
+    }
+    .he-world-item:last-child { border-bottom: none; }
+    .he-tool { color: var(--accent); font-weight: 600; }
+    .he-constraint { color: #94a3b8; font-size: 0.9em; margin-top: 0.1em; }
+
+    /* Appendix C: OpenClaw detail */
+    .oc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5em;
+      max-width: 900px;
+      margin: 0.6em auto;
+      align-items: start;
+    }
+    .oc-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.7em 0.9em;
+    }
+    .oc-box-label {
+      font-size: 0.62em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--mute);
+      margin-bottom: 0.5em;
+    }
+    .oc-node-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .oc-node-list li {
+      display: flex;
+      gap: 0.7em;
+      padding: 0.35em 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.76em;
+      align-items: flex-start;
+    }
+    .oc-node-list li:last-child { border-bottom: none; }
+    .oc-node-name { color: var(--accent); font-weight: 600; min-width: 120px; flex-shrink: 0; }
+    .oc-node-desc { color: #94a3b8; }
   </style>
 </head>
 <body>
@@ -528,6 +630,92 @@
       <span class="hl">「AIに指示する」</span>の次は——<span class="hlg">「AIが正しく動く環境を作る」</span>
     </p>
     <p class="muted sm" style="text-align:center; margin-top:0.3em;">→ デモを見てもらいましょう</p>
+  </section>
+
+  <!-- Appendix A: ハーネスエンジニアリング実例 -->
+  <section>
+    <h2><span class="appendix-label">Appendix A</span> ハーネスエンジニアリング<span class="hl">実例</span></h2>
+    <div class="harness-example">
+      <!-- 自分の構成 -->
+      <div class="he-col self">
+        <div class="he-col-label">自分の構成（CLAUDE.md ベース）</div>
+        <div class="he-item">
+          <div class="he-key">使えるツール</div>
+          <div class="he-val">GitHub / Discord / Web検索 / ローカルファイル</div>
+        </div>
+        <div class="he-item">
+          <div class="he-key">止まる条件</div>
+          <div class="he-val">外部への送信・投稿は確認を取る</div>
+        </div>
+        <div class="he-item">
+          <div class="he-key">記憶の範囲</div>
+          <div class="he-val">memory/ ファイル群（長期・セッション別）</div>
+        </div>
+        <div class="he-item">
+          <div class="he-key">禁止操作</div>
+          <div class="he-val">破壊的変更（rm -rf 等）は承認要</div>
+        </div>
+        <div class="he-item">
+          <div class="he-key">命令系統</div>
+          <div class="he-val">こまちさん（オーナー）の指示のみに従う</div>
+        </div>
+      </div>
+      <!-- 世間の事例 -->
+      <div class="he-col world">
+        <div class="he-col-label">世間の事例——みんな同じことをやってる</div>
+        <div class="he-world-item">
+          <div class="he-tool">Cursor Rules</div>
+          <div class="he-constraint">→ コード生成のスタイル・禁止パターンを制約</div>
+        </div>
+        <div class="he-world-item">
+          <div class="he-tool">GitHub Copilot Instructions</div>
+          <div class="he-constraint">→ リポジトリの文脈・命名規則・禁止ライブラリを制約</div>
+        </div>
+        <div class="he-world-item">
+          <div class="he-tool">Devin 組織設定</div>
+          <div class="he-constraint">→ アクセス可能なリソース・外部API呼び出し・承認フローを制約</div>
+        </div>
+        <div class="he-world-item" style="border-bottom:none;">
+          <div class="he-tool">Claude Code（CLAUDE.md）</div>
+          <div class="he-constraint">→ ツール権限・行動指針・記憶ポリシーを制約</div>
+        </div>
+        <p class="muted sm" style="margin-top:0.6em; text-align:center;">
+          ツールは違う。でも<span class="hlg">「何をどこまでやらせるか」を設計している</span>点は同じ
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Appendix C: OpenClaw 構成図（本編対比） -->
+  <section>
+    <h2><span class="appendix-label">Appendix C</span> OpenClaw <span class="hl">構成の詳細</span></h2>
+    <div class="oc-grid">
+      <!-- 本編の図（再掲・シンプル版） -->
+      <div class="oc-box" style="border-color:var(--border);">
+        <div class="oc-box-label">本編スライド3：外から見た構成</div>
+        <ul class="oc-node-list">
+          <li><span class="oc-node-name">💬 Discord</span><span class="oc-node-desc">入口。24時間常駐、話しかけると反応</span></li>
+          <li><span class="oc-node-name">🧠 記憶</span><span class="oc-node-desc">会話履歴を保持、日報を自動まとめ</span></li>
+          <li><span class="oc-node-name">🛠 ツール実行</span><span class="oc-node-desc">GitHub 操作、ファイル読み書き</span></li>
+          <li><span class="oc-node-name">🔗 AI 連携</span><span class="oc-node-desc">他の AI に指示、A2A オーケストレーション</span></li>
+        </ul>
+      </div>
+      <!-- 詳細版 -->
+      <div class="oc-box" style="border-color:var(--accent);">
+        <div class="oc-box-label">実際の内部構成</div>
+        <ul class="oc-node-list">
+          <li><span class="oc-node-name">Gateway</span><span class="oc-node-desc">Discord/Slack からのメッセージ受信・送信</span></li>
+          <li><span class="oc-node-name">Orchestrator</span><span class="oc-node-desc">Claude が「次に何をするか」を判断。ループの核</span></li>
+          <li><span class="oc-node-name">Memory</span><span class="oc-node-desc">短期（会話文脈）＋長期（ファイルベース）の2層</span></li>
+          <li><span class="oc-node-name">Heartbeat</span><span class="oc-node-desc">定期実行。日報生成・ログ保存などを cron 的に動かす</span></li>
+          <li><span class="oc-node-name">Tool Executor</span><span class="oc-node-desc">GitHub / Web / ファイル操作を安全に実行</span></li>
+          <li><span class="oc-node-name">Sub-agent Bridge</span><span class="oc-node-desc">Devin 等の外部 AI エージェントへ指示を橋渡し</span></li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted sm" style="text-align:center; margin-top:0.3em;">
+      Claude Code では Orchestrator = Claude Code 本体、Memory = CLAUDE.md + memory/、Heartbeat = cron hook に対応
+    </p>
   </section>
 
 </div></div>
