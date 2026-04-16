@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIを束ねる、という発想</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/night.css">
+  <style>
+    :root {
+      --accent: #60a5fa;
+      --dim:    #93c5fd;
+      --mute:   #64748b;
+      --warn:   #f59e0b;
+      --green:  #34d399;
+      --red:    #f87171;
+      --bg-card: #1e293b;
+      --border:  #334155;
+    }
+    .reveal .slides section { font-size: 0.82em; }
+    .reveal h1, .reveal h2, .reveal h3 { color: #e2e8f0; font-weight: 600; }
+    .reveal .hl    { color: var(--accent); font-weight: bold; }
+    .reveal .hlg   { color: var(--green);  font-weight: bold; }
+    .reveal .dim   { color: var(--dim); }
+    .reveal .muted { color: var(--mute); }
+    .reveal .warn-text { color: var(--warn); }
+    .sm { font-size: 0.8em; }
+
+    .quote {
+      background: var(--bg-card);
+      border-left: 3px solid var(--accent);
+      padding: 0.8em 1.2em;
+      font-size: 0.88em;
+      text-align: left;
+      border-radius: 0 6px 6px 0;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* ── Slide 2: Before/After ── */
+    .ba-wrap {
+      display: flex;
+      gap: 2em;
+      justify-content: center;
+      align-items: center;
+      margin: 0.6em auto;
+    }
+    .ba-col { flex: 1; max-width: 340px; text-align: center; }
+    .ba-label {
+      font-size: 0.7em;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 0.2em 1em;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 0.6em;
+    }
+    .ba-label.before { background: #3b1f1f; color: var(--red);   border: 1px solid var(--red); }
+    .ba-label.after  { background: #052e16; color: var(--green); border: 1px solid var(--green); }
+    .ba-flow {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.8em 0.6em;
+      font-size: 0.78em;
+      color: #e2e8f0;
+      line-height: 1.8;
+    }
+    .ba-arrow { color: var(--mute); font-size: 1.5em; margin: 0 0.3em; }
+    .ba-vs    { font-size: 1.2em; color: var(--mute); font-weight: bold; }
+
+    /* ── Slide 3: arch diagram (grid layout) ── */
+    .arch-grid {
+      display: grid;
+      grid-template-columns: 1fr 200px 1fr;
+      grid-template-rows: auto auto;
+      gap: 0.8em 1.2em;
+      align-items: center;
+      justify-items: center;
+      max-width: 780px;
+      margin: 0.5em auto;
+    }
+    .arch-center {
+      grid-column: 2;
+      grid-row: 1 / 3;
+      background: #172554;
+      border: 2px solid var(--accent);
+      border-radius: 10px;
+      padding: 0.7em 1.2em;
+      font-weight: bold;
+      font-size: 0.95em;
+      color: #e2e8f0;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .arch-node {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5em 0.8em;
+      font-size: 0.72em;
+      color: #94a3b8;
+      text-align: center;
+      width: 100%;
+    }
+    .arch-node span { display: block; font-size: 1.05em; color: #e2e8f0; font-weight: 600; margin-bottom: 0.2em; }
+
+    /* ── Slide 4: contrast ── */
+    .contrast-row {
+      display: flex;
+      align-items: center;
+      gap: 1em;
+      background: var(--bg-card);
+      border-radius: 8px;
+      padding: 0.7em 1em;
+      border: 1px solid var(--border);
+    }
+    .contrast-row + .contrast-row { margin-top: 0.5em; }
+    .contrast-row.bad  { border-color: var(--red);   background: #1c0e0e; }
+    .contrast-row.good { border-color: var(--green);  background: #071f14; }
+    .contrast-icon { font-size: 1.3em; flex-shrink: 0; }
+    .contrast-text { font-size: 0.88em; color: #e2e8f0; }
+    .contrast-sub  { font-size: 0.72em; color: var(--mute); margin-top: 0.15em; }
+
+    /* ── Slide 4: harness panel ── */
+    .h-harness-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.3em;
+      font-size: 0.72em;
+      color: #6ee7b7;
+      text-align: left;
+      padding: 0.3em 0;
+    }
+    .h-harness-grid span::before { content: "✓ "; color: var(--green); }
+
+    /* ── Slide 5: story event ── */
+    .event-box {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .event-date {
+      display: inline-block;
+      font-size: 0.7em;
+      background: #3b2a0e;
+      color: var(--warn);
+      border: 1px solid var(--warn);
+      border-radius: 4px;
+      padding: 0.2em 0.7em;
+      margin-bottom: 0.6em;
+    }
+
+    /* ── Slide 6: comparison ── */
+    .cmp {
+      width: 100%;
+      max-width: 840px;
+      margin: 0 auto;
+      border-collapse: collapse;
+      font-size: 0.81em;
+    }
+    .cmp th {
+      padding: 0.5em 1em;
+      background: var(--bg-card);
+      color: var(--dim);
+      font-weight: 600;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+    .cmp th.now { color: var(--accent); }
+    .cmp td {
+      padding: 0.5em 1em;
+      border: 1px solid var(--border);
+      text-align: center;
+      color: #e2e8f0;
+    }
+    .cmp tr td:first-child { color: var(--dim); text-align: left; font-size: 0.85em; }
+    .cmp tr:nth-child(odd) td { background: #0f1a2e; }
+
+    /* ── Slide 7: timeline ── */
+    .timeline {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 0;
+      margin: 1em auto;
+      max-width: 900px;
+      position: relative;
+    }
+    .tl-item {
+      flex: 1;
+      text-align: center;
+      position: relative;
+      padding: 0 0.5em;
+    }
+    .tl-dot {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      margin: 0 auto 0.5em;
+      position: relative;
+      z-index: 2;
+    }
+    .tl-dot.new { background: var(--green); }
+    .tl-line {
+      position: absolute;
+      top: 7px; left: 0; right: 0;
+      height: 2px;
+      background: var(--border);
+      z-index: 1;
+    }
+    .tl-item:first-child .tl-line { left: 50%; }
+    .tl-item:last-child  .tl-line { right: 50%; }
+    .tl-date  { font-size: 0.7em;  color: var(--dim);  margin-bottom: 0.3em; }
+    .tl-title { font-size: 0.85em; font-weight: 600; color: #e2e8f0; margin-bottom: 0.3em; }
+    .tl-desc  { font-size: 0.72em; color: #94a3b8; line-height: 1.4; }
+    .tl-badge {
+      display: inline-block;
+      font-size: 0.65em;
+      padding: 0.1em 0.5em;
+      border-radius: 3px;
+      margin-bottom: 0.3em;
+      background: #172554;
+      color: var(--dim);
+      border: 1px solid var(--border);
+    }
+    .tl-badge.new { background: #052e16; color: var(--green); border-color: var(--green); }
+
+    /* ── Slide 8: action cards ── */
+    .action-row {
+      display: flex;
+      gap: 1em;
+      justify-content: center;
+      margin: 0.8em auto;
+      max-width: 900px;
+    }
+    .action-card {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1em;
+      text-align: center;
+    }
+    .action-card.change { border-color: var(--warn); }
+    .action-card.keep   { border-color: var(--accent); }
+    .action-card.todo   { border-color: var(--green); }
+    .action-icon  { font-size: 1.8em; margin-bottom: 0.3em; }
+    .action-label {
+      font-size: 0.65em;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.4em;
+    }
+    .action-card.change .action-label { color: var(--warn); }
+    .action-card.keep   .action-label { color: var(--accent); }
+    .action-card.todo   .action-label { color: var(--green); }
+    .action-body { font-size: 0.82em; color: #e2e8f0; line-height: 1.5; }
+
+    /* ── Slide 9: story ── */
+    .story {
+      list-style: none;
+      padding: 0;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .story li {
+      display: flex;
+      gap: 1em;
+      align-items: flex-start;
+      padding: 0.55em 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.88em;
+    }
+    .story li:last-child { border-bottom: none; }
+    .story-num {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 1.8em; height: 1.8em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8em;
+      color: var(--dim);
+      flex-shrink: 0;
+    }
+    .story-content strong { color: var(--accent); }
+
+    /* ── Appendix ── */
+    .appendix-label {
+      display: inline-block;
+      font-size: 0.6em;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mute);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 0.1em 0.5em;
+      margin-bottom: 0.3em;
+      vertical-align: middle;
+    }
+    .harness-example {
+      display: flex;
+      gap: 1.5em;
+      align-items: stretch;
+      max-width: 900px;
+      margin: 0.3em auto;
+    }
+    .he-col {
+      flex: 1;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6em 0.7em;
+    }
+    .he-col.self { border-color: var(--accent); }
+    .he-col.world { border-color: var(--green); }
+    .he-col-label {
+      font-size: 0.65em;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 0.3em;
+    }
+    .he-col.self  .he-col-label { color: var(--accent); }
+    .he-col.world .he-col-label { color: var(--green); }
+    .he-item {
+      display: flex;
+      gap: 0.6em;
+      align-items: flex-start;
+      padding: 0.22em 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.76em;
+    }
+    .he-item:last-child { border-bottom: none; }
+    .he-key {
+      color: var(--dim);
+      flex-shrink: 0;
+      min-width: 90px;
+      font-size: 0.95em;
+    }
+    .he-val { color: #e2e8f0; }
+    .he-world-item {
+      padding: 0.25em 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.76em;
+    }
+    .he-world-item:last-child { border-bottom: none; }
+    .he-tool { color: var(--accent); font-weight: 600; }
+    .he-constraint { color: #94a3b8; font-size: 0.9em; margin-top: 0.1em; }
+
+    /* Appendix C: OpenClaw detail */
+    .oc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2em;
+      max-width: 900px;
+      margin: 0.3em auto;
+      align-items: start;
+    }
+    .oc-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.5em 0.7em;
+    }
+    .oc-box-label {
+      font-size: 0.62em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--mute);
+      margin-bottom: 0.35em;
+    }
+    .oc-node-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .oc-node-list li {
+      display: flex;
+      gap: 0.7em;
+      padding: 0.18em 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.74em;
+      align-items: flex-start;
+    }
+    .oc-node-list li:last-child { border-bottom: none; }
+    .oc-node-name { color: var(--accent); font-weight: 600; min-width: 120px; flex-shrink: 0; }
+    .oc-node-desc { color: #94a3b8; }
+  </style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+  <!-- 1. タイトル -->
+  <section>
+    <h1 style="font-size:1.5em;">AIを<span class="hl">束ねる</span>、という発想</h1>
+    <p class="muted sm">OpenClaw から学んだこと——エージェント運用の記録</p>
+    <br>
+    <p class="muted sm">2026.04 / エンジニア勉強会 / y-komai</p>
+  </section>
+
+  <!-- 2. きっかけ：Before/After -->
+  <section>
+    <h2>きっかけ：知人に見せてもらった<span class="hl">デモ</span></h2>
+    <div class="ba-wrap" style="margin-top:0.5em;">
+      <div class="ba-col">
+        <div class="ba-label before">普通のAI活用</div>
+        <div class="ba-flow">
+          👤 人間<br>
+          <span class="ba-arrow">↓</span><br>
+          🤖 AI（答える）<br>
+          <span style="font-size:0.75em; color:var(--mute);">毎回人間が橋渡し</span>
+        </div>
+      </div>
+      <div class="ba-vs">→</div>
+      <div class="ba-col">
+        <div class="ba-label after">OpenClaw のデモ</div>
+        <div class="ba-flow" style="border-color:var(--green);">
+          👤 人間（一言だけ）<br>
+          <span class="ba-arrow" style="color:var(--green);">↓</span><br>
+          🤖 OpenClaw<br>
+          <span class="ba-arrow" style="color:var(--green);">↓ ↓ ↓</span><br>
+          🤖 AI・ツール・GitHub
+        </div>
+      </div>
+    </div>
+    <div class="quote" style="margin-top:0.6em;">
+      「Devin に指示するのすらめんどいよね？<span class="hl">その指示を OpenClaw にやらせようっていう発想</span>。」
+      <p class="muted sm" style="text-align:right; margin:0.3em 0 0;">——知人の一言</p>
+    </div>
+  </section>
+
+  <!-- 3. 自分でも運用してみた -->
+  <section>
+    <h2>自分でも<span class="hl">運用してみた</span></h2>
+    <p class="muted sm" style="text-align:center; margin-bottom:0.5em;">OpenClaw を使って自作 AI アシスタントを構築した</p>
+    <div class="arch-grid">
+      <div class="arch-node">
+        <span>💬 Discord</span>
+        24時間常駐<br>話しかけると反応
+      </div>
+      <div class="arch-center">
+        🤖 AI アシスタント<br>
+        <span style="font-size:0.7em; color:var(--dim); font-weight:normal;">（OpenClaw上で動作）</span>
+      </div>
+      <div class="arch-node">
+        <span>🧠 記憶</span>
+        会話履歴を保持<br>日報を自動まとめ
+      </div>
+      <div class="arch-node">
+        <span>🛠 ツール実行</span>
+        GitHub 操作<br>ファイル読み書き
+      </div>
+      <div class="arch-node">
+        <span>🔗 AI 連携</span>
+        他の AI に指示<br>A2A オーケストレーション
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 気づき + ハーネスエンジニアリング（統合） -->
+  <section>
+    <h2>使い込んで<span class="hl">気づいたこと</span></h2>
+    <div style="display:flex; gap:1.5em; align-items:stretch; max-width:900px; margin:0.6em auto;">
+      <!-- Left: contrast -->
+      <div style="flex:1.1;">
+        <div class="contrast-row bad">
+          <div class="contrast-icon">❌</div>
+          <div>
+            <div class="contrast-text">プロンプトを上手く書く</div>
+            <div class="contrast-sub">毎回工夫しても、結果が安定しない</div>
+          </div>
+        </div>
+        <div class="contrast-row good">
+          <div class="contrast-icon">✅</div>
+          <div>
+            <div class="contrast-text"><span class="hlg">AIが動く「環境」を設計する</span></div>
+            <div class="contrast-sub">ツール・制約・記憶——この足場がAIの動きを決める</div>
+          </div>
+        </div>
+      </div>
+      <!-- Right: harness concept -->
+      <div style="flex:1; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:0.9em 1em;">
+        <div style="font-size:0.9em; font-weight:bold; color:var(--accent); margin-bottom:0.3em;">ハーネスエンジニアリング</div>
+        <div style="font-size:0.7em; color:var(--mute); margin-bottom:0.6em;">AI が正しく動くための足場設計<br>（Mitchell Hashimoto, 2026.02）</div>
+        <div class="h-harness-grid">
+          <span>使えるツール</span>
+          <span>止まる条件</span>
+          <span>記憶の範囲</span>
+          <span>禁止操作</span>
+        </div>
+      </div>
+    </div>
+    <p class="muted sm" style="text-align:center; margin-top:0.4em;">
+      「賢い部下に細かく指示する」より <span class="hl">「権限と制約を渡して任せる」</span> ——マネジメントと同じ発想
+    </p>
+  </section>
+
+  <!-- 5. ハーネスが試された日 -->
+  <section>
+    <h2>ハーネスが<span class="warn-text">試された日</span></h2>
+    <p class="muted sm" style="text-align:center;">設計を固めて、運用に乗り始めていた頃——</p>
+    <div class="event-box" style="margin-top:0.7em;">
+      <div class="quote" style="border-left-color:var(--warn); background:#1c1408;">
+        <div class="event-date">2026年4月</div><br>
+        Anthropic が Claude サブスクリプション経由での<br>
+        サードパーティエージェント利用を<span class="warn-text">遮断した</span>。<br>
+        <span style="font-size:0.85em; color:var(--mute);">OpenClaw が、使えなくなった。</span>
+      </div>
+      <div class="quote" style="margin-top:0.6em; border-left-color:var(--green);">
+        ツールは消えた。でも<span class="hl">「環境を設計する」という発想は残った</span>。<br>
+        <span class="dim sm">ハーネスがあったから、Claude Code という別の環境に移行できた。</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 基盤が消えても残ったもの -->
+  <section>
+    <h2>基盤が消えても<span class="hl">残ったもの</span></h2>
+    <table class="cmp" style="margin-top:0.6em;">
+      <thead>
+        <tr>
+          <th></th>
+          <th>OpenClaw 時代</th>
+          <th class="now">現在（Claude Code）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>実行環境</td><td>自前フレームワーク</td><td>Anthropic 公式 CLI</td></tr>
+        <tr><td>指示の出し方</td><td>AI 自身がオーケストレーション</td><td>Claude Code が仲介</td></tr>
+        <tr><td>ハーネスの実体</td><td>openclaw の設定ファイル</td><td>CLAUDE.md + memory/</td></tr>
+        <tr><td>ツールの保守</td><td>自分でフレームワークを維持</td><td class="hl">Anthropic 任せ（メンテ不要）</td></tr>
+      </tbody>
+    </table>
+    <div class="quote" style="margin-top:0.7em; font-size:0.85em;">
+      <span class="dim sm">そしてその発想が、業界の方向と一致していた——</span>
+    </div>
+  </section>
+
+  <!-- 7. 業界も同じ方向へ -->
+  <section>
+    <h2>業界も<span class="hl">同じ方向</span>へ</h2>
+    <p class="muted sm" style="text-align:center; margin-bottom:0.6em;">個人が手作りしていたものが、業界標準になっていく</p>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-line"></div>
+        <div class="tl-dot"></div>
+        <div class="tl-date">2024年末</div>
+        <div class="tl-badge">Anthropic</div>
+        <div class="tl-title">MCP</div>
+        <div class="tl-desc">AI とツールの接続を<br>標準化</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-line"></div>
+        <div class="tl-dot"></div>
+        <div class="tl-date">2025年4月</div>
+        <div class="tl-badge">Google → Linux Foundation</div>
+        <div class="tl-title">A2A プロトコル</div>
+        <div class="tl-desc">AI 同士の通信を<br>標準化</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-line"></div>
+        <div class="tl-dot new"></div>
+        <div class="tl-date">2026年4月</div>
+        <div class="tl-badge new">Anthropic</div>
+        <div class="tl-title" style="color:var(--green);">Claude Managed Agents</div>
+        <div class="tl-desc">オーケストレーション層を<br>まるごとホスト</div>
+      </div>
+    </div>
+    <div class="quote" style="margin-top:0.4em; font-size:0.85em;">
+      「自前で作る必要があったもの」が<span class="hl">標準化・サービス化</span>されていく流れ
+    </div>
+  </section>
+
+  <!-- 8. これからどうする？ -->
+  <section>
+    <h2>で、<span class="hl">これからどうする？</span></h2>
+    <div class="action-row" style="margin-top:0.8em;">
+      <div class="action-card change">
+        <div class="action-icon">🔄</div>
+        <div class="action-label">変わること</div>
+        <div class="action-body">実行基盤はプラットフォームが提供する時代に<br><span class="muted sm">（自前実装が不要になる）</span></div>
+      </div>
+      <div class="action-card keep">
+        <div class="action-icon">🔒</div>
+        <div class="action-label">変わらないこと</div>
+        <div class="action-body"><span class="hl">何をさせるか・どこで止めるか</span><br>の設計は人間の仕事</div>
+      </div>
+      <div class="action-card todo">
+        <div class="action-icon">👉</div>
+        <div class="action-label">明日から</div>
+        <div class="action-body">AIに指示を書く前に<br><span class="hlg">AIが動ける環境を<br>1つ整えてみる</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. まとめ -->
+  <section>
+    <h2>まとめ</h2>
+    <ol class="story" style="margin-top:0.5em;">
+      <li>
+        <div class="story-num">1</div>
+        <div class="story-content">
+          <strong>「知人のデモを見た」</strong> ——AIが自律で動き、AIがAIに指示する世界を知った
+        </div>
+      </li>
+      <li>
+        <div class="story-num">2</div>
+        <div class="story-content">
+          <strong>「自分で運用した」</strong> ——プロンプトより環境設計（ハーネスエンジニアリング）が効くと気づいた
+        </div>
+      </li>
+      <li>
+        <div class="story-num">3</div>
+        <div class="story-content">
+          <strong>「ツールが消えた」</strong> ——でも設計思想は生き残り、別の環境で再現できた
+        </div>
+      </li>
+      <li>
+        <div class="story-num">4</div>
+        <div class="story-content">
+          <strong>「業界が追いついた」</strong> ——個人の実践がMCP・A2A・Managed Agentsとして標準化されていく
+        </div>
+      </li>
+    </ol>
+    <p style="font-size:1.1em; margin-top:0.7em; text-align:center;">
+      <span class="hl">「AIに指示する」</span>の次は——<span class="hlg">「AIが正しく動く環境を作る」</span>
+    </p>
+    <p class="muted sm" style="text-align:center; margin-top:0.3em;">→ デモを見てもらいましょう</p>
+  </section>
+
+  <!-- 10. 次回予告 -->
+  <section>
+    <h2 style="font-size:1.0em; margin-bottom:0.3em;">次の問い</h2>
+    <p style="font-size:1.25em; font-weight:600; text-align:center; line-height:1.5; margin:0.2em 0;">
+      <span class="warn-text">深夜3時に起こされる回数</span>を<span class="hl">減らせるか？</span>
+    </p>
+    <p class="dim" style="text-align:center; font-size:0.82em; margin:0.2em 0 0.5em;">
+      ハーネスを設計できるなら——<span class="hl">エージェントを first responder にできる</span>
+    </p>
+    <div style="display:flex; gap:1.2em; justify-content:center; max-width:820px; margin:0 auto 0.5em;">
+      <div style="flex:1; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:0.5em 0.8em; text-align:center;">
+        <div style="font-size:0.68em; color:var(--mute); margin-bottom:0.2em;">今</div>
+        <div style="font-size:0.78em; color:#e2e8f0; line-height:1.5;">アラート → 人間が起きる → 調査・対応</div>
+      </div>
+      <div style="display:flex; align-items:center; color:var(--green); font-size:1.3em;">→</div>
+      <div style="flex:1; background:#071f14; border:1px solid var(--green); border-radius:8px; padding:0.5em 0.8em; text-align:center;">
+        <div style="font-size:0.68em; color:var(--green); margin-bottom:0.2em;">次</div>
+        <div style="font-size:0.78em; color:#e2e8f0; line-height:1.5;">アラート → <span class="hlg">エージェントが先に動く</span> → 対処不能な時だけ人間へ</div>
+      </div>
+    </div>
+    <div style="display:flex; gap:0.8em; justify-content:center; max-width:820px; margin:0 auto;">
+      <div style="flex:1; background:var(--bg-card); border:1px solid var(--border); border-radius:6px; padding:0.45em 0.7em; text-align:center;">
+        <div style="font-size:0.62em; color:var(--mute); margin-bottom:0.15em;">Read Only</div>
+        <div style="font-size:0.72em; color:#e2e8f0;">ログを読む・レポート</div>
+        <div style="font-size:0.65em; color:var(--green); margin-top:0.1em;">今日から始められる</div>
+      </div>
+      <div style="flex:1; background:#1e1a0a; border:1px solid var(--warn); border-radius:6px; padding:0.45em 0.7em; text-align:center;">
+        <div style="font-size:0.62em; color:var(--warn); margin-bottom:0.15em;">Suggest</div>
+        <div style="font-size:0.72em; color:#e2e8f0;">「再起動を推奨」とSlack通知</div>
+        <div style="font-size:0.65em; color:#e2e8f0; margin-top:0.1em;">人間が判断・実行</div>
+      </div>
+      <div style="flex:1; background:#1c0e0e; border:1px solid var(--red); border-radius:6px; padding:0.45em 0.7em; text-align:center;">
+        <div style="font-size:0.62em; color:var(--red); margin-bottom:0.15em;">Act</div>
+        <div style="font-size:0.72em; color:#e2e8f0;">Pod再起動・ロールバック自動実行</div>
+        <div style="font-size:0.65em; color:var(--mute); margin-top:0.1em;">ここだけ慎重に</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Appendix A: ハーネスエンジニアリング実例 -->
+  <section>
+    <h2><span class="appendix-label">Appendix A</span> ハーネスエンジニアリング<span class="hl">実例</span></h2>
+    <div class="harness-example">
+      <!-- 自分の構成 -->
+      <div class="he-col self">
+        <div class="he-col-label">自分の構成（CLAUDE.md ベース）</div>
+        <div class="he-item">
+          <div class="he-key">使えるツール</div>
+          <div class="he-val">GitHub / Discord / Web検索 / ローカルファイル</div>
+        </div>
+        <div class="he-item">
+          <div class="he-key">止まる条件</div>
+          <div class="he-val">外部への送信・投稿は確認を取る</div>
+        </div>
+        <div class="he-item">
+          <div class="he-key">記憶の範囲</div>
+          <div class="he-val">memory/ ファイル群（長期・セッション別）</div>
+        </div>
+        <div class="he-item">
+          <div class="he-key">禁止操作</div>
+          <div class="he-val">破壊的変更（rm -rf 等）は承認要</div>
+        </div>
+      </div>
+      <!-- 世間の事例 -->
+      <div class="he-col world">
+        <div class="he-col-label">世間の事例——みんな同じことをやってる</div>
+        <div class="he-world-item">
+          <div class="he-tool">Cursor Rules</div>
+          <div class="he-constraint">→ コード生成のスタイル・禁止パターンを制約</div>
+        </div>
+        <div class="he-world-item">
+          <div class="he-tool">GitHub Copilot Instructions</div>
+          <div class="he-constraint">→ リポジトリの文脈・命名規則・禁止ライブラリを制約</div>
+        </div>
+        <div class="he-world-item">
+          <div class="he-tool">Devin 組織設定</div>
+          <div class="he-constraint">→ アクセス可能なリソース・外部API呼び出し・承認フローを制約</div>
+        </div>
+        <div class="he-world-item" style="border-bottom:none;">
+          <div class="he-tool">Claude Code（CLAUDE.md）</div>
+          <div class="he-constraint">→ ツール権限・行動指針・記憶ポリシーを制約</div>
+        </div>
+        <p class="muted sm" style="margin-top:0.4em; text-align:center; font-size:0.7em;">
+          ツールは違う。でも<span class="hlg">「何をどこまでやらせるか」を設計している</span>点は同じ
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Appendix C: OpenClaw 構成図（本編対比） -->
+  <section>
+    <h2><span class="appendix-label">Appendix C</span> OpenClaw <span class="hl">構成の詳細</span></h2>
+    <div class="oc-grid">
+      <!-- 本編の図（再掲・シンプル版） -->
+      <div class="oc-box" style="border-color:var(--border);">
+        <div class="oc-box-label">本編スライド3：外から見た構成</div>
+        <ul class="oc-node-list">
+          <li><span class="oc-node-name">💬 Discord</span><span class="oc-node-desc">入口。24時間常駐、話しかけると反応</span></li>
+          <li><span class="oc-node-name">🧠 記憶</span><span class="oc-node-desc">会話履歴を保持、日報を自動まとめ</span></li>
+          <li><span class="oc-node-name">🛠 ツール実行</span><span class="oc-node-desc">GitHub 操作、ファイル読み書き</span></li>
+          <li><span class="oc-node-name">🔗 AI 連携</span><span class="oc-node-desc">他の AI に指示、A2A オーケストレーション</span></li>
+        </ul>
+      </div>
+      <!-- 詳細版 -->
+      <div class="oc-box" style="border-color:var(--accent);">
+        <div class="oc-box-label">実際の内部構成</div>
+        <ul class="oc-node-list">
+          <li><span class="oc-node-name">Gateway</span><span class="oc-node-desc">Discord/Slack からのメッセージ受信・送信</span></li>
+          <li><span class="oc-node-name">Orchestrator</span><span class="oc-node-desc">Claude が「次に何をするか」を判断。ループの核</span></li>
+          <li><span class="oc-node-name">Memory</span><span class="oc-node-desc">短期（会話文脈）＋長期（ファイルベース）の2層</span></li>
+          <li><span class="oc-node-name">Heartbeat</span><span class="oc-node-desc">定期実行。日報生成・ログ保存などを cron 的に動かす</span></li>
+          <li><span class="oc-node-name">Tool Executor</span><span class="oc-node-desc">GitHub / Web / ファイル操作を安全に実行</span></li>
+          <li><span class="oc-node-name">Sub-agent Bridge</span><span class="oc-node-desc">Devin 等の外部 AI エージェントへ指示を橋渡し</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>Reveal.initialize({
+  hash: true,
+  transition: 'fade',
+  slideNumber: true,
+  width: 1280,
+  height: 720,
+  margin: 0.04,
+  minScale: 0.2,
+  maxScale: 2.0
+});</script>
+</body>
+</html>

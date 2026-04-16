@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>深夜3時に起こされる回数を減らせるか</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/night.css">
+  <style>
+    :root {
+      --accent: #60a5fa;
+      --dim:    #93c5fd;
+      --mute:   #64748b;
+      --warn:   #f59e0b;
+      --green:  #34d399;
+      --red:    #f87171;
+      --bg-card: #1e293b;
+      --border:  #334155;
+    }
+    .reveal .slides section { font-size: 0.82em; }
+    .reveal h1, .reveal h2, .reveal h3 { color: #e2e8f0; font-weight: 600; }
+    .reveal .hl    { color: var(--accent); font-weight: bold; }
+    .reveal .hlg   { color: var(--green);  font-weight: bold; }
+    .reveal .hlw   { color: var(--warn);   font-weight: bold; }
+    .reveal .hlr   { color: var(--red);    font-weight: bold; }
+    .reveal .dim   { color: var(--dim); }
+    .reveal .muted { color: var(--mute); }
+    .reveal .warn-text { color: var(--warn); }
+    .sm { font-size: 0.8em; }
+
+    /* ── Before/After ── */
+    .ba-wrap {
+      display: flex;
+      gap: 2em;
+      justify-content: center;
+      align-items: center;
+      margin: 0.6em auto;
+    }
+    .ba-col { flex: 1; max-width: 360px; text-align: center; }
+    .ba-label {
+      font-size: 0.7em;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 0.2em 1em;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 0.6em;
+    }
+    .ba-label.before { background: #3b1f1f; color: var(--red);   border: 1px solid var(--red); }
+    .ba-label.after  { background: #052e16; color: var(--green); border: 1px solid var(--green); }
+    .ba-flow {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.8em 0.6em;
+      font-size: 0.78em;
+      color: #e2e8f0;
+      line-height: 1.9;
+    }
+    .ba-arrow { color: var(--mute); font-size: 1.5em; margin: 0 0.3em; }
+
+    /* ── 4 agents grid ── */
+    .agent-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8em;
+      max-width: 860px;
+      margin: 0.6em auto;
+    }
+    .agent-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.7em 0.9em;
+    }
+    .agent-num {
+      font-size: 0.62em;
+      letter-spacing: 0.1em;
+      color: var(--mute);
+      text-transform: uppercase;
+      margin-bottom: 0.2em;
+    }
+    .agent-name { font-size: 0.92em; font-weight: 600; color: var(--accent); margin-bottom: 0.3em; }
+    .agent-desc { font-size: 0.78em; color: #94a3b8; line-height: 1.5; }
+    .agent-tool { font-size: 0.7em; color: var(--mute); margin-top: 0.3em; }
+
+    /* ── 権限モデル ── */
+    .perm-row {
+      display: flex;
+      gap: 0.8em;
+      justify-content: center;
+      max-width: 880px;
+      margin: 0.6em auto;
+    }
+    .perm-card {
+      flex: 1;
+      border-radius: 8px;
+      padding: 0.7em 0.9em;
+    }
+    .perm-card.ro  { background: #071f14; border: 1px solid var(--green); }
+    .perm-card.sg  { background: #1e1a0a; border: 1px solid var(--warn); }
+    .perm-card.act { background: #1c0e0e; border: 1px solid var(--red); }
+    .perm-level {
+      font-size: 0.7em;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 0.3em;
+    }
+    .perm-card.ro  .perm-level { color: var(--green); }
+    .perm-card.sg  .perm-level { color: var(--warn); }
+    .perm-card.act .perm-level { color: var(--red); }
+    .perm-what { font-size: 0.82em; color: #e2e8f0; font-weight: 600; margin-bottom: 0.3em; }
+    .perm-example { font-size: 0.73em; color: #94a3b8; line-height: 1.5; }
+    .perm-tag {
+      display: inline-block;
+      font-size: 0.65em;
+      padding: 0.1em 0.5em;
+      border-radius: 3px;
+      margin-top: 0.4em;
+    }
+    .perm-card.ro  .perm-tag { background: #052e16; color: var(--green); border: 1px solid var(--green); }
+    .perm-card.sg  .perm-tag { background: #2a1f00; color: var(--warn); border: 1px solid var(--warn); }
+    .perm-card.act .perm-tag { background: #2a0808; color: var(--red);  border: 1px solid var(--red); }
+
+    /* ── steps ── */
+    .step-list {
+      list-style: none;
+      padding: 0;
+      max-width: 780px;
+      margin: 0.6em auto;
+    }
+    .step-list li {
+      display: flex;
+      gap: 1em;
+      align-items: flex-start;
+      padding: 0.55em 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.85em;
+    }
+    .step-list li:last-child { border-bottom: none; }
+    .step-num {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 1.8em; height: 1.8em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8em;
+      color: var(--dim);
+      flex-shrink: 0;
+    }
+    .step-content strong { color: var(--accent); }
+    .step-content .step-sub { font-size: 0.82em; color: var(--mute); margin-top: 0.1em; }
+
+    /* ── quote ── */
+    .quote {
+      background: var(--bg-card);
+      border-left: 3px solid var(--accent);
+      padding: 0.8em 1.2em;
+      font-size: 0.88em;
+      text-align: left;
+      border-radius: 0 6px 6px 0;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* ── demo card ── */
+    .demo-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1em 1.4em;
+      max-width: 700px;
+      margin: 0.8em auto;
+      text-align: left;
+    }
+    .demo-label {
+      font-size: 0.65em;
+      color: var(--mute);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.5em;
+    }
+    .demo-step {
+      display: flex;
+      gap: 0.8em;
+      align-items: flex-start;
+      padding: 0.35em 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8em;
+    }
+    .demo-step:last-child { border-bottom: none; }
+    .demo-step-num { color: var(--mute); min-width: 1.5em; flex-shrink: 0; }
+    .demo-step-text { color: #e2e8f0; }
+    .demo-step-text .actor { color: var(--accent); font-weight: 600; }
+    .demo-step-text .actor.agent { color: var(--green); }
+  </style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+  <!-- 1. タイトル -->
+  <section>
+    <p style="font-size:0.72em; color:var(--mute); margin-bottom:0.8em; letter-spacing:0.06em; text-transform:uppercase;">AIエージェント運用自動化</p>
+    <h1 style="font-size:1.2em; line-height:1.5;">
+      <span class="warn-text">深夜3時に起こされる回数</span>を<br>
+      <span class="hl">減らせるか？</span>
+    </h1>
+    <p style="font-size:0.78em; color:var(--mute); margin-top:1.2em;">WebサービスエンジニアのAIエージェント運用自動化</p>
+  </section>
+
+  <!-- 2. 午前3時のルーティン -->
+  <section>
+    <h2 style="font-size:1.0em; margin-bottom:0.6em;">あなたの<span class="warn-text">午前3時</span>はどんな感じですか？</h2>
+    <div class="quote" style="margin-bottom:0.8em;">
+      PagerDutyが鳴る。目が覚める。スマホでSlack確認。ラップトップ開く。<br>
+      ログ確認して、メトリクス確認して、関連サービス確認して——<br>
+      <span style="color:var(--warn);">30分後、「やっぱり再起動するか」とコマンド打つ。</span>
+    </div>
+    <p style="text-align:center; font-size:0.88em; color:var(--dim); margin-top:0.8em;">
+      この作業——<span class="hl">手順書に書けますか？</span>
+    </p>
+    <p style="text-align:center; font-size:0.82em; color:var(--mute);">
+      書けるなら、エージェントが代わりにできるかもしれない。
+    </p>
+  </section>
+
+  <!-- 3. 初動対応の正体 -->
+  <section>
+    <h2 style="font-size:1.0em; margin-bottom:0.5em;">初動対応の<span class="hl">正体</span></h2>
+    <ul class="step-list">
+      <li>
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <strong>アラートの確認</strong>
+          <div class="step-sub">どのサービス？どのメトリクス？閾値はいくつ？</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <strong>ログの調査</strong>
+          <div class="step-sub">直前のエラーログ・スタックトレース・関連サービスの状態</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <strong>影響範囲の特定</strong>
+          <div class="step-sub">どのユーザー？どのエンドポイント？どれくらい？</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <strong>判断と対応</strong>
+          <div class="step-sub">再起動で直るか？ロールバックが必要か？エスカレーションか？</div>
+        </div>
+      </li>
+    </ul>
+    <p style="text-align:center; font-size:0.78em; color:var(--mute); margin-top:0.5em;">
+      1〜3は<span class="hlg">ルーティン</span>。4だけが<span class="hlw">判断</span>。
+    </p>
+  </section>
+
+  <!-- 4. エージェントという選択肢 -->
+  <section>
+    <h2 style="font-size:1.0em; margin-bottom:0.5em;">エージェントという<span class="hl">選択肢</span></h2>
+    <div style="display:flex; gap:1.2em; max-width:860px; margin:0.4em auto;">
+      <div style="flex:1; background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:0.8em 1em;">
+        <div style="font-size:0.65em; color:var(--mute); text-transform:uppercase; margin-bottom:0.4em;">今使ってるもの</div>
+        <div style="font-size:0.88em; color:var(--dim); font-weight:600; margin-bottom:0.3em;">GitHub Copilot</div>
+        <div style="font-size:0.78em; color:#94a3b8; line-height:1.5;">コードを書く時に補完してくれる。<br>「次の1行」を提案する。</div>
+      </div>
+      <div style="display:flex; align-items:center; color:var(--green); font-size:1.3em;">→</div>
+      <div style="flex:1; background:#071f14; border:1px solid var(--green); border-radius:8px; padding:0.8em 1em;">
+        <div style="font-size:0.65em; color:var(--green); text-transform:uppercase; margin-bottom:0.4em;">次のステップ</div>
+        <div style="font-size:0.88em; color:var(--green); font-weight:600; margin-bottom:0.3em;">AIエージェント</div>
+        <div style="font-size:0.78em; color:#e2e8f0; line-height:1.5;">あなたが寝てる間に<br>「次の30分」を代わりにやってくれる。</div>
+      </div>
+    </div>
+    <p style="text-align:center; font-size:0.8em; color:var(--mute); margin-top:0.7em;">
+      Copilotは「補助」。エージェントは「<span class="hl">委任</span>」。
+    </p>
+  </section>
+
+  <!-- 5. Before / After -->
+  <section>
+    <h2 style="font-size:1.0em; margin-bottom:0.5em;"><span class="hlr">Before</span> / <span class="hlg">After</span></h2>
+    <div class="ba-wrap" style="max-width:860px;">
+      <div class="ba-col">
+        <div class="ba-label before">Before</div>
+        <div class="ba-flow">
+          ログ監視<br>↓<br>アラート発火<br>↓<br><span style="color:var(--red);">PagerDuty → 人間が起きる</span><br>↓<br>調査（30分）<br>↓<br>対応・解決
+        </div>
+      </div>
+      <div class="ba-arrow">→</div>
+      <div class="ba-col">
+        <div class="ba-label after">After</div>
+        <div class="ba-flow">
+          ログ監視<br>↓<br>アラート発火<br>↓<br><span style="color:var(--green);">エージェントが調査・初動対応</span><br>↓<br>対処不能な時だけ<br><span style="color:var(--warn);">PagerDuty → 人間へ</span>
+        </div>
+      </div>
+    </div>
+    <p style="text-align:center; font-size:0.78em; color:var(--mute); margin-top:0.4em;">
+      PagerDutyが消えるのではなく、<span class="hl">人間が呼ばれる頻度が下がる</span>
+    </p>
+  </section>
+
+  <!-- 6. 4つのエージェントの役割 -->
+  <section>
+    <h2 style="font-size:1.0em; margin-bottom:0.5em;"><span class="hl">4つ</span>のエージェントの役割分担</h2>
+    <div class="agent-grid">
+      <div class="agent-card" style="border-color:var(--accent);">
+        <div class="agent-num">Agent 1</div>
+        <div class="agent-name">アラート受信</div>
+        <div class="agent-desc">PagerDuty/Webhookを受け取り、アラートの内容を構造化して次エージェントへ渡す</div>
+        <div class="agent-tool">→ Webhook受信 / PagerDuty API</div>
+      </div>
+      <div class="agent-card" style="border-color:var(--dim);">
+        <div class="agent-num">Agent 2</div>
+        <div class="agent-name">ログ・メトリクス調査</div>
+        <div class="agent-desc">エラーログ・スタックトレース・関連サービスの状態を収集してレポートを作成</div>
+        <div class="agent-tool">→ Datadog / CloudWatch MCP連携</div>
+      </div>
+      <div class="agent-card" style="border-color:var(--warn);">
+        <div class="agent-num">Agent 3</div>
+        <div class="agent-name">トリアージ・修復試行</div>
+        <div class="agent-desc">調査結果を判断。自己修復できそうなら実行（権限内で）。できなければAgent 4へ</div>
+        <div class="agent-tool">→ kubectl / 再起動 / ロールバック（権限設定次第）</div>
+      </div>
+      <div class="agent-card" style="border-color:var(--red);">
+        <div class="agent-num">Agent 4</div>
+        <div class="agent-name">エスカレーション</div>
+        <div class="agent-desc">対処不能と判断したら人間へ。調査レポート付きでSlack通知 / PagerDuty発火</div>
+        <div class="agent-tool">→ Slack API / PagerDuty API</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. デモ -->
+  <section>
+    <h2 style="font-size:1.0em; margin-bottom:0.5em;"><span class="hl">デモ</span>：500エラー発生→エージェントがSlackにレポート</h2>
+    <div class="demo-wrap">
+      <div class="demo-label">ステージング環境 / 500エラー発生シナリオ</div>
+      <div class="demo-step">
+        <div class="demo-step-num">1</div>
+        <div class="demo-step-text"><span class="actor">監視</span> → 500エラー率が閾値超過、Webhookを発火</div>
+      </div>
+      <div class="demo-step">
+        <div class="demo-step-num">2</div>
+        <div class="demo-step-text"><span class="actor agent">Agent 1</span> → アラート受信、内容を構造化</div>
+      </div>
+      <div class="demo-step">
+        <div class="demo-step-num">3</div>
+        <div class="demo-step-text"><span class="actor agent">Agent 2</span> → 直近のエラーログ・デプロイ履歴・メトリクスを収集</div>
+      </div>
+      <div class="demo-step">
+        <div class="demo-step-num">4</div>
+        <div class="demo-step-text"><span class="actor agent">Agent 3</span> → 「最新デプロイ後に発生、ロールバックで解消見込み」と判断</div>
+      </div>
+      <div class="demo-step">
+        <div class="demo-step-num">5</div>
+        <div class="demo-step-text"><span class="actor agent">Agent 4</span> → Slackに調査レポート送信「ロールバックを推奨します」</div>
+      </div>
+    </div>
+    <p style="text-align:center; font-size:0.75em; color:var(--mute);">この時点でまだ<span class="hl">人間は寝ている</span></p>
+  </section>
+
+  <!-- 8. 怖い話 → 権限モデル -->
+  <section>
+    <h2 style="font-size:1.0em; margin-bottom:0.4em;">「<span class="hlr">怖い</span>」に答える——3段階権限モデル</h2>
+    <div class="perm-row">
+      <div class="perm-card ro">
+        <div class="perm-level">Read Only</div>
+        <div class="perm-what">観察・レポート</div>
+        <div class="perm-example">ログを読む<br>メトリクス確認<br>レポートをSlackに送る</div>
+        <div class="perm-tag">今日から始められる</div>
+      </div>
+      <div class="perm-card sg">
+        <div class="perm-level">Suggest</div>
+        <div class="perm-what">提案・通知</div>
+        <div class="perm-example">「再起動を推奨します」<br>「ロールバックしますか？」<br>→ 人間が判断・実行</div>
+        <div class="perm-tag">人間が最終判断</div>
+      </div>
+      <div class="perm-card act">
+        <div class="perm-level">Act</div>
+        <div class="perm-what">自動実行</div>
+        <div class="perm-example">Pod再起動<br>ロールバック実行<br>スケールアウト</div>
+        <div class="perm-tag">ここだけ慎重に</div>
+      </div>
+    </div>
+    <p style="text-align:center; font-size:0.8em; color:var(--mute); margin-top:0.5em;">
+      <span class="hlr">怖いのはActだけ</span>。Read OnlyとSuggestは<span class="hlg">今日から始められる</span>
+    </p>
+  </section>
+
+  <!-- 9. 段階的導入 -->
+  <section>
+    <h2 style="font-size:1.0em; margin-bottom:0.5em;"><span class="hl">段階的導入</span>——最初は「調査レポートを作るだけ」から</h2>
+    <ul class="step-list">
+      <li>
+        <div class="step-num" style="color:var(--green); border-color:var(--green);">1</div>
+        <div class="step-content">
+          <strong style="color:var(--green);">Read Only フェーズ</strong>（リスクゼロ）
+          <div class="step-sub">アラートが来たらログを調査してSlackにレポートを送るだけ。人間はそのレポートを見て判断。</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-num" style="color:var(--warn); border-color:var(--warn);">2</div>
+        <div class="step-content">
+          <strong style="color:var(--warn);">Suggest フェーズ</strong>（承認フロー付き）
+          <div class="step-sub">「再起動を推奨します。実行しますか？ ✅/❌」をSlackで送る。人間がボタンを押すまでは何もしない。</div>
+        </div>
+      </li>
+      <li>
+        <div class="step-num" style="color:var(--red); border-color:var(--red);">3</div>
+        <div class="step-content">
+          <strong style="color:var(--red);">Act フェーズ</strong>（ガードレール付き）
+          <div class="step-sub">dry-runモードで検証後。blast radius制限あり（1台だけ / タイムアウト5分 / 自動ロールバック付き）。</div>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- 10. 何から始めるか -->
+  <section>
+    <h2 style="font-size:1.0em; margin-bottom:0.5em;">何から<span class="hl">始めるか</span></h2>
+    <div style="max-width:760px; margin:0 auto;">
+      <div style="background:var(--bg-card); border:1px solid var(--green); border-radius:8px; padding:0.9em 1.2em; margin-bottom:0.7em;">
+        <div style="font-size:0.7em; color:var(--green); font-weight:600; margin-bottom:0.4em; letter-spacing:0.06em; text-transform:uppercase;">STEP 1 — 今週できること</div>
+        <p style="font-size:0.82em; color:#e2e8f0; margin:0; line-height:1.6;">
+          <strong>runbookをエージェントが読める形に整理する</strong><br>
+          <span class="muted">手順書が存在するなら、エージェントへの指示書に変換できる。「ログのどこを見るか」「判断基準は何か」を文章で書き出す。</span>
+        </p>
+      </div>
+      <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:8px; padding:0.9em 1.2em;">
+        <div style="font-size:0.7em; color:var(--mute); font-weight:600; margin-bottom:0.4em; letter-spacing:0.06em; text-transform:uppercase;">STEP 2 — その次</div>
+        <p style="font-size:0.82em; color:#94a3b8; margin:0; line-height:1.6;">
+          <strong style="color:#e2e8f0;">Read Onlyエージェントを1本作る</strong><br>
+          アラートWebhookを受けてログ調査→Slackに送るだけ。壊れない。失うものはない。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11. まとめ -->
+  <section>
+    <h2 style="font-size:1.0em; margin-bottom:0.8em;">まとめ</h2>
+    <p style="font-size:1.2em; font-weight:600; text-align:center; line-height:1.7; margin-bottom:0.8em;">
+      人間が寝てる間に、<span class="hlg">初動は終わってる</span>
+    </p>
+    <div style="max-width:720px; margin:0 auto; font-size:0.82em; color:#94a3b8; line-height:1.8; text-align:left;">
+      <p style="margin:0.3em 0;">✅ 初動対応の1〜3（調査・確認・報告）はルーティン——エージェントに委任できる</p>
+      <p style="margin:0.3em 0;">✅ 「全自動」は怖い。<span class="hl">Read Only → Suggest → Act</span> の順で導入する</p>
+      <p style="margin:0.3em 0;">✅ PagerDutyは消えない。<span class="hlg">人間が呼ばれる回数が減る</span>だけ</p>
+      <p style="margin:0.3em 0;">✅ 今日から始めるなら<span class="hlw">runbookをエージェントの指示書に変換する</span>だけでいい</p>
+    </div>
+  </section>
+
+  <!-- 12. Q&A -->
+  <section>
+    <h2 style="font-size:1.0em; margin-bottom:0.8em;">Q&A</h2>
+    <p style="font-size:1.1em; text-align:center; color:var(--dim); margin-bottom:1.2em;">ご質問・ご意見お待ちしています</p>
+    <div style="max-width:700px; margin:0 auto; font-size:0.78em; color:var(--mute); line-height:1.8;">
+      <p style="margin:0.2em 0;"><span class="hl">参考:</span> Claude Managed Agents — <span class="dim">claude.ai/docs</span></p>
+      <p style="margin:0.2em 0;"><span class="hl">参考:</span> Anthropic API Tool Use — <span class="dim">docs.anthropic.com</span></p>
+      <p style="margin:0.2em 0;"><span class="hl">参考:</span> PagerDuty Webhook v3 — <span class="dim">developer.pagerduty.com</span></p>
+    </div>
+  </section>
+
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>Reveal.initialize({
+  hash: true,
+  transition: 'fade',
+  slideNumber: true,
+  width: 1280,
+  height: 720,
+  margin: 0.04,
+  minScale: 0.2,
+  maxScale: 2.0
+});</script>
+</body>
+</html>
