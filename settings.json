@@ -8,8 +8,8 @@
       "mcp__plugin_discord_discord__download_attachment",
       "Bash",
       "Read",
-      "Write(~/.claude/**)",
-      "Edit(~/.claude/**)",
+      "Write(/Users/ykomai/.claude/**)",
+      "Edit(/Users/ykomai/.claude/**)",
       "Glob",
       "Grep"
     ]
