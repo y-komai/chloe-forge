@@ -303,75 +303,75 @@
     }
     .harness-example {
       display: flex;
-      gap: 1.5em;
+      gap: 1.2em;
       align-items: stretch;
-      max-width: 900px;
-      margin: 0.3em auto;
+      max-width: 940px;
+      margin: 0.15em auto;
     }
     .he-col {
       flex: 1;
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 0.6em 0.7em;
+      padding: 0.45em 0.6em;
     }
     .he-col.self { border-color: var(--accent); }
     .he-col.world { border-color: var(--green); }
     .he-col-label {
-      font-size: 0.65em;
+      font-size: 0.6em;
       font-weight: 600;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      margin-bottom: 0.3em;
+      margin-bottom: 0.25em;
     }
     .he-col.self  .he-col-label { color: var(--accent); }
     .he-col.world .he-col-label { color: var(--green); }
     .he-item {
       display: flex;
-      gap: 0.6em;
+      gap: 0.5em;
       align-items: flex-start;
-      padding: 0.22em 0;
+      padding: 0.15em 0;
       border-bottom: 1px solid var(--border);
-      font-size: 0.76em;
+      font-size: 0.72em;
     }
     .he-item:last-child { border-bottom: none; }
     .he-key {
       color: var(--dim);
       flex-shrink: 0;
-      min-width: 90px;
+      min-width: 80px;
       font-size: 0.95em;
     }
     .he-val { color: #e2e8f0; }
     .he-world-item {
-      padding: 0.25em 0;
+      padding: 0.15em 0;
       border-bottom: 1px solid var(--border);
-      font-size: 0.76em;
+      font-size: 0.72em;
     }
     .he-world-item:last-child { border-bottom: none; }
     .he-tool { color: var(--accent); font-weight: 600; }
-    .he-constraint { color: #94a3b8; font-size: 0.9em; margin-top: 0.1em; }
+    .he-constraint { color: #94a3b8; font-size: 0.9em; margin-top: 0.05em; }
 
     /* Appendix C: OpenClaw detail */
     .oc-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 1.2em;
-      max-width: 900px;
-      margin: 0.3em auto;
+      gap: 1em;
+      max-width: 940px;
+      margin: 0.15em auto;
       align-items: start;
     }
     .oc-box {
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 0.5em 0.7em;
+      padding: 0.4em 0.6em;
     }
     .oc-box-label {
-      font-size: 0.62em;
+      font-size: 0.6em;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--mute);
-      margin-bottom: 0.35em;
+      margin-bottom: 0.25em;
     }
     .oc-node-list {
       list-style: none;
@@ -380,14 +380,14 @@
     }
     .oc-node-list li {
       display: flex;
-      gap: 0.7em;
-      padding: 0.18em 0;
+      gap: 0.6em;
+      padding: 0.12em 0;
       border-bottom: 1px solid var(--border);
-      font-size: 0.74em;
+      font-size: 0.7em;
       align-items: flex-start;
     }
     .oc-node-list li:last-child { border-bottom: none; }
-    .oc-node-name { color: var(--accent); font-weight: 600; min-width: 120px; flex-shrink: 0; }
+    .oc-node-name { color: var(--accent); font-weight: 600; min-width: 105px; flex-shrink: 0; }
     .oc-node-desc { color: #94a3b8; }
   </style>
 </head>
@@ -673,7 +673,7 @@
 
   <!-- Appendix A: ハーネスエンジニアリング実例 -->
   <section>
-    <h2><span class="appendix-label">Appendix A</span> ハーネスエンジニアリング<span class="hl">実例</span></h2>
+    <h2 style="font-size:0.95em; margin-bottom:0.3em; white-space:nowrap;"><span class="appendix-label">Appendix A</span> ハーネスエンジニアリング<span class="hl">実例</span></h2>
     <div class="harness-example">
       <!-- 自分の構成 -->
       <div class="he-col self">
@@ -714,7 +714,7 @@
           <div class="he-tool">Claude Code（CLAUDE.md）</div>
           <div class="he-constraint">→ ツール権限・行動指針・記憶ポリシーを制約</div>
         </div>
-        <p class="muted sm" style="margin-top:0.4em; text-align:center; font-size:0.7em;">
+        <p class="muted sm" style="margin-top:0.2em; text-align:center; font-size:0.65em;">
           ツールは違う。でも<span class="hlg">「何をどこまでやらせるか」を設計している</span>点は同じ
         </p>
       </div>
@@ -723,7 +723,7 @@
 
   <!-- Appendix C: OpenClaw 構成図（本編対比） -->
   <section>
-    <h2><span class="appendix-label">Appendix C</span> OpenClaw <span class="hl">構成の詳細</span></h2>
+    <h2 style="font-size:0.95em; margin-bottom:0.3em;"><span class="appendix-label">Appendix C</span> OpenClaw <span class="hl">構成の詳細</span></h2>
     <div class="oc-grid">
       <!-- 本編の図（再掲・シンプル版） -->
       <div class="oc-box" style="border-color:var(--border);">
