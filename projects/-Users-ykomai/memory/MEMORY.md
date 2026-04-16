@@ -41,6 +41,7 @@ openclaw 時代からの記憶は `long-term/` に保管されている。
 
 - [feedback_background_tasks.md](feedback_background_tasks.md) — 重いタスクはバックグラウンドエージェントで、会話継続
 - [feedback_discord_source.md](feedback_discord_source.md) — sourceがdiscordなら必ずDiscordにreply、内容で返信先を変えない
+- [feedback_permissions.md](feedback_permissions.md) — Discord permission通知の無効化（settings.jsonでは止まらない、server.ts修正が必要）
 
 ## 重要な過去の知見
 
@@ -58,7 +59,7 @@ openclaw 時代からの記憶は `long-term/` に保管されている。
 
 最新のセッションから順に参照すること。
 
-- [session-2026-04-16](session-2026-04-16.md) — 勉強会スライド最終化、SD Gallery作成（Bun+SQLite）、100枚画像生成、WSL/Mac同期構成の方針決定
+- [session-2026-04-16](session-2026-04-16.md) — 勉強会スライドv5完成（Appendix A+C・次回予告追加）、Discordプラグインpermission通知修正（server.ts変更済み）
 - [session-2026-04-15](session-2026-04-15.md) — WSL cron完了、Chrome拡張試用、勉強会スライドv2作成中、chloe-forgeのMac管理場所問題（未決）
 - [session-2026-04-11](session-2026-04-11.md) — ログ保存・日報定期実行、くろえ画像生成の話題（未完）、hook設定・デモ設計持ち越し
 - [session-2026-04-09](session-2026-04-09.md) — openclaw→Claude Code 移行、gh認証、設定移植完了
