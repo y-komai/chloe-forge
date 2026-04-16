@@ -6,12 +6,10 @@ originSessionId: ac8e1991-a2be-497d-97fe-21a55765626d
 ---
 ## 次にやること（優先度高）
 
-### WSL/Mac同期構成の整備（方針決定済み、実装待ち）
-1. **画像の永続化**: WSL `~/sd-images/` → `/mnt/c/Users/ykoma/sd-images/` に移動
-   - gallery.dbも一緒に移動
-   - server.tsのIMAGES_DIR定数を更新
-2. **Discordログcronにgit pullを追加**: `~/.claude/scripts/discord-log-save.ts` の先頭に `git pull origin main` を追加（pull→ログ追加→push）
-3. **sd-galleryの起動元統一**: WSL `~/chloe-forge/` からgit pullしてそこで起動するように変更（`~/.claude/projects/` は使わない）
+### WSL/Mac同期構成の整備（完了 2026-04-16）
+1. ✅ **画像の永続化**: `~/sd-images/` → `/mnt/c/Users/ykoma/sd-images/` に移動済み
+2. ✅ **Discordログcronにgit pull追加**: pull→ログ追加→push の順に変更済み
+3. ✅ **sd-gallery起動元を chloe-forge/ に統一**: `~/chloe-forge/projects/sd-gallery/server.ts` から起動
 
 **デプロイ戦略（決定済み）**: sd-galleryのコードを変更・pushするときは、くろえがそのままSSHでWSLに入りpull + 再起動までやる（常駐プロセスなし、cron不要）
 
@@ -26,6 +24,10 @@ originSessionId: ac8e1991-a2be-497d-97fe-21a55765626d
 - [ ] **デモ内容の決定**（スライドは完成済み、75f0f21）
 
 ---
+
+### SD Gallery 追加機能（続き）
+- [ ] **日付ごとの整理**: 今は slug ベースのシーン単位。日付（生成日）でフィルタ・グループ化できるようにする
+- [ ] **妄想日記 → 画像生成**: 日報を書くタイミングでその日のくろえの一日を短文で書いて（テキスト）、それに基づいてシーンを自動生成。日付でギャラリーに紐づける
 
 ## 中期的にやりたいこと
 
