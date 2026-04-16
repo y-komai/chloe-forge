@@ -330,7 +330,7 @@
       display: flex;
       gap: 0.6em;
       align-items: flex-start;
-      padding: 0.3em 0;
+      padding: 0.22em 0;
       border-bottom: 1px solid var(--border);
       font-size: 0.76em;
     }
@@ -343,7 +343,7 @@
     }
     .he-val { color: #e2e8f0; }
     .he-world-item {
-      padding: 0.4em 0;
+      padding: 0.25em 0;
       border-bottom: 1px solid var(--border);
       font-size: 0.76em;
     }
@@ -381,7 +381,7 @@
     .oc-node-list li {
       display: flex;
       gap: 0.7em;
-      padding: 0.35em 0;
+      padding: 0.25em 0;
       border-bottom: 1px solid var(--border);
       font-size: 0.76em;
       align-items: flex-start;
@@ -655,10 +655,6 @@
           <div class="he-key">禁止操作</div>
           <div class="he-val">破壊的変更（rm -rf 等）は承認要</div>
         </div>
-        <div class="he-item">
-          <div class="he-key">命令系統</div>
-          <div class="he-val">こまちさん（オーナー）の指示のみに従う</div>
-        </div>
       </div>
       <!-- 世間の事例 -->
       <div class="he-col world">
@@ -679,7 +675,7 @@
           <div class="he-tool">Claude Code（CLAUDE.md）</div>
           <div class="he-constraint">→ ツール権限・行動指針・記憶ポリシーを制約</div>
         </div>
-        <p class="muted sm" style="margin-top:0.6em; text-align:center;">
+        <p class="muted sm" style="margin-top:0.4em; text-align:center; font-size:0.7em;">
           ツールは違う。でも<span class="hlg">「何をどこまでやらせるか」を設計している</span>点は同じ
         </p>
       </div>
@@ -713,9 +709,6 @@
         </ul>
       </div>
     </div>
-    <p class="muted sm" style="text-align:center; margin-top:0.3em;">
-      Claude Code では Orchestrator = Claude Code 本体、Memory = CLAUDE.md + memory/、Heartbeat = cron hook に対応
-    </p>
   </section>
 
 </div></div>
