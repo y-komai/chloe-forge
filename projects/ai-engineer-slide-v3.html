@@ -81,8 +81,9 @@
       font-size: 0.75em;
       color: var(--dim);
       white-space: nowrap;
-      min-width: 100px;
+      min-width: 120px;
       text-align: center;
+      flex-shrink: 0;
     }
     .step-label.new { border-color: var(--accent); color: var(--accent); }
 
@@ -292,18 +293,18 @@
   <section>
     <h2>まとめ</h2>
     <br>
-    <ul class="steps">
+    <ul class="steps" style="max-width: 860px;">
       <li>
         <span class="step-label">変わったこと</span>
-        <span>AIは「答える道具」から「自律で動くエージェント」へ</span>
+        <span>「答える道具」から「自律で動くエージェント」へ</span>
       </li>
       <li>
         <span class="step-label">重要になること</span>
-        <span><span class="hl">ハーネスの設計</span>：AIが動く環境・制約・記憶を作る技術</span>
+        <span><span class="hl">ハーネスの設計</span> ——AIが動く環境・制約・記憶を作る技術</span>
       </li>
       <li>
         <span class="step-label">業界の方向</span>
-        <span>A2A、Claude Managed Agents——「個人レベルでやってたこと」が産業化される</span>
+        <span>A2A、Claude Managed Agents ——個人の実践が産業化されていく</span>
       </li>
     </ul>
     <br>
