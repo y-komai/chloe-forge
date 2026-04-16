@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIを束ねる、という発想</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reset.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/night.css">
+  <style>
+    :root {
+      --accent: #60a5fa;
+      --dim:    #93c5fd;
+      --mute:   #64748b;
+      --warn:   #f59e0b;
+      --green:  #34d399;
+      --bg-card: #1e293b;
+      --border:  #334155;
+    }
+    .reveal .slides section { font-size: 0.82em; }
+    .reveal h1, .reveal h2, .reveal h3 { color: #e2e8f0; font-weight: 600; }
+    .reveal .hl    { color: var(--accent); font-weight: bold; }
+    .reveal .hlg   { color: var(--green);  font-weight: bold; }
+    .reveal .dim   { color: var(--dim); }
+    .reveal .muted { color: var(--mute); font-size: 0.82em; }
+    .reveal .warn-text { color: var(--warn); }
+    .big   { font-size: 1.3em; line-height: 1.6; }
+    .sm    { font-size: 0.8em; }
+
+    .row   { display: flex; gap: 1.2em; justify-content: center; align-items: stretch; }
+    .card  {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.85em 1em;
+      flex: 1;
+    }
+    .card.hi  { border-color: var(--accent); }
+    .card.go  { border-color: var(--green); }
+    .card h3  {
+      margin: 0 0 0.5em;
+      font-size: 0.75em;
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .quote {
+      background: var(--bg-card);
+      border-left: 3px solid var(--accent);
+      padding: 0.8em 1.2em;
+      font-size: 0.88em;
+      text-align: left;
+      border-radius: 0 6px 6px 0;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* timeline steps */
+    .steps {
+      list-style: none;
+      padding: 0;
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: left;
+    }
+    .steps li {
+      display: flex;
+      gap: 1em;
+      align-items: flex-start;
+      padding: 0.55em 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.86em;
+    }
+    .steps li:last-child { border-bottom: none; }
+    .step-label {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.2em 0.6em;
+      font-size: 0.75em;
+      color: var(--dim);
+      white-space: nowrap;
+      min-width: 100px;
+      text-align: center;
+    }
+    .step-label.new { border-color: var(--accent); color: var(--accent); }
+
+    /* comparison table */
+    .cmp {
+      width: 100%;
+      max-width: 820px;
+      margin: 0 auto;
+      border-collapse: collapse;
+      font-size: 0.82em;
+    }
+    .cmp th {
+      padding: 0.55em 1em;
+      background: var(--bg-card);
+      color: var(--dim);
+      font-weight: 600;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+    .cmp th.now { color: var(--accent); }
+    .cmp td {
+      padding: 0.55em 1em;
+      border: 1px solid var(--border);
+      text-align: center;
+      color: #e2e8f0;
+    }
+    .cmp tr td:first-child {
+      color: var(--dim);
+      text-align: left;
+      font-size: 0.85em;
+    }
+    .cmp tr:nth-child(odd) td { background: #0f1a2e; }
+
+    /* harness diagram */
+    .harness-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3em;
+      margin: 0.8em auto;
+    }
+    .h-box {
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      padding: 0.55em 2em;
+      font-size: 0.85em;
+      color: #e2e8f0;
+      text-align: center;
+    }
+    .h-box.agent { border-color: var(--accent); background: #172554; min-width: 260px; font-weight: bold; font-size: 1em; }
+    .h-box.harness { border-color: var(--green); background: #052e16; font-size: 0.78em; min-width: 360px; color: var(--green); }
+    .h-arrow { color: var(--mute); font-size: 1.2em; }
+    .h-row   { display: flex; gap: 1.2em; }
+    .h-small { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 0.4em 0.9em; font-size: 0.75em; color: #94a3b8; text-align: center; }
+  </style>
+</head>
+<body>
+<div class="reveal"><div class="slides">
+
+  <!-- 1. タイトル -->
+  <section>
+    <h1 style="font-size:1.5em;">AIを<span class="hl">束ねる</span>、という発想</h1>
+    <p class="muted" style="font-size:0.9em;">OpenClaw から学んだこと、業界が追いついてきた話</p>
+    <br>
+    <p class="muted sm">2026.04 / エンジニア勉強会 / y-komai</p>
+  </section>
+
+  <!-- 2. きっかけ：OpenClawとの出会い -->
+  <section>
+    <h2>きっかけ：<span class="hl">OpenClaw</span>との出会い</h2>
+    <br>
+    <div class="quote">
+      「Devin に指示するのすらめんどいよね？<br>
+      <span class="hl">その指示を OpenClaw にやらせようっていう発想</span>。<br>
+      いわゆる A2A（Agent to Agents）。」
+    </div>
+    <br>
+    <p class="sm" style="text-align:left; max-width:700px; margin:0 auto;">
+      これを聞いたとき、衝撃だった。<br>
+      AIが <strong>「答える道具」</strong> じゃなくて <strong>「動かす存在」</strong> として日常に溶け込んでいる。<br>
+      しかも <span class="hl">AIがAIに指示する</span>。
+    </p>
+  </section>
+
+  <!-- 3. OpenClawって何をしてたのか -->
+  <section>
+    <h2>OpenClaw って<span class="hl">何をしていたのか</span></h2>
+    <ul class="steps">
+      <li>
+        <span class="step-label">常駐</span>
+        <span>Discord にずっといる。話しかけると反応する</span>
+      </li>
+      <li>
+        <span class="step-label">記憶</span>
+        <span>前の会話を覚えてる。日報を自動でまとめる</span>
+      </li>
+      <li>
+        <span class="step-label">ツール実行</span>
+        <span>GitHub を操作する、ファイルを書く、テストを回す</span>
+      </li>
+      <li>
+        <span class="step-label">AI 連携</span>
+        <span>他の AI（Devin 等）に指示を出すオーケストレーター</span>
+      </li>
+    </ul>
+    <br>
+    <p class="dim sm">OpenClaw は <strong>独自フレームワーク</strong> として、これらすべてを自前で持っていた</p>
+  </section>
+
+  <!-- 4. ここで気づいたこと -->
+  <section>
+    <h2>ここで気づいたこと</h2>
+    <br>
+    <p class="big" style="text-align:center;">
+      重要なのは<br>
+      <span class="hl">「どう指示するか」</span>じゃなく<br>
+      <span class="hlg">「どんな環境で動かすか」</span>だ
+    </p>
+    <br>
+    <div class="quote">
+      ツールは何を使えるか、どこで止まるか、<br>
+      失敗したらどうするか、何を記憶するか——<br>
+      <span class="hl">この「足場」の設計が結果を決める</span>
+    </div>
+  </section>
+
+  <!-- 5. ハーネスエンジニアリング -->
+  <section>
+    <h2><span class="hl">ハーネスエンジニアリング</span>という発想</h2>
+    <br>
+    <div class="harness-wrap">
+      <div class="h-box agent">🤖 AI エージェント</div>
+      <div class="h-arrow">↕</div>
+      <div class="h-box harness">
+        ハーネス：使えるツール / 止まる条件 / 記憶の範囲 / 確認が必要な操作
+      </div>
+      <div class="h-arrow">↕</div>
+      <div class="h-row">
+        <div class="h-small">ファイル</div>
+        <div class="h-small">GitHub</div>
+        <div class="h-small">Discord</div>
+        <div class="h-small">Web</div>
+      </div>
+    </div>
+    <br>
+    <p class="sm muted">
+      「賢い部下に細かく手順を指示する」より<br>
+      <span class="hl">「権限と制約を渡して、あとは任せる」</span> ——マネジメントと同じ発想
+    </p>
+  </section>
+
+  <!-- 6. OpenClaw はどうなったか -->
+  <section>
+    <h2>OpenClaw は<span class="warn-text">どうなったか</span></h2>
+    <br>
+    <p style="font-size:0.95em; max-width:680px; margin:0 auto; text-align:left;">
+      Anthropic の OAuth ポリシー変更で <span class="warn-text">使用不可</span> に。<br>
+      同じ時期に <span class="hl">Claude Code</span> という公式プロダクトが登場した。
+    </p>
+    <br>
+    <table class="cmp">
+      <thead>
+        <tr>
+          <th></th>
+          <th>OpenClaw 時代</th>
+          <th class="now">現在（Claude Code）</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>ランタイム</td><td>自前フレームワーク</td><td>Anthropic 公式プロダクト</td></tr>
+        <tr><td>オーケストレーター</td><td>くろえ自身が担う</td><td>Claude Code 側が担う</td></tr>
+        <tr><td>ハーネスの実体</td><td>openclaw の設定・コード</td><td>CLAUDE.md + memory/ ファイル群</td></tr>
+        <tr><td>維持コスト</td><td>自分でフレームワークを育てる</td><td>Anthropic が育てる</td></tr>
+      </tbody>
+    </table>
+    <br>
+    <p class="dim sm">「オーケストレーター」の役割がプラットフォーム側に移管された</p>
+  </section>
+
+  <!-- 7. 業界も同じ方向へ -->
+  <section>
+    <h2>業界も<span class="hl">同じ方向</span>へ</h2>
+    <ul class="steps">
+      <li>
+        <span class="step-label">2024年末</span>
+        <span>MCP（Model Context Protocol）— Anthropic。AIとツールをつなぐ標準規格</span>
+      </li>
+      <li>
+        <span class="step-label">2025年4月</span>
+        <span>A2A プロトコル — Google → Linux Foundation。AIとAIが通信する標準規格</span>
+      </li>
+      <li>
+        <span class="step-label new">2026年4月</span>
+        <span><span class="hl">Claude Managed Agents</span> — Anthropic。オーケストレーション層ごとホストするサービス</span>
+      </li>
+    </ul>
+    <br>
+    <div class="quote">
+      「自前で作る必要があったもの」が<br>
+      <span class="hl">標準化・サービス化</span>されていく流れ
+    </div>
+  </section>
+
+  <!-- 8. まとめ -->
+  <section>
+    <h2>まとめ</h2>
+    <br>
+    <ul class="steps">
+      <li>
+        <span class="step-label">変わったこと</span>
+        <span>AIは「答える道具」から「自律で動くエージェント」へ</span>
+      </li>
+      <li>
+        <span class="step-label">重要になること</span>
+        <span><span class="hl">ハーネスの設計</span>：AIが動く環境・制約・記憶を作る技術</span>
+      </li>
+      <li>
+        <span class="step-label">業界の方向</span>
+        <span>A2A、Claude Managed Agents——「個人レベルでやってたこと」が産業化される</span>
+      </li>
+    </ul>
+    <br>
+    <p class="big" style="text-align:center;">
+      <span class="hl">「AIに指示する」</span>の次は<br>
+      <span class="hlg">「AIが正しく動く環境を作る」</span>
+    </p>
+    <br>
+    <p class="dim sm">→ デモを見てもらいましょう</p>
+  </section>
+
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script>Reveal.initialize({
+  hash: true,
+  transition: 'fade',
+  slideNumber: true,
+  width: 1280,
+  height: 720,
+  margin: 0.04,
+  minScale: 0.2,
+  maxScale: 2.0
+});</script>
+</body>
+</html>
