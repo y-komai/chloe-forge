@@ -6,8 +6,12 @@
       "mcp__plugin_discord_discord__edit_message",
       "mcp__plugin_discord_discord__fetch_messages",
       "mcp__plugin_discord_discord__download_attachment",
-      "Write(~/.claude/*)",
-      "Edit(~/.claude/*)"
+      "Bash",
+      "Read",
+      "Write(~/.claude/**)",
+      "Edit(~/.claude/**)",
+      "Glob",
+      "Grep"
     ]
   },
   "enabledPlugins": {
