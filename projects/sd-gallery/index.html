@@ -8,39 +8,59 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #0f0f13; color: #e2e8f0; font-family: system-ui, sans-serif; }
 
-    header { padding: 1.2em 2em; border-bottom: 1px solid #1e293b; display: flex; align-items: center; gap: 0.8em; }
-    header h1 { font-size: 1.1em; color: #60a5fa; font-weight: 600; }
+    header { padding: 1em 1.5em; border-bottom: 1px solid #1e293b; display: flex; align-items: center; gap: 0.8em; }
+    header h1 { font-size: 1em; color: #60a5fa; font-weight: 600; flex: 1; }
     .back-btn { background: none; border: 1px solid #334155; border-radius: 6px; color: #94a3b8; padding: 0.3em 0.8em; cursor: pointer; font-size: 0.8em; display: none; }
     .back-btn:hover { border-color: #60a5fa; color: #60a5fa; }
 
-    /* scene grid */
-    #scene-view .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1em; padding: 1.2em 2em 2em;
-    }
-    .scene-card { cursor: pointer; border-radius: 10px; overflow: hidden; background: #1e293b; border: 1px solid #1e293b; transition: all 0.15s; }
-    .scene-card:hover { border-color: #60a5fa; transform: translateY(-2px); }
-    .scene-card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; background: #0f172a; }
-    .scene-card .label { padding: 0.6em 0.8em; }
-    .scene-card .label .name { font-size: 0.88em; font-weight: 600; color: #e2e8f0; }
-    .scene-card .label .sub { font-size: 0.72em; color: #64748b; margin-top: 0.15em; }
+    /* tabs */
+    .tabs { display: flex; gap: 0; border-bottom: 1px solid #1e293b; }
+    .tab { padding: 0.7em 1.5em; font-size: 0.82em; cursor: pointer; color: #64748b; border-bottom: 2px solid transparent; transition: all 0.15s; }
+    .tab.active { color: #60a5fa; border-bottom-color: #60a5fa; }
+    .tab:hover { color: #94a3b8; }
 
-    /* detail view */
-    #detail-view { display: none; padding: 1.2em 2em 2em; }
-    .prompt-box { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 0.8em 1em; margin-bottom: 1.2em; }
-    .prompt-box h3 { font-size: 0.72em; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4em; }
-    .prompt-box p { font-size: 0.75em; color: #94a3b8; line-height: 1.6; word-break: break-word; }
-    .detail-title { font-size: 1.1em; font-weight: 600; margin-bottom: 0.8em; }
-    .image-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 0.7em;
-    }
+    /* calendar */
+    #calendar-view { padding: 1.2em 1.5em; }
+    .cal-nav { display: flex; align-items: center; gap: 1em; margin-bottom: 1em; }
+    .cal-nav button { background: none; border: 1px solid #334155; border-radius: 6px; color: #94a3b8; padding: 0.3em 0.7em; cursor: pointer; font-size: 0.85em; }
+    .cal-nav button:hover { border-color: #60a5fa; color: #60a5fa; }
+    .cal-nav h2 { font-size: 0.95em; color: #e2e8f0; font-weight: 600; min-width: 120px; text-align: center; }
+    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.4em; }
+    .cal-weekday { text-align: center; font-size: 0.7em; color: #475569; padding: 0.3em 0; }
+    .cal-day { border-radius: 8px; overflow: hidden; background: #1e293b; border: 1px solid #1e293b; min-height: 80px; cursor: default; transition: border-color 0.15s; }
+    .cal-day.has-images { cursor: pointer; border-color: #334155; }
+    .cal-day.has-images:hover { border-color: #60a5fa; }
+    .cal-day.today { border-color: #3b82f6; }
+    .cal-day.other-month .day-num { color: #334155; }
+    .cal-day .day-num { font-size: 0.72em; color: #64748b; padding: 0.35em 0.5em; }
+    .cal-day .thumb { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
+    .cal-day .count { font-size: 0.65em; color: #475569; padding: 0.2em 0.5em 0.3em; }
+
+    /* date detail */
+    #date-view { display: none; padding: 1.2em 1.5em; }
+    .date-title { font-size: 1em; font-weight: 600; margin-bottom: 1em; color: #e2e8f0; }
+    .scene-group { margin-bottom: 1.5em; }
+    .scene-group h3 { font-size: 0.78em; color: #60a5fa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6em; }
+    .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.6em; }
     .img-item { position: relative; border-radius: 8px; overflow: hidden; cursor: pointer; background: #1e293b; }
     .img-item img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; transition: transform 0.15s; }
     .img-item:hover img { transform: scale(1.03); }
-    .img-item .num { position: absolute; top: 0.4em; left: 0.5em; background: rgba(0,0,0,0.6); border-radius: 4px; padding: 0.1em 0.4em; font-size: 0.68em; color: #94a3b8; }
+    .img-item .num { position: absolute; top: 0.4em; left: 0.5em; background: rgba(0,0,0,0.6); border-radius: 4px; padding: 0.1em 0.4em; font-size: 0.65em; color: #94a3b8; }
+
+    /* scenes tab */
+    #scene-view { display: none; padding: 1.2em 1.5em; }
+    #scene-detail { display: none; padding: 1.2em 1.5em; }
+    .scene-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.8em; }
+    .scene-card { cursor: pointer; border-radius: 10px; overflow: hidden; background: #1e293b; border: 1px solid #1e293b; transition: all 0.15s; }
+    .scene-card:hover { border-color: #60a5fa; transform: translateY(-2px); }
+    .scene-card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; background: #0f172a; }
+    .scene-card .label { padding: 0.5em 0.7em; }
+    .scene-card .label .name { font-size: 0.82em; font-weight: 600; }
+    .scene-card .label .sub { font-size: 0.68em; color: #64748b; margin-top: 0.1em; }
+    .prompt-box { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 0.8em 1em; margin-bottom: 1em; }
+    .prompt-box h3 { font-size: 0.7em; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4em; }
+    .prompt-box p { font-size: 0.73em; color: #94a3b8; line-height: 1.6; word-break: break-word; }
+    .scene-detail-title { font-size: 1em; font-weight: 600; margin-bottom: 0.8em; }
 
     /* lightbox */
     #lb { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 100; align-items: center; justify-content: center; }
@@ -49,41 +69,199 @@
     #lb-close { position: fixed; top: 1em; right: 1.5em; font-size: 2em; cursor: pointer; color: #64748b; }
     #lb-close:hover { color: #e2e8f0; }
 
-    .loading { padding: 3em 2em; text-align: center; color: #64748b; }
+    .loading { padding: 3em 2em; text-align: center; color: #64748b; font-size: 0.85em; }
   </style>
 </head>
 <body>
   <header>
-    <button class="back-btn" id="back-btn" onclick="showScenes()">← 戻る</button>
-    <h1 id="header-title">🖼 SD Gallery — くろえ</h1>
+    <button class="back-btn" id="back-btn" onclick="handleBack()">← 戻る</button>
+    <h1 id="header-title">🖤 くろえの日記</h1>
   </header>
 
-  <div id="scene-view">
-    <div class="grid" id="scene-grid"><p class="loading">読み込み中...</p></div>
+  <div class="tabs" id="tabs">
+    <div class="tab active" id="tab-calendar" onclick="switchTab('calendar')">日記</div>
+    <div class="tab" id="tab-scenes" onclick="switchTab('scenes')">シーン別</div>
   </div>
 
-  <div id="detail-view">
-    <p class="detail-title" id="detail-title"></p>
+  <!-- calendar view -->
+  <div id="calendar-view">
+    <div class="cal-nav">
+      <button onclick="changeMonth(-1)">‹</button>
+      <h2 id="cal-month-label"></h2>
+      <button onclick="changeMonth(1)">›</button>
+    </div>
+    <div class="cal-grid" id="cal-weekdays"></div>
+    <div class="cal-grid" id="cal-days"></div>
+  </div>
+
+  <!-- date detail -->
+  <div id="date-view">
+    <p class="date-title" id="date-title"></p>
+    <div id="date-images"></div>
+  </div>
+
+  <!-- scenes tab -->
+  <div id="scene-view">
+    <div class="scene-grid" id="scene-grid"><p class="loading">読み込み中...</p></div>
+  </div>
+
+  <!-- scene detail -->
+  <div id="scene-detail">
+    <p class="scene-detail-title" id="scene-detail-title"></p>
     <div class="prompt-box">
       <h3>Prompt</h3>
-      <p id="detail-prompt"></p>
+      <p id="scene-detail-prompt"></p>
     </div>
-    <div class="image-grid" id="image-grid"></div>
+    <div class="image-grid" id="scene-image-grid"></div>
   </div>
 
   <div id="lb"><span id="lb-close">×</span><img id="lb-img" src="" alt=""></div>
 
   <script>
-    let scenes = [];
+    let currentTab = 'calendar';
+    let calYear = new Date().getFullYear();
+    let calMonth = new Date().getMonth() + 1;
+    let calData = {};
+    let backStack = [];
+    let allScenes = [];
 
+    const WEEKDAYS = ['日','月','火','水','木','金','土'];
+
+    // tabs
+    function switchTab(tab) {
+      currentTab = tab;
+      backStack = [];
+      document.getElementById('back-btn').style.display = 'none';
+      document.getElementById('header-title').textContent = tab === 'calendar' ? '🖤 くろえの日記' : '🖤 シーン別';
+      document.getElementById('tab-calendar').classList.toggle('active', tab === 'calendar');
+      document.getElementById('tab-scenes').classList.toggle('active', tab === 'scenes');
+      document.getElementById('tabs').style.display = '';
+      document.getElementById('calendar-view').style.display = tab === 'calendar' ? 'block' : 'none';
+      document.getElementById('date-view').style.display = 'none';
+      document.getElementById('scene-view').style.display = tab === 'scenes' ? 'block' : 'none';
+      document.getElementById('scene-detail').style.display = 'none';
+      if (tab === 'scenes' && !allScenes.length) loadScenes();
+    }
+
+    function handleBack() {
+      const prev = backStack.pop();
+      if (!prev) return;
+      if (prev === 'calendar') {
+        document.getElementById('date-view').style.display = 'none';
+        document.getElementById('calendar-view').style.display = 'block';
+        document.getElementById('header-title').textContent = '🖤 くろえの日記';
+        document.getElementById('tabs').style.display = '';
+      } else if (prev === 'scenes') {
+        document.getElementById('scene-detail').style.display = 'none';
+        document.getElementById('scene-view').style.display = 'block';
+        document.getElementById('header-title').textContent = '🖤 シーン別';
+        document.getElementById('tabs').style.display = '';
+      }
+      if (!backStack.length) document.getElementById('back-btn').style.display = 'none';
+    }
+
+    // calendar
+    async function loadCalendar() {
+      const res = await fetch(`/api/calendar?year=${calYear}&month=${calMonth}`);
+      const rows = await res.json();
+      calData = {};
+      for (const r of rows) calData[r.diary_date] = r;
+      renderCalendar();
+    }
+
+    function renderCalendar() {
+      const label = document.getElementById('cal-month-label');
+      label.textContent = `${calYear}年 ${calMonth}月`;
+
+      const wdEl = document.getElementById('cal-weekdays');
+      wdEl.innerHTML = WEEKDAYS.map(d => `<div class="cal-weekday">${d}</div>`).join('');
+
+      const first = new Date(calYear, calMonth - 1, 1);
+      const lastDay = new Date(calYear, calMonth, 0).getDate();
+      const startDow = first.getDay();
+      const today = new Date().toISOString().slice(0, 10);
+
+      const cells = [];
+      // prev month padding
+      const prevLast = new Date(calYear, calMonth - 1, 0).getDate();
+      for (let i = startDow - 1; i >= 0; i--) {
+        cells.push({ day: prevLast - i, otherMonth: true });
+      }
+      for (let d = 1; d <= lastDay; d++) cells.push({ day: d, otherMonth: false });
+      while (cells.length % 7 !== 0) cells.push({ day: cells.length - (startDow + lastDay) + 1, otherMonth: true });
+
+      const daysEl = document.getElementById('cal-days');
+      daysEl.innerHTML = cells.map(c => {
+        const dateStr = c.otherMonth ? null : `${calYear}-${String(calMonth).padStart(2,'0')}-${String(c.day).padStart(2,'0')}`;
+        const entry = dateStr ? calData[dateStr] : null;
+        const isToday = dateStr === today;
+        const cls = ['cal-day', c.otherMonth ? 'other-month' : '', entry ? 'has-images' : '', isToday ? 'today' : ''].filter(Boolean).join(' ');
+        const onclick = entry ? `onclick="showDate('${dateStr}')"` : '';
+        const thumb = entry ? `<img class="thumb" src="/serve/${entry.thumb_id}" loading="lazy">` : '';
+        const count = entry ? `<div class="count">${entry.count}枚</div>` : '';
+        return `<div class="${cls}" ${onclick}><div class="day-num">${c.day}</div>${thumb}${count}</div>`;
+      }).join('');
+    }
+
+    function changeMonth(delta) {
+      calMonth += delta;
+      if (calMonth > 12) { calMonth = 1; calYear++; }
+      if (calMonth < 1)  { calMonth = 12; calYear--; }
+      loadCalendar();
+    }
+
+    async function showDate(date) {
+      backStack.push('calendar');
+      document.getElementById('calendar-view').style.display = 'none';
+      document.getElementById('date-view').style.display = 'block';
+      document.getElementById('tabs').style.display = 'none';
+      document.getElementById('back-btn').style.display = 'inline-block';
+
+      const [y, m, d] = date.split('-');
+      document.getElementById('header-title').textContent = `${y}年${parseInt(m)}月${parseInt(d)}日`;
+      document.getElementById('date-title').textContent = `${y}年${parseInt(m)}月${parseInt(d)}日`;
+      document.getElementById('date-images').innerHTML = '<p class="loading">読み込み中...</p>';
+
+      const res = await fetch(`/api/dates/${date}/images`);
+      const images = await res.json();
+      if (!images.length) {
+        document.getElementById('date-images').innerHTML = '<p class="loading">この日の画像はありません</p>';
+        return;
+      }
+
+      // group by scene
+      const groups = {};
+      for (const img of images) {
+        if (!groups[img.scene_slug]) groups[img.scene_slug] = { name: img.scene_name, images: [] };
+        groups[img.scene_slug].images.push(img);
+      }
+
+      document.getElementById('date-images').innerHTML = Object.entries(groups).map(([slug, g]) => `
+        <div class="scene-group">
+          <h3>${g.name}</h3>
+          <div class="image-grid">
+            ${g.images.map((img, i) => `
+              <div class="img-item" onclick="openLb('/serve/${img.id}')">
+                <img src="/serve/${img.id}" loading="lazy" alt="">
+                <span class="num">${String(i+1).padStart(2,'0')}</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // scenes tab
     async function loadScenes() {
       const res = await fetch('/api/scenes');
-      scenes = await res.json();
+      allScenes = await res.json();
       const grid = document.getElementById('scene-grid');
-      if (!scenes.length) { grid.innerHTML = '<p class="loading">シーンなし</p>'; return; }
-      grid.innerHTML = scenes.map(s => `
-        <div class="scene-card" onclick="showDetail('${s.slug}')">
-          ${s.image_count > 0 ? `<img src="/thumb/${s.slug}" loading="lazy" alt="${s.name}">` : `<div style="aspect-ratio:2/3;background:#0f172a;display:flex;align-items:center;justify-content:center;color:#334155;">no image</div>`}
+      if (!allScenes.length) { grid.innerHTML = '<p class="loading">シーンなし</p>'; return; }
+      grid.innerHTML = allScenes.map(s => `
+        <div class="scene-card" onclick="showSceneDetail('${s.slug}')">
+          ${s.image_count > 0
+            ? `<img src="/thumb/${s.slug}" loading="lazy" alt="${s.name}">`
+            : `<div style="aspect-ratio:2/3;background:#0f172a;display:flex;align-items:center;justify-content:center;color:#334155;font-size:0.75em;">no image</div>`}
           <div class="label">
             <div class="name">${s.name}</div>
             <div class="sub">${s.image_count} 枚</div>
@@ -92,39 +270,34 @@
       `).join('');
     }
 
-    async function showDetail(slug) {
-      const scene = scenes.find(s => s.slug === slug);
+    async function showSceneDetail(slug) {
+      const scene = allScenes.find(s => s.slug === slug);
       if (!scene) return;
-
+      backStack.push('scenes');
       document.getElementById('scene-view').style.display = 'none';
-      document.getElementById('detail-view').style.display = 'block';
+      document.getElementById('scene-detail').style.display = 'block';
+      document.getElementById('tabs').style.display = 'none';
       document.getElementById('back-btn').style.display = 'inline-block';
       document.getElementById('header-title').textContent = scene.name;
-      document.getElementById('detail-title').textContent = scene.name;
-      document.getElementById('detail-prompt').textContent = scene.prompt;
-      document.getElementById('image-grid').innerHTML = '<p class="loading">読み込み中...</p>';
+      document.getElementById('scene-detail-title').textContent = scene.name;
+      document.getElementById('scene-detail-prompt').textContent = scene.prompt;
+      document.getElementById('scene-image-grid').innerHTML = '<p class="loading">読み込み中...</p>';
 
       const res = await fetch(`/api/scenes/${slug}/images`);
       const images = await res.json();
       if (!images.length) {
-        document.getElementById('image-grid').innerHTML = '<p class="loading">画像なし（生成中かも）</p>';
+        document.getElementById('scene-image-grid').innerHTML = '<p class="loading">画像なし</p>';
         return;
       }
-      document.getElementById('image-grid').innerHTML = images.map((img, i) => `
+      document.getElementById('scene-image-grid').innerHTML = images.map((img, i) => `
         <div class="img-item" onclick="openLb('/serve/${img.id}')">
-          <img src="/serve/${img.id}" loading="lazy" alt="${img.filepath}">
+          <img src="/serve/${img.id}" loading="lazy" alt="">
           <span class="num">${String(i+1).padStart(2,'0')}</span>
         </div>
       `).join('');
     }
 
-    function showScenes() {
-      document.getElementById('scene-view').style.display = 'block';
-      document.getElementById('detail-view').style.display = 'none';
-      document.getElementById('back-btn').style.display = 'none';
-      document.getElementById('header-title').textContent = '🖼 SD Gallery — くろえ';
-    }
-
+    // lightbox
     function openLb(src) {
       document.getElementById('lb-img').src = src;
       document.getElementById('lb').classList.add('show');
@@ -133,7 +306,9 @@
     document.getElementById('lb').onclick = (e) => { if (e.target === e.currentTarget) document.getElementById('lb').classList.remove('show'); };
     document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('lb').classList.remove('show'); });
 
-    loadScenes();
+    // init
+    loadCalendar();
+    switchTab('calendar');
   </script>
 </body>
 </html>

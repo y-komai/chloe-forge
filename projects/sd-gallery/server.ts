@@ -7,7 +7,6 @@ const DB_PATH    = "/mnt/c/Users/ykoma/sd-images/gallery.db";
 const IMAGES_DIR = "/mnt/c/Users/ykoma/sd-images";
 const PORT       = 3210;
 
-// Init DB
 const db = new Database(DB_PATH, { create: true });
 db.exec(`
   CREATE TABLE IF NOT EXISTS scenes (
@@ -28,9 +27,11 @@ db.exec(`
     height     INTEGER,
     cfg_scale  REAL,
     sampler    TEXT,
+    diary_date TEXT,
     created_at TEXT    DEFAULT (datetime('now'))
   );
   CREATE INDEX IF NOT EXISTS idx_images_scene ON images(scene_id);
+  CREATE INDEX IF NOT EXISTS idx_images_date ON images(diary_date);
 `);
 
 const cors = { "Access-Control-Allow-Origin": "*" };
@@ -41,7 +42,6 @@ const server = serve({
   async fetch(req) {
     const url = new URL(req.url);
 
-    // ── static ──────────────────────────────────────────────────
     if (url.pathname === "/" || url.pathname === "/index.html") {
       const html = await readFile(join(import.meta.dir, "index.html"), "utf-8");
       return new Response(html, { headers: { "Content-Type": "text/html; charset=utf-8" } });
@@ -51,7 +51,7 @@ const server = serve({
     if (url.pathname === "/api/scenes" && req.method === "GET") {
       const scenes = db.query(`
         SELECT s.*, COUNT(i.id) as image_count,
-               (SELECT filepath FROM images WHERE scene_id = s.id ORDER BY id LIMIT 1) as thumb
+               (SELECT id FROM images WHERE scene_id = s.id ORDER BY id LIMIT 1) as thumb_id
         FROM scenes s
         LEFT JOIN images i ON i.scene_id = s.id
         GROUP BY s.id
@@ -78,20 +78,51 @@ const server = serve({
       return Response.json(images, { headers: cors });
     }
 
+    // ── GET /api/calendar?year=YYYY&month=M ─────────────────────
+    if (url.pathname === "/api/calendar" && req.method === "GET") {
+      const year  = url.searchParams.get("year")  ?? new Date().getFullYear().toString();
+      const month = url.searchParams.get("month") ?? String(new Date().getMonth() + 1);
+      const prefix = `${year}-${month.padStart(2, "0")}`;
+      const rows = db.query(`
+        SELECT diary_date, COUNT(*) as count,
+               (SELECT id FROM images WHERE diary_date = i.diary_date ORDER BY id LIMIT 1) as thumb_id
+        FROM images i
+        WHERE diary_date LIKE ?
+        GROUP BY diary_date
+        ORDER BY diary_date
+      `).all(`${prefix}%`);
+      return Response.json(rows, { headers: cors });
+    }
+
+    // ── GET /api/dates/:date/images ──────────────────────────────
+    const dateMatch = url.pathname.match(/^\/api\/dates\/(\d{4}-\d{2}-\d{2})\/images$/);
+    if (dateMatch && req.method === "GET") {
+      const date = dateMatch[1];
+      const images = db.query(`
+        SELECT i.*, s.name as scene_name, s.slug as scene_slug
+        FROM images i
+        JOIN scenes s ON s.id = i.scene_id
+        WHERE i.diary_date = ?
+        ORDER BY s.id, i.id
+      `).all(date);
+      return Response.json(images, { headers: cors });
+    }
+
     // ── POST /api/images ─────────────────────────────────────────
     if (url.pathname === "/api/images" && req.method === "POST") {
       const body = await req.json() as {
         scene_id: number; filepath: string;
         seed?: number; steps?: number; width?: number; height?: number;
-        cfg_scale?: number; sampler?: string;
+        cfg_scale?: number; sampler?: string; diary_date?: string;
       };
       const stmt = db.prepare(
-        "INSERT INTO images (scene_id, filepath, seed, steps, width, height, cfg_scale, sampler) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+        "INSERT INTO images (scene_id, filepath, seed, steps, width, height, cfg_scale, sampler, diary_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
       );
       const result = stmt.run(
         body.scene_id, body.filepath,
         body.seed ?? null, body.steps ?? null, body.width ?? null,
-        body.height ?? null, body.cfg_scale ?? null, body.sampler ?? null
+        body.height ?? null, body.cfg_scale ?? null, body.sampler ?? null,
+        body.diary_date ?? null
       );
       return Response.json({ id: result.lastInsertRowid }, { headers: cors });
     }
