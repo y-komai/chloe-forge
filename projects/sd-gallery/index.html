@@ -13,8 +13,7 @@
     .back-btn { background: none; border: 1px solid #334155; border-radius: 6px; color: #94a3b8; padding: 0.3em 0.8em; cursor: pointer; font-size: 0.8em; display: none; }
     .back-btn:hover { border-color: #60a5fa; color: #60a5fa; }
 
-    /* tabs */
-    .tabs { display: flex; gap: 0; border-bottom: 1px solid #1e293b; }
+    .tabs { display: flex; border-bottom: 1px solid #1e293b; }
     .tab { padding: 0.7em 1.5em; font-size: 0.82em; cursor: pointer; color: #64748b; border-bottom: 2px solid transparent; transition: all 0.15s; }
     .tab.active { color: #60a5fa; border-bottom-color: #60a5fa; }
     .tab:hover { color: #94a3b8; }
@@ -36,11 +35,23 @@
     .cal-day .thumb { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
     .cal-day .count { font-size: 0.65em; color: #475569; padding: 0.2em 0.5em 0.3em; }
 
-    /* date detail */
-    #date-view { display: none; padding: 1.2em 1.5em; }
-    .date-title { font-size: 1em; font-weight: 600; margin-bottom: 1em; color: #e2e8f0; }
-    .scene-group { margin-bottom: 1.5em; }
-    .scene-group h3 { font-size: 0.78em; color: #60a5fa; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6em; }
+    /* diary page (date → scene list) */
+    #diary-view { display: none; padding: 1.2em 1.5em; }
+    .diary-date-title { font-size: 1em; font-weight: 600; color: #e2e8f0; margin-bottom: 0.8em; }
+    .diary-text-box { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 0.8em 1em; margin-bottom: 1.2em; min-height: 60px; }
+    .diary-text-box p { font-size: 0.82em; color: #94a3b8; line-height: 1.7; white-space: pre-wrap; }
+    .diary-text-box.empty p { color: #475569; font-style: italic; }
+    .diary-scenes-title { font-size: 0.72em; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.7em; }
+    .scene-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.7em; }
+    .scene-card { cursor: pointer; border-radius: 10px; overflow: hidden; background: #1e293b; border: 1px solid #1e293b; transition: all 0.15s; }
+    .scene-card:hover { border-color: #60a5fa; transform: translateY(-2px); }
+    .scene-card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; background: #0f172a; }
+    .scene-card .label { padding: 0.45em 0.65em; }
+    .scene-card .label .name { font-size: 0.8em; font-weight: 600; }
+    .scene-card .label .sub { font-size: 0.66em; color: #64748b; margin-top: 0.1em; }
+
+    /* scene images page */
+    #scene-images-view { display: none; padding: 1.2em 1.5em; }
     .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.6em; }
     .img-item { position: relative; border-radius: 8px; overflow: hidden; cursor: pointer; background: #1e293b; }
     .img-item img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; transition: transform 0.15s; }
@@ -48,19 +59,13 @@
     .img-item .num { position: absolute; top: 0.4em; left: 0.5em; background: rgba(0,0,0,0.6); border-radius: 4px; padding: 0.1em 0.4em; font-size: 0.65em; color: #94a3b8; }
 
     /* scenes tab */
-    #scene-view { display: none; padding: 1.2em 1.5em; }
-    #scene-detail { display: none; padding: 1.2em 1.5em; }
-    .scene-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.8em; }
-    .scene-card { cursor: pointer; border-radius: 10px; overflow: hidden; background: #1e293b; border: 1px solid #1e293b; transition: all 0.15s; }
-    .scene-card:hover { border-color: #60a5fa; transform: translateY(-2px); }
-    .scene-card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; display: block; background: #0f172a; }
-    .scene-card .label { padding: 0.5em 0.7em; }
-    .scene-card .label .name { font-size: 0.82em; font-weight: 600; }
-    .scene-card .label .sub { font-size: 0.68em; color: #64748b; margin-top: 0.1em; }
+    #scene-list-view { display: none; padding: 1.2em 1.5em; }
+    #scene-detail-view { display: none; padding: 1.2em 1.5em; }
+    .all-scene-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.8em; }
     .prompt-box { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 0.8em 1em; margin-bottom: 1em; }
     .prompt-box h3 { font-size: 0.7em; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.4em; }
     .prompt-box p { font-size: 0.73em; color: #94a3b8; line-height: 1.6; word-break: break-word; }
-    .scene-detail-title { font-size: 1em; font-weight: 600; margin-bottom: 0.8em; }
+    .view-title { font-size: 1em; font-weight: 600; margin-bottom: 0.8em; }
 
     /* lightbox */
     #lb { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 100; align-items: center; justify-content: center; }
@@ -68,7 +73,6 @@
     #lb img { max-width: 90vw; max-height: 90vh; border-radius: 8px; object-fit: contain; }
     #lb-close { position: fixed; top: 1em; right: 1.5em; font-size: 2em; cursor: pointer; color: #64748b; }
     #lb-close:hover { color: #e2e8f0; }
-
     .loading { padding: 3em 2em; text-align: center; color: #64748b; font-size: 0.85em; }
   </style>
 </head>
@@ -83,7 +87,6 @@
     <div class="tab" id="tab-scenes" onclick="switchTab('scenes')">シーン別</div>
   </div>
 
-  <!-- calendar view -->
   <div id="calendar-view">
     <div class="cal-nav">
       <button onclick="changeMonth(-1)">‹</button>
@@ -94,25 +97,34 @@
     <div class="cal-grid" id="cal-days"></div>
   </div>
 
-  <!-- date detail -->
-  <div id="date-view">
-    <p class="date-title" id="date-title"></p>
-    <div id="date-images"></div>
+  <!-- diary page: text + scene cards -->
+  <div id="diary-view">
+    <p class="diary-date-title" id="diary-date-title"></p>
+    <div class="diary-text-box" id="diary-text-box">
+      <p id="diary-text"></p>
+    </div>
+    <p class="diary-scenes-title">シーン</p>
+    <div class="scene-list" id="diary-scene-list"><p class="loading">読み込み中...</p></div>
   </div>
 
-  <!-- scenes tab -->
-  <div id="scene-view">
-    <div class="scene-grid" id="scene-grid"><p class="loading">読み込み中...</p></div>
+  <!-- scene images: grid of generated images for that date+scene -->
+  <div id="scene-images-view">
+    <div class="image-grid" id="scene-image-grid"></div>
   </div>
 
-  <!-- scene detail -->
-  <div id="scene-detail">
-    <p class="scene-detail-title" id="scene-detail-title"></p>
+  <!-- scenes tab: all scenes list -->
+  <div id="scene-list-view">
+    <div class="all-scene-grid" id="all-scene-grid"><p class="loading">読み込み中...</p></div>
+  </div>
+
+  <!-- scene detail: prompt + all images -->
+  <div id="scene-detail-view">
+    <p class="view-title" id="scene-detail-title"></p>
     <div class="prompt-box">
       <h3>Prompt</h3>
       <p id="scene-detail-prompt"></p>
     </div>
-    <div class="image-grid" id="scene-image-grid"></div>
+    <div class="image-grid" id="scene-detail-grid"></div>
   </div>
 
   <div id="lb"><span id="lb-close">×</span><img id="lb-img" src="" alt=""></div>
@@ -124,38 +136,47 @@
     let calData = {};
     let backStack = [];
     let allScenes = [];
+    let currentDate = null;
 
     const WEEKDAYS = ['日','月','火','水','木','金','土'];
+    const VIEWS = ['calendar-view','diary-view','scene-images-view','scene-list-view','scene-detail-view'];
 
-    // tabs
+    function showOnly(id) {
+      for (const v of VIEWS) document.getElementById(v).style.display = v === id ? 'block' : 'none';
+    }
+
     function switchTab(tab) {
       currentTab = tab;
       backStack = [];
       document.getElementById('back-btn').style.display = 'none';
-      document.getElementById('header-title').textContent = tab === 'calendar' ? '🖤 くろえの日記' : '🖤 シーン別';
+      document.getElementById('tabs').style.display = '';
       document.getElementById('tab-calendar').classList.toggle('active', tab === 'calendar');
       document.getElementById('tab-scenes').classList.toggle('active', tab === 'scenes');
-      document.getElementById('tabs').style.display = '';
-      document.getElementById('calendar-view').style.display = tab === 'calendar' ? 'block' : 'none';
-      document.getElementById('date-view').style.display = 'none';
-      document.getElementById('scene-view').style.display = tab === 'scenes' ? 'block' : 'none';
-      document.getElementById('scene-detail').style.display = 'none';
-      if (tab === 'scenes' && !allScenes.length) loadScenes();
+      if (tab === 'calendar') {
+        document.getElementById('header-title').textContent = '🖤 くろえの日記';
+        showOnly('calendar-view');
+      } else {
+        document.getElementById('header-title').textContent = '🖤 シーン別';
+        showOnly('scene-list-view');
+        if (!allScenes.length) loadAllScenes();
+      }
     }
 
     function handleBack() {
       const prev = backStack.pop();
+      document.getElementById('tabs').style.display = '';
       if (!prev) return;
-      if (prev === 'calendar') {
-        document.getElementById('date-view').style.display = 'none';
-        document.getElementById('calendar-view').style.display = 'block';
+      if (prev.view === 'calendar') {
         document.getElementById('header-title').textContent = '🖤 くろえの日記';
-        document.getElementById('tabs').style.display = '';
-      } else if (prev === 'scenes') {
-        document.getElementById('scene-detail').style.display = 'none';
-        document.getElementById('scene-view').style.display = 'block';
+        showOnly('calendar-view');
+      } else if (prev.view === 'diary') {
+        currentDate = prev.date;
+        document.getElementById('header-title').textContent = prev.title;
+        showOnly('diary-view');
+        document.getElementById('tabs').style.display = 'none';
+      } else if (prev.view === 'scene-list') {
         document.getElementById('header-title').textContent = '🖤 シーン別';
-        document.getElementById('tabs').style.display = '';
+        showOnly('scene-list-view');
       }
       if (!backStack.length) document.getElementById('back-btn').style.display = 'none';
     }
@@ -170,11 +191,8 @@
     }
 
     function renderCalendar() {
-      const label = document.getElementById('cal-month-label');
-      label.textContent = `${calYear}年 ${calMonth}月`;
-
-      const wdEl = document.getElementById('cal-weekdays');
-      wdEl.innerHTML = WEEKDAYS.map(d => `<div class="cal-weekday">${d}</div>`).join('');
+      document.getElementById('cal-month-label').textContent = `${calYear}年 ${calMonth}月`;
+      document.getElementById('cal-weekdays').innerHTML = WEEKDAYS.map(d => `<div class="cal-weekday">${d}</div>`).join('');
 
       const first = new Date(calYear, calMonth - 1, 1);
       const lastDay = new Date(calYear, calMonth, 0).getDate();
@@ -182,21 +200,17 @@
       const today = new Date().toISOString().slice(0, 10);
 
       const cells = [];
-      // prev month padding
       const prevLast = new Date(calYear, calMonth - 1, 0).getDate();
-      for (let i = startDow - 1; i >= 0; i--) {
-        cells.push({ day: prevLast - i, otherMonth: true });
-      }
+      for (let i = startDow - 1; i >= 0; i--) cells.push({ day: prevLast - i, otherMonth: true });
       for (let d = 1; d <= lastDay; d++) cells.push({ day: d, otherMonth: false });
       while (cells.length % 7 !== 0) cells.push({ day: cells.length - (startDow + lastDay) + 1, otherMonth: true });
 
-      const daysEl = document.getElementById('cal-days');
-      daysEl.innerHTML = cells.map(c => {
+      document.getElementById('cal-days').innerHTML = cells.map(c => {
         const dateStr = c.otherMonth ? null : `${calYear}-${String(calMonth).padStart(2,'0')}-${String(c.day).padStart(2,'0')}`;
         const entry = dateStr ? calData[dateStr] : null;
         const isToday = dateStr === today;
         const cls = ['cal-day', c.otherMonth ? 'other-month' : '', entry ? 'has-images' : '', isToday ? 'today' : ''].filter(Boolean).join(' ');
-        const onclick = entry ? `onclick="showDate('${dateStr}')"` : '';
+        const onclick = entry ? `onclick="showDiary('${dateStr}')"` : '';
         const thumb = entry ? `<img class="thumb" src="/serve/${entry.thumb_id}" loading="lazy">` : '';
         const count = entry ? `<div class="count">${entry.count}枚</div>` : '';
         return `<div class="${cls}" ${onclick}><div class="day-num">${c.day}</div>${thumb}${count}</div>`;
@@ -210,80 +224,60 @@
       loadCalendar();
     }
 
-    async function showDate(date) {
-      backStack.push('calendar');
-      document.getElementById('calendar-view').style.display = 'none';
-      document.getElementById('date-view').style.display = 'block';
+    // diary page
+    async function showDiary(date) {
+      currentDate = date;
+      backStack.push({ view: 'calendar' });
       document.getElementById('tabs').style.display = 'none';
       document.getElementById('back-btn').style.display = 'inline-block';
 
       const [y, m, d] = date.split('-');
-      document.getElementById('header-title').textContent = `${y}年${parseInt(m)}月${parseInt(d)}日`;
-      document.getElementById('date-title').textContent = `${y}年${parseInt(m)}月${parseInt(d)}日`;
-      document.getElementById('date-images').innerHTML = '<p class="loading">読み込み中...</p>';
+      const titleStr = `${y}年${parseInt(m)}月${parseInt(d)}日`;
+      document.getElementById('header-title').textContent = titleStr;
+      document.getElementById('diary-date-title').textContent = titleStr;
+      document.getElementById('diary-text').textContent = '読み込み中...';
+      document.getElementById('diary-scene-list').innerHTML = '<p class="loading">読み込み中...</p>';
+      showOnly('diary-view');
 
-      const res = await fetch(`/api/dates/${date}/images`);
-      const images = await res.json();
-      if (!images.length) {
-        document.getElementById('date-images').innerHTML = '<p class="loading">この日の画像はありません</p>';
+      const res = await fetch(`/api/dates/${date}`);
+      const data = await res.json();
+
+      const textEl = document.getElementById('diary-text');
+      const boxEl = document.getElementById('diary-text-box');
+      if (data.entry?.text) {
+        textEl.textContent = data.entry.text;
+        boxEl.classList.remove('empty');
+      } else {
+        textEl.textContent = 'この日の日記はまだありません';
+        boxEl.classList.add('empty');
+      }
+
+      if (!data.scenes.length) {
+        document.getElementById('diary-scene-list').innerHTML = '<p class="loading">画像なし</p>';
         return;
       }
 
-      // group by scene
-      const groups = {};
-      for (const img of images) {
-        if (!groups[img.scene_slug]) groups[img.scene_slug] = { name: img.scene_name, images: [] };
-        groups[img.scene_slug].images.push(img);
-      }
-
-      document.getElementById('date-images').innerHTML = Object.entries(groups).map(([slug, g]) => `
-        <div class="scene-group">
-          <h3>${g.name}</h3>
-          <div class="image-grid">
-            ${g.images.map((img, i) => `
-              <div class="img-item" onclick="openLb('/serve/${img.id}')">
-                <img src="/serve/${img.id}" loading="lazy" alt="">
-                <span class="num">${String(i+1).padStart(2,'0')}</span>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // scenes tab
-    async function loadScenes() {
-      const res = await fetch('/api/scenes');
-      allScenes = await res.json();
-      const grid = document.getElementById('scene-grid');
-      if (!allScenes.length) { grid.innerHTML = '<p class="loading">シーンなし</p>'; return; }
-      grid.innerHTML = allScenes.map(s => `
-        <div class="scene-card" onclick="showSceneDetail('${s.slug}')">
-          ${s.image_count > 0
-            ? `<img src="/thumb/${s.slug}" loading="lazy" alt="${s.name}">`
-            : `<div style="aspect-ratio:2/3;background:#0f172a;display:flex;align-items:center;justify-content:center;color:#334155;font-size:0.75em;">no image</div>`}
+      document.getElementById('diary-scene-list').innerHTML = data.scenes.map(s => `
+        <div class="scene-card" onclick="showSceneImages('${date}', '${s.slug}', '${s.name}')">
+          ${s.thumb_id ? `<img src="/serve/${s.thumb_id}" loading="lazy" alt="${s.name}">` : `<div style="aspect-ratio:2/3;background:#0f172a;display:flex;align-items:center;justify-content:center;color:#334155;font-size:0.75em;">no image</div>`}
           <div class="label">
             <div class="name">${s.name}</div>
-            <div class="sub">${s.image_count} 枚</div>
+            <div class="sub">${s.image_count}枚</div>
           </div>
         </div>
       `).join('');
     }
 
-    async function showSceneDetail(slug) {
-      const scene = allScenes.find(s => s.slug === slug);
-      if (!scene) return;
-      backStack.push('scenes');
-      document.getElementById('scene-view').style.display = 'none';
-      document.getElementById('scene-detail').style.display = 'block';
-      document.getElementById('tabs').style.display = 'none';
-      document.getElementById('back-btn').style.display = 'inline-block';
-      document.getElementById('header-title').textContent = scene.name;
-      document.getElementById('scene-detail-title').textContent = scene.name;
-      document.getElementById('scene-detail-prompt').textContent = scene.prompt;
+    // scene images for a specific date
+    async function showSceneImages(date, slug, name) {
+      const [y, m, d] = date.split('-');
+      const dateTitle = `${y}年${parseInt(m)}月${parseInt(d)}日`;
+      backStack.push({ view: 'diary', date, title: dateTitle });
+      document.getElementById('header-title').textContent = name;
       document.getElementById('scene-image-grid').innerHTML = '<p class="loading">読み込み中...</p>';
+      showOnly('scene-images-view');
 
-      const res = await fetch(`/api/scenes/${slug}/images`);
+      const res = await fetch(`/api/dates/${date}/scenes/${slug}/images`);
       const images = await res.json();
       if (!images.length) {
         document.getElementById('scene-image-grid').innerHTML = '<p class="loading">画像なし</p>';
@@ -297,16 +291,54 @@
       `).join('');
     }
 
-    // lightbox
-    function openLb(src) {
-      document.getElementById('lb-img').src = src;
-      document.getElementById('lb').classList.add('show');
+    // scenes tab
+    async function loadAllScenes() {
+      const res = await fetch('/api/scenes');
+      allScenes = await res.json();
+      const grid = document.getElementById('all-scene-grid');
+      if (!allScenes.length) { grid.innerHTML = '<p class="loading">シーンなし</p>'; return; }
+      grid.innerHTML = allScenes.map(s => `
+        <div class="scene-card" onclick="showSceneDetail('${s.slug}')">
+          ${s.image_count > 0
+            ? `<img src="/thumb/${s.slug}" loading="lazy" alt="${s.name}">`
+            : `<div style="aspect-ratio:2/3;background:#0f172a;display:flex;align-items:center;justify-content:center;color:#334155;font-size:0.75em;">no image</div>`}
+          <div class="label">
+            <div class="name">${s.name}</div>
+            <div class="sub">${s.image_count}枚</div>
+          </div>
+        </div>
+      `).join('');
     }
+
+    async function showSceneDetail(slug) {
+      const scene = allScenes.find(s => s.slug === slug);
+      if (!scene) return;
+      backStack.push({ view: 'scene-list' });
+      document.getElementById('tabs').style.display = 'none';
+      document.getElementById('back-btn').style.display = 'inline-block';
+      document.getElementById('header-title').textContent = scene.name;
+      document.getElementById('scene-detail-title').textContent = scene.name;
+      document.getElementById('scene-detail-prompt').textContent = scene.prompt;
+      document.getElementById('scene-detail-grid').innerHTML = '<p class="loading">読み込み中...</p>';
+      showOnly('scene-detail-view');
+
+      const res = await fetch(`/api/scenes/${slug}/images`);
+      const images = await res.json();
+      if (!images.length) { document.getElementById('scene-detail-grid').innerHTML = '<p class="loading">画像なし</p>'; return; }
+      document.getElementById('scene-detail-grid').innerHTML = images.map((img, i) => `
+        <div class="img-item" onclick="openLb('/serve/${img.id}')">
+          <img src="/serve/${img.id}" loading="lazy" alt="">
+          <span class="num">${String(i+1).padStart(2,'0')}</span>
+        </div>
+      `).join('');
+    }
+
+    // lightbox
+    function openLb(src) { document.getElementById('lb-img').src = src; document.getElementById('lb').classList.add('show'); }
     document.getElementById('lb-close').onclick = () => document.getElementById('lb').classList.remove('show');
     document.getElementById('lb').onclick = (e) => { if (e.target === e.currentTarget) document.getElementById('lb').classList.remove('show'); };
     document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('lb').classList.remove('show'); });
 
-    // init
     loadCalendar();
     switchTab('calendar');
   </script>

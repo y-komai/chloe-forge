@@ -9,6 +9,13 @@ const PORT       = 3210;
 
 const db = new Database(DB_PATH, { create: true });
 db.exec(`
+  CREATE TABLE IF NOT EXISTS diary_entries (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    diary_date TEXT    UNIQUE NOT NULL,
+    text       TEXT,
+    created_at TEXT    DEFAULT (datetime('now')),
+    updated_at TEXT    DEFAULT (datetime('now'))
+  );
   CREATE TABLE IF NOT EXISTS scenes (
     id         INTEGER PRIMARY KEY AUTOINCREMENT,
     slug       TEXT    UNIQUE NOT NULL,
@@ -94,17 +101,42 @@ const server = serve({
       return Response.json(rows, { headers: cors });
     }
 
-    // ── GET /api/dates/:date/images ──────────────────────────────
-    const dateMatch = url.pathname.match(/^\/api\/dates\/(\d{4}-\d{2}-\d{2})\/images$/);
-    if (dateMatch && req.method === "GET") {
-      const date = dateMatch[1];
-      const images = db.query(`
-        SELECT i.*, s.name as scene_name, s.slug as scene_slug
+    // ── GET /api/dates/:date ─────────────────────────────────────
+    const datePageMatch = url.pathname.match(/^\/api\/dates\/(\d{4}-\d{2}-\d{2})$/);
+    if (datePageMatch && req.method === "GET") {
+      const date = datePageMatch[1];
+      const entry = db.query("SELECT * FROM diary_entries WHERE diary_date = ?").get(date) as { text: string } | null;
+      const scenes = db.query(`
+        SELECT s.id, s.slug, s.name,
+               COUNT(i.id) as image_count,
+               (SELECT id FROM images WHERE scene_id = s.id AND diary_date = ? ORDER BY id LIMIT 1) as thumb_id
         FROM images i
         JOIN scenes s ON s.id = i.scene_id
         WHERE i.diary_date = ?
-        ORDER BY s.id, i.id
-      `).all(date);
+        GROUP BY s.id
+        ORDER BY s.id
+      `).all(date, date);
+      return Response.json({ entry: entry ?? null, scenes }, { headers: cors });
+    }
+
+    // ── PUT /api/dates/:date ─────────────────────────────────────
+    const datePutMatch = url.pathname.match(/^\/api\/dates\/(\d{4}-\d{2}-\d{2})$/);
+    if (datePutMatch && req.method === "PUT") {
+      const date = datePutMatch[1];
+      const body = await req.json() as { text: string };
+      db.prepare(`INSERT INTO diary_entries (diary_date, text) VALUES (?, ?)
+        ON CONFLICT(diary_date) DO UPDATE SET text=excluded.text, updated_at=datetime('now')`
+      ).run(date, body.text);
+      return Response.json({ ok: true }, { headers: cors });
+    }
+
+    // ── GET /api/dates/:date/scenes/:slug/images ─────────────────
+    const dateSceneMatch = url.pathname.match(/^\/api\/dates\/(\d{4}-\d{2}-\d{2})\/scenes\/([^/]+)\/images$/);
+    if (dateSceneMatch && req.method === "GET") {
+      const [, date, slug] = dateSceneMatch;
+      const scene = db.query("SELECT id FROM scenes WHERE slug = ?").get(slug) as { id: number } | null;
+      if (!scene) return Response.json([], { headers: cors });
+      const images = db.query("SELECT * FROM images WHERE scene_id = ? AND diary_date = ? ORDER BY id").all(scene.id, date);
       return Response.json(images, { headers: cors });
     }
 
