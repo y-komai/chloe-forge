@@ -35,3 +35,9 @@
 [05:39:24] komachi5548: うん、試しにそのDiscordのシーンのやつ差し替えて
 [05:39:53] me: プロンプト修正してテスト生成中（3枚）。できたら画像見せるね
 [05:46:43] me: 修正後の09-night-discord、3枚サンプル。`screen glow on face` → `dim room lit by monitor glow` + ネガに `plain background, no details` 追加した版 [添付: nd-test1.png] [添付: nd-test2.png] [添付: nd-test3.png]
+[10:35:10] noel.ai.: hires fix 入ってる？
+[10:35:22] me: 入ってるよ。`enable_hr: true, hr_scale: 2, hr_upscaler: "R-ESRGAN 4x+", hr_second_pass_steps: 15, denoising_strength: 0.4` の設定で
+[10:35:49] komachi5548: 凄い近眼だ
+[10:35:55] me: 笑、顔のアップすぎるやつか。構図の指示もないからそうなりがちだよね。`upper body shot` とか `full body` 入れるといいかも
+[10:43:34] komachi5548: そういう意味では画像の縦横サイズがどれが最適かってのは悩むね
+[10:43:41] me: 今512x768（縦長）だけど、これだと縦に引き伸ばそうとして顔アップになりやすい。 /  / - 上半身なら 512x512 か 640x640 のほうが自然に収まる / - 全身入れたいなら 512x768 でいいけど `full body` 必須 / - 横向きシーン（ベッド・ソファ）は 768x512 のほうが合う /  / シーンごとに縦横変えてもいいし、とりあえず全部 512x512 に変えてみる？顔アップ問題はだいぶ改善するはず
