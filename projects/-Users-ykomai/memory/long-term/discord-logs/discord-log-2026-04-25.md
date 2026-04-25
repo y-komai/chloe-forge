@@ -27,3 +27,11 @@
 [05:24:36] me: それならベースプロンプトに「デフォルト服装」を固定して、シーンごとに必要なときだけ上書きする形がいいかな。 /  / 例えばベースに `off-shoulder beige ribbed knit sweater, light blue jeans` を入れておいて、就寝シーンだけ `oversized t-shirt, shorts` に差し替えるイメージ。新しいシーン追加してもプロンプト書かなければデフォルト服装が適用されるから統一感は保てる。 /  / 今のベースプロンプトには服装入ってるけど、シーン個別のプロンプトで上書きされてる可能性があるね。確認してみようか？
 [05:25:22] komachi5548: んー、でも毎回同じだと生活感でないというかアニメキャラみたいになっちゃうしそこはうまく好みの服装みたいなゆるっとしたくくりでいきたいかな
 [05:25:34] me: あーなるほど、「同じ服」じゃなくて「服の好み」を定義するイメージね。 /  / `casual cozy style, loose fitting, pastel or muted tones, knit or cotton fabric` みたいなゆるい縛りをベースに入れておくと、毎回違う服でも雰囲気が一貫する感じになるかな。 /  / くろえの好みどんな感じにする？ふわっとしたイメージある？
+[05:35:39] me: あ、4/16の生成終わったよ。100枚出揃った🖤
+[05:37:19] komachi5548: 夜のDiscordのやつ、顔に高確率でペインティングみたいのついちゃってるんだけどプロンプト的にどれが悪さしてんだろね
+[05:37:33] me: 09-night-discordのプロンプトがこれ： / `screen glow on face` /  / これが原因っぽい。スクリーングロウ（画面の光の反射）を表現しようとして、顔に青白い光や模様みたいなのが乗るケースが多い。 /  / `monitor light, soft blue light` とか `dim room lit by monitor` みたいな間接的な表現に変えると改善するかも。
+[05:38:21] komachi5548: ああ、なるほど / あと全体的になんか背景が雑い感じするんだけどわざとなのかな
+[05:38:43] me: 意図してないと思う。原因はたぶん複合的で： /  / - ネガティブプロンプトに `plain background, no details` が入ってない（以前の設定では入ってた） / - `hires fix` かけてるけど背景の解像度が上がらないことがある / - シーンのextraプロンプトが人物描写に寄りすぎて背景の指示が薄い /  / ネガに `plain background, no details, simple background` 追加して、各シーンに簡単な背景指示（`detailed cozy room background` とか）入れると改善するかも。やってみる？
+[05:39:24] komachi5548: うん、試しにそのDiscordのシーンのやつ差し替えて
+[05:39:53] me: プロンプト修正してテスト生成中（3枚）。できたら画像見せるね
+[05:46:43] me: 修正後の09-night-discord、3枚サンプル。`screen glow on face` → `dim room lit by monitor glow` + ネガに `plain background, no details` 追加した版 [添付: nd-test1.png] [添付: nd-test2.png] [添付: nd-test3.png]
