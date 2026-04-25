@@ -35,6 +35,7 @@ db.exec(`
     cfg_scale  REAL,
     sampler    TEXT,
     diary_date TEXT,
+    prompt     TEXT,
     created_at TEXT    DEFAULT (datetime('now'))
   );
   CREATE INDEX IF NOT EXISTS idx_images_scene ON images(scene_id);
@@ -145,16 +146,16 @@ const server = serve({
       const body = await req.json() as {
         scene_id: number; filepath: string;
         seed?: number; steps?: number; width?: number; height?: number;
-        cfg_scale?: number; sampler?: string; diary_date?: string;
+        cfg_scale?: number; sampler?: string; diary_date?: string; prompt?: string;
       };
       const stmt = db.prepare(
-        "INSERT INTO images (scene_id, filepath, seed, steps, width, height, cfg_scale, sampler, diary_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+        "INSERT INTO images (scene_id, filepath, seed, steps, width, height, cfg_scale, sampler, diary_date, prompt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
       );
       const result = stmt.run(
         body.scene_id, body.filepath,
         body.seed ?? null, body.steps ?? null, body.width ?? null,
         body.height ?? null, body.cfg_scale ?? null, body.sampler ?? null,
-        body.diary_date ?? null
+        body.diary_date ?? null, body.prompt ?? null
       );
       return Response.json({ id: result.lastInsertRowid }, { headers: cors });
     }

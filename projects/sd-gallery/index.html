@@ -109,6 +109,7 @@
 
   <!-- scene images: grid of generated images for that date+scene -->
   <div id="scene-images-view">
+    <div class="prompt-box" id="scene-images-prompt-box" style="display:none"><h3>Prompt</h3><p id="scene-images-prompt"></p></div>
     <div class="image-grid" id="scene-image-grid"></div>
   </div>
 
@@ -275,6 +276,8 @@
       backStack.push({ view: 'diary', date, title: dateTitle });
       document.getElementById('header-title').textContent = name;
       document.getElementById('scene-image-grid').innerHTML = '<p class="loading">読み込み中...</p>';
+      document.getElementById('scene-images-prompt-box').style.display = 'none';
+      document.getElementById('scene-images-prompt').textContent = '';
       showOnly('scene-images-view');
 
       const res = await fetch(`/api/dates/${date}/scenes/${slug}/images`);
@@ -282,6 +285,11 @@
       if (!images.length) {
         document.getElementById('scene-image-grid').innerHTML = '<p class="loading">画像なし</p>';
         return;
+      }
+      const firstPrompt = images.find(img => img.prompt)?.prompt;
+      if (firstPrompt) {
+        document.getElementById('scene-images-prompt').textContent = firstPrompt;
+        document.getElementById('scene-images-prompt-box').style.display = 'block';
       }
       document.getElementById('scene-image-grid').innerHTML = images.map((img, i) => `
         <div class="img-item" onclick="openLb('/serve/${img.id}')">
