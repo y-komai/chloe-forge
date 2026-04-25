@@ -191,7 +191,12 @@ const server = serve({
       }
     }
 
-    return new Response("Not found", { status: 404 });
+    // SPA fallback
+    if (['/diary', '/scenes'].some(p => url.pathname.startsWith(p))) {
+      const html = await readFile(join(import.meta.dir, 'index.html'), 'utf-8');
+      return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+    }
+    return new Response('Not found', { status: 404 });
   },
 });
 
