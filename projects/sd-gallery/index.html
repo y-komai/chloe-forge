@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SD Gallery — くろえ</title>
+  <title>SD Gallery</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { background: #0f0f13; color: #e2e8f0; font-family: system-ui, sans-serif; }
@@ -12,6 +12,8 @@
     header h1 { font-size: 1em; color: #60a5fa; font-weight: 600; flex: 1; }
     .back-btn { background: none; border: 1px solid #334155; border-radius: 6px; color: #94a3b8; padding: 0.3em 0.8em; cursor: pointer; font-size: 0.8em; display: none; }
     .back-btn:hover { border-color: #60a5fa; color: #60a5fa; }
+    .char-select { background: #1e293b; border: 1px solid #334155; border-radius: 6px; color: #94a3b8; padding: 0.3em 0.6em; font-size: 0.8em; cursor: pointer; }
+    .char-select:hover { border-color: #60a5fa; }
 
     .tabs { display: flex; border-bottom: 1px solid #1e293b; }
     .tab { padding: 0.7em 1.5em; font-size: 0.82em; cursor: pointer; color: #64748b; border-bottom: 2px solid transparent; transition: all 0.15s; }
@@ -80,6 +82,7 @@
   <header>
     <button class="back-btn" id="back-btn" onclick="handleBack()">← 戻る</button>
     <h1 id="header-title">🖤 くろえの日記</h1>
+    <select class="char-select" id="char-select" onchange="switchCharacter(this.value)"></select>
   </header>
 
   <div class="tabs" id="tabs">
@@ -137,12 +140,45 @@
     let calData = {};
     let allScenes = [];
     let currentDate = null;
+    let currentCharacter = 'chloe';
+    let characters = [];
 
     const WEEKDAYS = ['日','月','火','水','木','金','土'];
     const VIEWS = ['calendar-view','diary-view','scene-images-view','scene-list-view','scene-detail-view'];
 
     function showOnly(id) {
       for (const v of VIEWS) document.getElementById(v).style.display = v === id ? 'block' : 'none';
+    }
+
+    function apiUrl(path) {
+      const sep = path.includes('?') ? '&' : '?';
+      return `${path}${sep}character=${currentCharacter}`;
+    }
+
+    async function loadCharacters() {
+      const res = await fetch('/api/characters');
+      characters = await res.json();
+      const sel = document.getElementById('char-select');
+      sel.innerHTML = characters.map(c =>
+        `<option value="${c.slug}" ${c.slug === currentCharacter ? 'selected' : ''}>${c.name}</option>`
+      ).join('');
+      sel.style.display = characters.length <= 1 ? 'none' : '';
+      updateHeaderTitle();
+    }
+
+    function updateHeaderTitle() {
+      const char = characters.find(c => c.slug === currentCharacter);
+      const name = char?.name ?? currentCharacter;
+      document.getElementById('header-title').textContent = `🖤 ${name}の日記`;
+      document.title = `SD Gallery — ${name}`;
+    }
+
+    function switchCharacter(slug) {
+      currentCharacter = slug;
+      allScenes = [];
+      updateHeaderTitle();
+      loadCalendar();
+      if (currentTab === 'scenes') loadAllScenes();
     }
 
     // ── History API ──────────────────────────────────────────────
@@ -161,8 +197,10 @@
       document.getElementById('tabs').style.display = hasTabs ? '' : 'none';
       document.getElementById('back-btn').style.display = hasTabs ? 'none' : 'inline-block';
 
+      if (s.character) currentCharacter = s.character;
+
       if (s.view === 'calendar') {
-        document.getElementById('header-title').textContent = '🖤 くろえの日記';
+        updateHeaderTitle();
         showOnly('calendar-view');
       } else if (s.view === 'diary') {
         const [y, m, d] = s.date.split('-');
@@ -174,7 +212,8 @@
         showOnly('scene-images-view');
         if (isPopstate) _renderSceneImages(s.date, s.slug);
       } else if (s.view === 'scene-list') {
-        document.getElementById('header-title').textContent = '🖤 シーン別';
+        updateHeaderTitle();
+        document.getElementById('header-title').textContent = document.getElementById('header-title').textContent.replace('の日記', 'のシーン別');
         showOnly('scene-list-view');
         if (!allScenes.length) loadAllScenes();
       } else if (s.view === 'scene-detail') {
@@ -188,15 +227,15 @@
 
     function switchTab(tab) {
       currentTab = tab;
-      if (tab === 'calendar') navigate({ view: 'calendar', tab }, '/');
-      else navigate({ view: 'scene-list', tab: 'scenes' }, '/?tab=scenes');
+      if (tab === 'calendar') navigate({ view: 'calendar', tab, character: currentCharacter }, '/');
+      else navigate({ view: 'scene-list', tab: 'scenes', character: currentCharacter }, '/?tab=scenes');
     }
 
     function handleBack() { history.back(); }
 
     // calendar
     async function loadCalendar() {
-      const res = await fetch(`/api/calendar?year=${calYear}&month=${calMonth}`);
+      const res = await fetch(apiUrl(`/api/calendar?year=${calYear}&month=${calMonth}`));
       const rows = await res.json();
       calData = {};
       for (const r of rows) calData[r.diary_date] = r;
@@ -240,7 +279,7 @@
     // diary page
     async function showDiary(date) {
       currentDate = date;
-      navigate({ view: 'diary', date }, `/diary/${date}`);
+      navigate({ view: 'diary', date, character: currentCharacter }, `/diary/${date}`);
       await _renderDiary(date);
     }
 
@@ -249,7 +288,7 @@
       document.getElementById('diary-date-title').textContent = `${y}年${parseInt(m)}月${parseInt(d)}日`;
       document.getElementById('diary-text').textContent = '読み込み中...';
       document.getElementById('diary-scene-list').innerHTML = '<p class="loading">読み込み中...</p>';
-      const res = await fetch(`/api/dates/${date}`);
+      const res = await fetch(apiUrl(`/api/dates/${date}`));
       const data = await res.json();
       const textEl = document.getElementById('diary-text');
       const boxEl = document.getElementById('diary-text-box');
@@ -266,7 +305,7 @@
 
     // scene images for a specific date
     async function showSceneImages(date, slug, name) {
-      navigate({ view: 'scene-images', date, slug, name }, `/diary/${date}/scenes/${slug}`);
+      navigate({ view: 'scene-images', date, slug, name, character: currentCharacter }, `/diary/${date}/scenes/${slug}`);
       document.getElementById('scene-image-grid').innerHTML = '<p class="loading">読み込み中...</p>';
       document.getElementById('scene-images-prompt-box').style.display = 'none';
       document.getElementById('scene-images-prompt').textContent = '';
@@ -274,7 +313,7 @@
     }
 
     async function _renderSceneImages(date, slug) {
-      const res = await fetch(`/api/dates/${date}/scenes/${slug}/images`);
+      const res = await fetch(apiUrl(`/api/dates/${date}/scenes/${slug}/images`));
       const images = await res.json();
       if (!images.length) {
         document.getElementById('scene-image-grid').innerHTML = '<p class="loading">画像なし</p>';
@@ -295,14 +334,14 @@
 
     // scenes tab
     async function loadAllScenes() {
-      const res = await fetch('/api/scenes');
+      const res = await fetch(apiUrl('/api/scenes'));
       allScenes = await res.json();
       const grid = document.getElementById('all-scene-grid');
       if (!allScenes.length) { grid.innerHTML = '<p class="loading">シーンなし</p>'; return; }
       grid.innerHTML = allScenes.map(s => `
         <div class="scene-card" onclick="showSceneDetail('${s.slug}')">
           ${s.image_count > 0
-            ? `<img src="/thumb/${s.slug}" loading="lazy" alt="${s.name}">`
+            ? `<img src="${apiUrl('/thumb/' + s.slug)}" loading="lazy" alt="${s.name}">`
             : `<div style="aspect-ratio:2/3;background:#0f172a;display:flex;align-items:center;justify-content:center;color:#334155;font-size:0.75em;">no image</div>`}
           <div class="label">
             <div class="name">${s.name}</div>
@@ -315,7 +354,7 @@
     async function showSceneDetail(slug) {
       const scene = allScenes.find(s => s.slug === slug);
       if (!scene) return;
-      navigate({ view: 'scene-detail', slug, name: scene.name, tab: 'scenes' }, `/scenes/${slug}`);
+      navigate({ view: 'scene-detail', slug, name: scene.name, tab: 'scenes', character: currentCharacter }, `/scenes/${slug}`);
       document.getElementById('scene-detail-title').textContent = scene.name;
       document.getElementById('scene-detail-prompt').textContent = scene.prompt;
       document.getElementById('scene-detail-grid').innerHTML = '<p class="loading">読み込み中...</p>';
@@ -323,10 +362,10 @@
     }
 
     async function _renderSceneDetail(slug) {
-      if (!allScenes.length) { const r = await fetch('/api/scenes'); allScenes = await r.json(); }
+      if (!allScenes.length) { const r = await fetch(apiUrl('/api/scenes')); allScenes = await r.json(); }
       const scene = allScenes.find(s => s.slug === slug);
       if (scene) { document.getElementById('scene-detail-title').textContent = scene.name; document.getElementById('scene-detail-prompt').textContent = scene.prompt; }
-      const res = await fetch(`/api/scenes/${slug}/images`);
+      const res = await fetch(apiUrl(`/api/scenes/${slug}/images`));
       const images = await res.json();
       if (!images.length) { document.getElementById('scene-detail-grid').innerHTML = '<p class="loading">画像なし</p>'; return; }
       document.getElementById('scene-detail-grid').innerHTML = images.map((img, i) => `
@@ -344,17 +383,18 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('lb').classList.remove('show'); });
 
     // init: restore from URL or default to calendar
-    (function init() {
+    (async function init() {
+      await loadCharacters();
       const path = location.pathname;
-      let initState = { view: 'calendar' };
+      let initState = { view: 'calendar', character: currentCharacter };
       const diaryScene = path.match(/^\/diary\/(\d{4}-\d{2}-\d{2})\/scenes\/(.+)$/);
       const diary = path.match(/^\/diary\/(\d{4}-\d{2}-\d{2})$/);
       const scene = path.match(/^\/scenes\/(.+)$/);
       const tab = new URLSearchParams(location.search).get('tab');
-      if (diaryScene) initState = { view: 'scene-images', date: diaryScene[1], slug: diaryScene[2], name: diaryScene[2] };
-      else if (diary) initState = { view: 'diary', date: diary[1] };
-      else if (scene) initState = { view: 'scene-detail', slug: scene[1], name: scene[1], tab: 'scenes' };
-      else if (tab === 'scenes') initState = { view: 'scene-list', tab: 'scenes' };
+      if (diaryScene) initState = { view: 'scene-images', date: diaryScene[1], slug: diaryScene[2], name: diaryScene[2], character: currentCharacter };
+      else if (diary) initState = { view: 'diary', date: diary[1], character: currentCharacter };
+      else if (scene) initState = { view: 'scene-detail', slug: scene[1], name: scene[1], tab: 'scenes', character: currentCharacter };
+      else if (tab === 'scenes') initState = { view: 'scene-list', tab: 'scenes', character: currentCharacter };
       history.replaceState(initState, '', location.href);
       applyState(initState, true);
       loadCalendar();
