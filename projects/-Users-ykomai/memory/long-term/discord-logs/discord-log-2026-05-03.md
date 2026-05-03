@@ -149,3 +149,30 @@
 [14:51:00] me: 了解。シーン登録→日記作成→100枚生成の順でやる。生成はバックグラウンドで回すから終わったら報告する🖤
 [14:51:31] komachi5548: あ、もう生成タスク積んでる？ / まず1シーンでやればよかった
 [14:54:14] me: テスト1枚できたよ。arisa-01-morning（起床シーン）。 / これでOKなら残り9シーン×10枚走らせる。どう？ [添付: arisa-01-morning.png]
+[15:03:49] komachi5548: これも hires fix でやってる？ / なんかちょっと荒い感じするな
+[15:04:36] komachi5548: 呪文が足らんのかな
+[15:07:29] me: hires fix は入ってるよ（R-ESRGAN 4x+, denoising 0.4）。 /  / プロンプトに品質系の詳細語が少ないのが原因かも。くろえのに比べて `highly detailed`, `soft lighting`, `beautiful detailed eyes`, `upper body` とかが抜けてる。 /  / 修正してもう一枚試す？
+[15:07:44] komachi5548: うん
+[15:08:25] me: 修正版。`highly detailed`, `upper body`, `beautiful detailed eyes`, `soft lighting` 追加した。 [添付: arisa-01-morning-v2.png]
+[15:09:01] komachi5548: なんだかわからんなｗ / もう一枚
+[15:09:37] me: もう一枚。 [添付: arisa-01-morning-v3.png]
+[15:10:18] komachi5548: masterpieceは入れてる？ / 例によって普段着で寝起きになってそうだな / 日中のシーンにしてもう一枚
+[15:11:17] me: arisa-06-afternoon（窓辺で午後）。highly detailed + upper body 追加版。 [添付: arisa-06-afternoon-test.png]
+[15:14:10] komachi5548: なんかまだ雑いな… / masterpiece入ってるの？プロンプト / masterpiece , best quality , ultra detailed とか
+[15:14:52] me: `masterpiece, best quality, ultra detailed, highly detailed` + `sharp focus` 版。 [添付: arisa-ultra.png]
+[15:16:20] komachi5548: なんかあんまり効果ないなｗ / all detailed とかは？
+[15:17:01] me: `all finely detailed` 追加版。 /  / 正直これで変わらないなら呪文よりモデルかCFGの問題かも。くろえのときと同じチェックポイント使ってる？ [添付: arisa-alldetailed.png]
+[15:17:31] komachi5548: まあいいかもね / checkpointはしらない / 自分で見れないの？
+[15:17:49] me: チェックポイント: `rinAnim8drawIllustrious_v31` /  / これアニメ系モデルだからたぶんくろえと同じ。 /  / 「まあいいかも」ならこのプロンプトで全10シーン更新して100枚走らせる？
+[15:18:22] komachi5548: お家のイメージもう少し近代的でもいい気がするけどどう？ / もう少し金持ちっていうか
+[15:18:38] me: いいと思う。ミニマリストは残しつつ上に振るイメージ。 /  / 部屋設定案： / `luxury apartment, modern minimalist interior, floor-to-ceiling windows, city view, sleek dark furniture, marble accent, monochrome aesthetic, sophisticated, clean lines` /  / 高層マンション + 大きな窓から都市景観 + マーブルアクセント。クールなアリサに合ってる気がする。これで試す？
+[15:18:46] komachi5548: うん
+[15:19:24] me: 高級マンション版。 [添付: arisa-luxury.png]
+[15:19:48] komachi5548: 髪色変わっちゃった🥺
+[15:20:27] me: 髪色に重み `(cool blue to silver gradient hair:1.4)` 付けて、ネガに `brown hair, black hair, blonde hair` 追加した。 [添付: arisa-fix.png]
+[15:21:30] komachi5548: まあ悪くはないかなあ / なんか変だけど / 顔面の様子がわかりづらい
+[15:22:10] me: `portrait, looking at viewer` 追加。都市景観は背景に引かせた。 [添付: arisa-portrait.png]
+[15:25:05] komachi5548: オフィスっぽいけどまあいいか / あと、作画ミス防止系もいれて / bad anatomy とか bad hands とか指系のやつとか色々
+[15:25:50] me: ネガ強化版。追加したもの： / `(worst quality:1.3), (low quality:1.3), bad hands, (bad hands:1.3), bad fingers, extra fingers, missing fingers, fused fingers, too many fingers, mutated hands, missing limbs, deformed, disfigured, mutated, mutation, malformed` /  / これでよければ全10シーンのプロンプト・ネガを更新して100枚走らせる。 [添付: arisa-neg.png]
+[15:26:06] komachi5548: おー、まあいいかもね / やってみよう
+[15:26:51] me: 全10シーンのプロンプト・ネガ更新完了、100枚生成スタートした（PID 680290）。 / 1シーン10枚 × 10シーン = 100枚。進捗は `tail -f /tmp/gen_arisa_100.log` で見れる。終わったら声かけるね。
