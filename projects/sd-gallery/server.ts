@@ -54,15 +54,15 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_images_date ON images(diary_date);
 `);
 
-// 既存データのキャラクターIDをchloeに設定
-db.exec(`
-  ALTER TABLE scenes ADD COLUMN character_id INTEGER DEFAULT 1 REFERENCES characters(id);
-  UPDATE scenes SET character_id = 1 WHERE character_id IS NULL;
-`);
-db.exec(`
-  ALTER TABLE diary_entries ADD COLUMN character_id INTEGER DEFAULT 1 REFERENCES characters(id);
-  UPDATE diary_entries SET character_id = 1 WHERE character_id IS NULL;
-`);
+// 既存データのキャラクターIDをchloeに設定（カラムが既存の場合はスキップ）
+try { db.run("ALTER TABLE scenes ADD COLUMN character_id INTEGER DEFAULT 1 REFERENCES characters(id)"); } catch {}
+db.run("UPDATE scenes SET character_id = 1 WHERE character_id IS NULL");
+try { db.run("ALTER TABLE diary_entries ADD COLUMN character_id INTEGER DEFAULT 1 REFERENCES characters(id)"); } catch {}
+db.run("UPDATE diary_entries SET character_id = 1 WHERE character_id IS NULL");
+// charactersテーブルの追加カラム
+try { db.run("ALTER TABLE characters ADD COLUMN base_prompt TEXT"); } catch {}
+try { db.run("ALTER TABLE characters ADD COLUMN neg_prompt TEXT"); } catch {}
+try { db.run("ALTER TABLE characters ADD COLUMN personality TEXT"); } catch {}
 
 const cors = { "Access-Control-Allow-Origin": "*" };
 
