@@ -176,3 +176,4 @@
 [15:25:50] me: ネガ強化版。追加したもの： / `(worst quality:1.3), (low quality:1.3), bad hands, (bad hands:1.3), bad fingers, extra fingers, missing fingers, fused fingers, too many fingers, mutated hands, missing limbs, deformed, disfigured, mutated, mutation, malformed` /  / これでよければ全10シーンのプロンプト・ネガを更新して100枚走らせる。 [添付: arisa-neg.png]
 [15:26:06] komachi5548: おー、まあいいかもね / やってみよう
 [15:26:51] me: 全10シーンのプロンプト・ネガ更新完了、100枚生成スタートした（PID 680290）。 / 1シーン10枚 × 10シーン = 100枚。進捗は `tail -f /tmp/gen_arisa_100.log` で見れる。終わったら声かけるね。
+[15:47:28] me: 100枚全部終わった。ギャラリーで確認してみて → <http://192.168.11.40:3210/>
