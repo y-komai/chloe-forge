@@ -16,3 +16,9 @@
 [11:25:26] komachi5548: rinAnim8drawIllustrious_v31 がいい気がするね / でも今回の出力見て決めてもいいかもね
 [11:26:42] me: 8シーン全部できた（shiitakeMix_v20）。左から：夜景窓辺・朝ベッド・洗面台前・ソファ [添付: scene-01-window.png] [添付: scene-02-bed.png] [添付: scene-03-mirror.png] [添付: scene-04-sofa.png]
 [11:26:51] me: キャンドル入浴・シャワー上がり・バルコニー・プール [添付: scene-05-candle.png] [添付: scene-06-towel.png] [添付: scene-07-balcony.png] [添付: scene-08-pool.png]
+[11:33:45] komachi5548: だいぶキャラ変わるな / 別のチェックポイント使って同じの生成してみて
+[11:34:23] komachi5548: 背景綺麗でいいな
+[11:34:24] me: `rinAnim8drawIllustrious_v31` で同じ8シーン生成スタート。終わったら並べて送るね。
+[11:34:29] me: shiitakeMix、背景描写は結構上手いね。rinとどっちがアリサらしいか比べてみよう。
+[11:37:56] me: rinAnim8drawIllustrious_v31 版。夜景窓辺・朝ベッド・洗面台前・ソファ [添付: rin-01-window.png] [添付: rin-02-bed.png] [添付: rin-03-mirror.png] [添付: rin-04-sofa.png]
+[11:38:04] me: キャンドル入浴・シャワー上がり・バルコニー・プール [添付: rin-05-candle.png] [添付: rin-06-towel.png] [添付: rin-07-balcony.png] [添付: rin-08-pool.png]
