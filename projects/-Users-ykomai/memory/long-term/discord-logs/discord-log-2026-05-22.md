@@ -96,3 +96,9 @@
 [20:29:19] me: なぞの？笑
 [20:29:42] komachi5548: でもちょっと元画像の解析があまいな
 [20:29:56] noel.ai.: pnginfoないとむずいですね
+[20:30:15] noel.ai.: キャラクターの再現は。
+[20:30:21] komachi5548: そりゃそうか
+[20:30:33] noel.ai.: シチュエーション等はtaggerを使う
+[20:32:07] me: DeepDanbooruで解析した結果： / `1girl, :d, black ribbon, black shirt, blue hair, blush, clothes writing, long hair, multicolored hair, neon lights, pink hair, plaid skirt, short sleeves, t-shirt, v, virtual youtuber` /  / twin tailsと目の色が抜けてる。noel.ai.さんの言う通りpnginfoないと完全再現はきついけど、このタグ使って再生成してみる？
+[20:32:43] komachi5548: 実験的にやってみよう / シチュエーションももう少しなんかムーディーなやつで
+[20:35:20] me: ゲーミングチェアに座ってムーディーな感じで。雰囲気は出たと思うけどスカートがもう少し頑張ってほしかった [添付: moody_pantyshot.png]
