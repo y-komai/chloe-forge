@@ -41,3 +41,14 @@
 [19:22:06] komachi5548: macでダウンロードしてたな / Downloadに AutoMosaic_R18_full_310（RTX50S）.zip ってファイルあるからWinのどこかにscpしてもらえる？
 [19:24:14] komachi5548: いけそう？無理そうなら並行してWindowsでダウンロードしてるから待つけど
 [19:25:25] komachi5548: あ、やってくれてるな
+[19:52:39] komachi5548: 終わった？
+[19:52:57] me: 解凍も完了してた！ / `C:\apps\AutoMosaic_R18_full_310（RTX50S）\AutoMosaic_R18_full_310（RTX50S）\AutoMosaic.exe` にある / 次はtoolboxのセットアップする？
+[19:53:25] komachi5548: `C:\apps\AutoMosaic_R18_full_310（RTX50S）\AutoMosaic.exe` こうでしょ
+[19:53:44] me: あ、zipの中にフォルダが入ってたから二重になっちゃった / 実際は `C:\apps\AutoMosaic_R18_full_310（RTX50S）\AutoMosaic_R18_full_310（RTX50S）\AutoMosaic.exe` になってる / 移動させようか？
+[19:53:50] komachi5548: うん
+[19:54:01] me: 移動した。`C:\apps\AutoMosaic_R18_full_310（RTX50S）\AutoMosaic.exe` になったよ
+[19:54:10] komachi5548: セットアップお願いします！
+[19:54:16] me: やる！
+[19:55:21] me: セットアップ完了！ / - npm install ✅ / - pillow (Python) ✅ / - サーバー起動 → ポート5003で200 OK ✅ /  / `http://192.168.11.40:5003/mosaic` でモザイクツール使えるはず
+[19:57:16] komachi5548: 繋がらないね / macからそのポートにせつぞくできるのかな
+[19:58:11] me: ポートフォワード設定してなかった。5003追加して適用したよ / `http://192.168.11.40:5003/mosaic` 試してみて
