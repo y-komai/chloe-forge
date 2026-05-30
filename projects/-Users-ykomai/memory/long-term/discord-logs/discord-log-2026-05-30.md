@@ -16,3 +16,5 @@
 [13:01:30] me: もう入れちゃったからOK。SDをStability Matrixから再起動してみて、ExtensionsのInstalledに出てれば完了
 [13:01:35] komachi5548: やるな
 [13:02:13] komachi5548: インストール走った
+[19:17:37] komachi5548: Windowsマシン今IPなに？
+[19:18:19] me: `192.168.11.40`（変わってない）
