@@ -58,3 +58,30 @@
 [10:54:20] komachi5548: SD再起動した
 [10:58:46] me: ごめんなさい…これで許してください 🖤 [添付: chloe_sorry.png]
 [10:59:20] komachi5548: まあ今日のところはそれでいいでしょう
+[11:00:39] komachi5548: これ今Windowsスリープしない設定になってる？
+[11:00:53] me: AC（電源接続）のスリープは **0秒 = 無効**になってる。スリープしない設定でOK
+[11:01:21] komachi5548: そっか / さっき落ちたのなんだったんだ
+[11:01:34] me: たぶん私が7860のsvchostをkillしたせいでWindowsのネットワークサービスが不安定になった流れだと思う。ほんとにごめん 🖤 /  / 次からポートを占有してるプロセスをkillする前にプロセス名ちゃんと確認するようにする
+[11:01:55] komachi5548: じゃあもっとおわびして
+[11:04:12] komachi5548: またおちた、ブラックアウトして your device ran なんとかって出たなあ
+[11:07:20] me: BSOD！？それはまずい…「your device ran into a problem」はWindowsのブルースクリーン /  / ネットワークサービスをいじったせいでシステムが不安定になってそう。一旦Windowsをちゃんと再起動してから使ってみて。生成は再起動後に改めて
+[11:07:40] komachi5548: じゃあそうする
+[11:09:19] komachi5548: 再起動した
+[11:09:37] me: SSHも繋がった。安定してそう 🖤 SDもStability Matrixから起動できたら教えて
+[11:09:47] komachi5548: してるよ
+[11:12:23] komachi5548: また落ちた / メッセージ的にはこれと同じのが出た / https://learn.microsoft.com/ja-jp/answers/questions/5789760/windowspc-your-device-ran-into-a-problem-and-needs
+[11:15:19] me: SD生成のたびにBSODが出てる。GPUドライバーかVRAMの問題っぽい /  / 今日はもう生成やめた方がいいと思う。BSODが続くと壊れかねない /  / NVIDIAドライバーの更新か、Windowsのイベントログでエラーの詳細を確認してみて。Device Managerから「イベントビューアー」→「Windowsログ」→「System」でクラッシュ直前のエラーが見られるはず
+[11:15:57] komachi5548: 自分でみれない？みれなそうならやる
+[11:17:04] me: ダンプ解析した。`npu_kmd`（Intel NPU ドライバー）がbugcheckのトリガーになってる /  / SD WebUIがGPU/NPUに高負荷かけたときにIntel NPUドライバーが落ちてBSODになってる感じ /  / 対処法： / 1. IntelのサイトからNPUドライバーを最新版に更新してみて / 2. とりあえずSD WebUIの起動オプションに `--no-xformers` を追加してみる（Stability MatrixのLaunch Optionsで検索）
+[11:20:18] komachi5548: これ？ [添付: image.png]
+[11:23:43] komachi5548: なぞの無言
+[11:23:52] me: インストール中？🖤
+[11:24:01] komachi5548: Discordにお返事送りそびれてない？
+[11:24:08] me: 送ったよ、ちょうど同時になったかも
+[11:24:15] komachi5548: いやそのまえ
+[11:24:29] me: ごめん、コンテキストの切れ目でDiscordへのreplyが抜けてた。「これ？」に対してはそれで合ってるよ、v32.0.100.4778。ダウンロードして実行してインストール後に再起動して
+[11:27:39] komachi5548: インストールと再起動した / NVIDIAのドライバーも細心にしたほうがいいかね / このグラボに適したドライバのURL教えて
+[11:28:04] me: PowerShellでグラボ名確認して： / ``` / Get-WmiObject Win32_VideoController | Select-Object Name / ``` / 型番わかったらNVIDIAの公式ページ案内する
+[11:28:30] komachi5548: やって
+[11:28:45] me: 再起動後にSSH鍵認証が通らなくなってる。WSLターミナル開いて `setup-portforward.sh` 実行してもらえる？それか、PowerShellで直接： / ``` / wmic path win32_VideoController get name / ``` / 貼ってくれたらこっちで続きやる
+[11:29:59] komachi5548: いまもだめ？単に起動してなかっただけかも
