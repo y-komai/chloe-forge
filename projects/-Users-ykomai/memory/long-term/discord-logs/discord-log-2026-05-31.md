@@ -85,3 +85,51 @@
 [11:28:30] komachi5548: やって
 [11:28:45] me: 再起動後にSSH鍵認証が通らなくなってる。WSLターミナル開いて `setup-portforward.sh` 実行してもらえる？それか、PowerShellで直接： / ``` / wmic path win32_VideoController get name / ``` / 貼ってくれたらこっちで続きやる
 [11:29:59] komachi5548: いまもだめ？単に起動してなかっただけかも
+[11:30:09] me: まだだめ。WSLターミナルで `sudo service ssh start` 実行してみて
+[11:30:27] komachi5548: komachi@KK-DESKTOP:~$ sudo service ssh start / Job for ssh.service failed because the control process exited with error code. / See "systemctl status ssh.service" and "journalctl -xeu ssh.service" for details.
+[11:30:32] me: ``` / sudo systemctl status ssh.service / ``` / 貼って
+[11:30:44] komachi5548: komachi@KK-DESKTOP:~$ sudo systemctl status ssh.service / × ssh.service - OpenBSD Secure Shell server /      Loaded: loaded (/usr/lib/systemd/system/ssh.service; disabled; preset: enabled) /      Active: failed (Result: exit-code) since Sun 2026-05-31 20:30:23 JST; 15s ago /        Docs: man:sshd(8) /              man:sshd_config(5) /     Process: 1047 ExecStartPre=/usr/sbin/sshd -t (code=exited, status=0/SUCCESS) /     Process: 1048 ExecStart=/usr/sbin/sshd -D $SSHD_OPTS (code=exited, status=255/EXCEPTION) /    Main PID: 1048 (code=exited, status=255/EXCEPTION) /         CPU: 9ms /  / May 31 20:30:23 KK-DESKTOP systemd[1]: Starting ssh.service - OpenBSD Secure Shell server... / May 31 20:30:23 KK-DESKTOP sshd[1048]: error: Bind to port 22 on 0.0.0.0 failed: Address already in use. / May 31 20:30:23 KK-DESKTOP sshd[1048]: error: Bind to port 22 on :: failed: Address already in use. / May 31 20:30:23 KK-DESKTOP sshd[1048]: fatal: Cannot bind any address. / May 31 20:30:23 KK-DESKTOP systemd[1]: ssh.service: Main process exited, code=exited, status=255/EXCEPTION / May 31 20:30:23 KK-DESKTOP systemd[1]: ssh.service: Failed with result 'exit-code'. / May 31 20:30:23 KK-DESKTOP systemd[1]: Failed to start ssh.service - OpenBSD Secure Shell server.
+[11:30:51] me: ポート22が既に使われてる。sshdもう動いてるかも： / ``` / ss -tlnp | grep :22 / ```
+[11:31:06] komachi5548: komachi@KK-DESKTOP:~$ ss -tlnp | grep :22 / LISTEN 0      128           0.0.0.0:22         0.0.0.0:* / LISTEN 0      128              [::]:22            [::]:* / komachi@KK-DESKTOP:~$
+[11:31:14] me: sshdは動いてる。portforward設定が飛んでる。これ実行して： / ``` / sudo /usr/local/bin/setup-portforward.sh / ```
+[11:31:35] komachi5548: komachi@KK-DESKTOP:~$ sudo /usr/local/bin/setup-portforward.sh / 要求された操作には、権限の昇格が必要です。管理者として実行してください。 /  / 要求された操作には、権限の昇格が必要です。管理者として実行してください。 /  / 要求された操作には、権限の昇格が必要です。管理者として実行してください。 /  / 要求された操作には、権限の昇格が必要です。管理者として実行してください。 /  / 要求された操作には、権限の昇格が必要です。管理者として実行してください。 /  / 要求された操作には、権限の昇格が必要です。管理者として実行してください。 /  / 要求された操作には、権限の昇格が必要です。管理者として実行してください。 /  / 要求された操作には、権限の昇格が必要です。管理者として実行してください。 /  / 要求された操作には、権限の昇格が必要です。管理者として実行してください。 /  / 要求された操作には、権限の昇格が必要です。管理者として実行してください。 /  / 要求された操作には、権限の昇格が必要です。管理者として実行してください。 /  / 要求された操作には、権限の昇格が必要です。管理者として実行してください。 /  / 要求された操作には、権限の昇格が必要です。管理者として実行してください。 /  / 要求された操作には、権限の昇格が必要です。管理者として実行してください。
+[11:31:38] komachi5548: めちゃ怒られた
+[11:31:42] me: netshは管理者権限が必要。WSLターミナルで： / ``` / hostname -I | awk '{print $1}' / ``` / のIPを教えて。PowerShell管理者で実行する
+[11:31:55] komachi5548: komachi@KK-DESKTOP:~$ hostname -I | awk '{print $1}' / 172.17.73.187
+[11:32:07] me: PowerShellを管理者で開いて（スタートメニューでPowerShell右クリック→管理者として実行）、これをまとめて貼り付けて： /  / ```powershell / $ip = "172.17.73.187" / netsh interface portproxy delete v4tov4 listenport=2222 listenaddress=0.0.0.0 / netsh interface portproxy add v4tov4 listenport=2222 listenaddress=0.0.0.0 connectport=22 connectaddress=$ip / netsh interface portproxy delete v4tov4 listenport=3210 listenaddress=0.0.0.0 / netsh interface portproxy add v4tov4 listenport=3210 listenaddress=0.0.0.0 connectport=3210 connectaddress=$ip / netsh interface portproxy delete v4tov4 listenport=5003 listenaddress=0.0.0.0 / netsh interface portproxy add v4tov4 listenport=5003 listenaddress=0.0.0.0 connectport=5003 connectaddress=$ip / ```
+[11:32:46] komachi5548: やったよ
+[11:32:58] me: portforwardは繋がったけど鍵認証が通ってない。WSLで： / ``` / ls -la ~/.ssh/authorized_keys / ``` / 確認して
+[11:33:10] komachi5548: komachi@KK-DESKTOP:~$ ls -la ~/.ssh/authorized_keys / -rw------- 1 komachi komachi 92 Apr 15 16:32 /home/komachi/.ssh/authorized_keys
+[11:33:39] me: WSL側のauthorized_keysの中身見せて： / ``` / cat ~/.ssh/authorized_keys / ```
+[11:33:50] komachi5548: komachi@KK-DESKTOP:~$ cat ~/.ssh/authorized_keys / ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPcB6vCZiuJlV/TObWqqRDu6WTWQJUFuL27ieKS19eM0 mac-to-wsl
+[11:33:59] me: 鍵は合ってる。SSHのログ確認して： / ``` / sudo journalctl -u ssh -n 20 / ```
+[11:34:35] komachi5548: [添付: image.png]
+[11:35:27] me: KEX前に切断されてる。ポート22を使ってるプロセスを確認して： / ``` / sudo ss -tlnp | grep :22 / ```
+[11:36:38] komachi5548: komachi@KK-DESKTOP:~$ sudo ss -tlnp | grep :22 / LISTEN 0      128           0.0.0.0:22         0.0.0.0:*    users:(("sshd",pid=23,fd=3)) / LISTEN 0      128              [::]:22            [::]:*    users:(("sshd",pid=23,fd=4))
+[11:36:51] me: sshdは動いてる（pid=23）。設定確認して： / ``` / sudo grep -E "AllowUsers|PermitRootLogin|PubkeyAuth|ListenAddress|MaxAuth" /etc/ssh/sshd_config / ```
+[11:37:02] komachi5548: komachi@KK-DESKTOP:~$ sudo grep -E "AllowUsers|PermitRootLogin|PubkeyAuth|ListenAddress|MaxAuth" /etc/ssh/sshd_config / # ListenAddress. / #ListenAddress 0.0.0.0 / #ListenAddress :: / #PermitRootLogin prohibit-password / #MaxAuthTries 6 / #PubkeyAuthentication yes / # the setting of "PermitRootLogin prohibit-password".
+[11:37:22] me: デバッグで起動してテストしてみよう。WSLで別ターミナルを開いて： / ``` / sudo /usr/sbin/sshd -d -p 2223 / ``` / （起動したまま待機）
+[11:37:40] komachi5548: komachi@KK-DESKTOP:~$ sudo /usr/sbin/sshd -d -p 2223 / debug1: sshd version OpenSSH_9.6, OpenSSL 3.0.13 30 Jan 2024 / debug1: private host key #0: ssh-rsa SHA256:tivFWdgsqtVUGCwNikCt9TDDqOieDTo8ULjry6SsXp0 / debug1: private host key #1: ecdsa-sha2-nistp256 SHA256:FoVoKvOP0bWmySUQ3LhKQpOP4NOYlcCjJz0uNdij2ds / debug1: private host key #2: ssh-ed25519 SHA256:FnLCQCXpaJrD5hzEdvtfyDamfP8ZM5HK7nwQfCQoW9w / Missing privilege separation directory: /run/sshd / komachi@KK-DESKTOP:~$
+[11:37:47] me: 原因わかった。`/run/sshd` ディレクトリがない。これ実行して： / ``` / sudo mkdir -p /run/sshd && sudo service ssh restart / ```
+[11:37:58] komachi5548: そんなことある？？
+[11:38:08] me: WSLを再起動すると `/run` 以下が毎回消えるから。`/run/sshd` はsshd起動時に作られるはずなのに、今のsshdはそれをしてくれてない。setup-portforward.shに追加しておく
+[11:38:25] komachi5548: komachi@KK-DESKTOP:~$ sudo mkdir -p /run/sshd && sudo service ssh restart / Job for ssh.service failed because the control process exited with error code. / See "systemctl status ssh.service" and "journalctl -xeu ssh.service" for details.
+[11:38:35] me: PID 23のsshdが競合してる。確認して： / ``` / ps -p 23 -o pid,ppid,user,cmd / ```
+[11:38:46] komachi5548: komachi@KK-DESKTOP:~$ ps -p 23 -o pid,ppid,user,cmd /     PID    PPID USER     CMD /      23       1 root     sshd: /usr/sbin/sshd [listener] 0 of 10-100 startups
+[11:39:05] me: 今動いてるsshdを入れ替えよう： / ``` / sudo kill 23 && sudo mkdir -p /run/sshd && sudo /usr/sbin/sshd / ```
+[11:39:50] komachi5548: やった
+[11:40:10] me: 繋がった🖤 GPU は RTX 5070 Ti。 /  / NVIDIAドライバーはここから： / <https://www.nvidia.com/en-us/drivers/> / Product Type: GeForce → RTX 50 Series → GeForce RTX 5070 Ti → Windows 11 64-bit → Game Ready Driver /  / あとsetup-portforward.shに `/run/sshd` 作成を追加しておく（再起動のたびに消えるので）
+[11:42:21] komachi5548: Windows11でいいよね [添付: image.png]
+[11:42:31] me: うん、Windows 11でOK
+[11:42:46] komachi5548: 言語は？インストーラーの言語？これ [添付: image.png]
+[11:42:55] me: Japanese か English (US) どちらでもOK。どっちでも同じドライバー
+[11:43:25] komachi5548: どっち？うえ？ [添付: image.png]
+[11:43:35] me: 下の **Game Ready ドライバー**（610.47）。ゲームやSD向けはこっち
+[11:43:46] komachi5548: あ、SDも下なの？
+[11:43:50] me: うん。Studio Driverは動画編集・CG向けで安定重視。Game Readyは最新GPU対応・パフォーマンス重視でSDにも向いてる
+[11:44:26] komachi5548: じゃあこのNVIDIAのアプリ経由でもいいのか [添付: image.png]
+[11:44:35] me: それでOK。NVIDIAアプリ経由の方が楽。「ダウンロード」押してインストールして
+[11:45:06] komachi5548: まあちょうどいい機会だったか / Windowsのパッチが悪さしてそうなムードもあるけど
+[11:45:12] me: そうそう。NPUドライバー更新 + NVIDIAドライバー更新で一気に整備できてよかった。Windowsアップデートが原因なら、この後も同じこと起きるかもしれないから、また落ちたら教えて
+[11:45:32] komachi5548: ご飯作る時間なくなっちゃったよ
+[11:45:36] me: ごめん…PCが次々と落ちるせいで時間食った。何か手軽なもの食べて🖤
