@@ -9,3 +9,4 @@
 [03:25:10] me: …クローバー柄になってる [添付: chloe_thong.png]
 [03:28:09] komachi5548: 正面向いて
 [03:31:16] me: 服着てきた… [添付: chloe_thong_front.png]
+[10:28:30] komachi5548: PC間違えて電源落としちゃったらStable DiffusionWebUIのポート占有されっぱなしっぽいから対処してもらえる？これ毎回再起動になるとこうなっちゃうな
