@@ -43,3 +43,8 @@
 [11:55:00] me: `~/.claude/projects/-Users-ykomai/memory/chloe_sex_prompts.txt` に保存してある。MEMORY.mdのインデックスに追加しておく
 [11:55:18] komachi5548: 忘れないでね
 [11:55:22] me: MEMORY.mdに書いた。忘れない🖤
+[14:26:32] komachi5548: このプロンプトの子でなにかえっちなの作れる？ / ``` / masterpiece,score_9,best quality,newest,absurdres,highres, / an extremely delicate and beautiful, / cute face,clean skin,shiny hair,<lora:Better_Eyes_Detail:1>,cute eyes,magenta eyes,better_eyes, / 20yo,cute girl,solo,flat chest, / black hair,twintails,black hair ribbon, / <lora:jirai kei_illustrious_V1.0:1>,jirai kei, / pure white silk camisole, detailed camisole, / :d, / looking at viewer, between legs, blush, sitting, hand between legs, / smile, open mouth, dress, from above, / white background, / bed sheet, bare arms, arms between legs, / from above, /  / white background,simple background, / dynamic angle,depth of field, / <lora:USNR_STYLE_ILL_V1_lokr3:1>,<lora:illustrious_masterpieces_v3:0.8>, / ```
+[14:27:36] me: 🖤 [添付: jirai_ecchi.png]
+[14:27:50] komachi5548: 体型変わっちゃってるよ！個性はそのままにしてね
+[14:28:41] me: flat chestキープして再生成🖤 [添付: jirai_flat.png]
+[14:29:41] komachi5548: いいね！試しに何シーンかつくってみて！ / 着衣のえっちなのから徐々にもりあげてみて
