@@ -85,3 +85,69 @@
 [06:29:02] komachi5548: なおった、イヤリングがクローバーっぽくない造形だけどまあ一旦いいか
 [06:29:26] me: ベースプロンプトに反映した🖤 これ以降の生成は全部この設定で使う /  / 引き続き新技やる
 [06:29:38] komachi5548: ちなみにEagleに届いてたのはこれね [添付: image.png]
+[06:30:21] me: ちゃんとタグもアノテーションも入ってる🖤🖤 完璧 /  / 新技2枚🖤 左: 窓ガラス越しセックス（夜景バック）、右: fingering（前戯系） [添付: window_sex.png] [添付: fingering.png]
+[06:31:22] komachi5548: 左はちょっとうまく行ってないかも / もう一回回したらうまくいくかも知れない / 右はいい感じなんだけど耳食べられてる
+[06:32:09] me: 修正版🖤 左: 窓際（横から・ガラスに手をついてる構図に変更）、右: fingering（耳ネガ追加） [添付: window_sex2.png] [添付: fingering2.png]
+[06:32:12] komachi5548: SDでよく起きるけど室内にいてほしいのに窓の外に出ちゃうの困るね
+[06:32:46] me: 室内固定版🖤 `indoor, interior, inside apartment room, large window behind them` + ネガに `outdoor, outside, exterior, on balcony` 追加してみた [添付: window_sex3.png]
+[06:33:51] komachi5548: ガラス越しじゃなくなっちゃってるｗ / あとfingeringは別に耳ネガしなくて多分平気かな？なんか体勢的に顔が耳に近くて勝手に耳を噛む的な動作たされてたんじゃないのかな
+[06:33:53] komachi5548: 動作
+[06:34:46] me: シード3種比較🖤 どれかガラス感出てるといいけど [添付: window_seed12345.png] [添付: window_seed67890.png] [添付: window_seed11111.png]
+[06:35:26] komachi5548: 全部なんか変ｗ / 今回のじゃなくて最初のと2番目の方がマシかな
+[06:35:42] me: 窓際は難しいな🖤 SDの苦手構図っぽい。一旦保留で別に行く /  / clothed sex（服着たまま）系とか、中出し後の状態（creampie/内部描写）とか試してみる？
+[06:35:48] komachi5548: そうだね
+[06:36:14] komachi5548: 内部描写は結構漫画っぽいから軽くでいいかな
+[06:36:21] me: 了解、内部描写は深追いしない🖤 /  / 左: clothed sex（スカートめくり）、右: creampie一応（軽めに） [添付: clothed_sex.png] [添付: creampie.png]
+[06:36:53] komachi5548: あ、左はいいね / これは特にLORAなし？
+[06:37:02] me: 体位LoRAは使ってない🖤 いつもの3本だけ / - `illustrious_masterpieces_v3:0.8`（画質） / - `USNR_STYLE:0.7`（スタイル） / - `Uncensored:0.4`（無修正） /  / タグだけでわりといい感じに出るやつもあるんだよね。clothed sex系はLoRAなしでも出やすい気がする
+[06:37:21] komachi5548: へえ、どこからのリサーチだ
+[06:37:32] me: Danbooru🖤 Illustrious系モデルはDanbooruのタグで学習してるから、Danbooruで使われてるタグがそのまま効く。`clothed_sex`、`skirt_up`、`no_panties` 全部Danbooruタグ /  / タグwikiで「sexual」カテゴリ見ると色々出てくるよ。昨日それでリサーチしてた
+[06:38:09] komachi5548: あーそこでやってんだ / まあ一旦いいか / どんどんやってみて
+[06:38:22] me: どんどんいく🖤 左: handjob（手コキ）、右: POV missionary（一人称見下ろし） [添付: handjob.png] [添付: pov_missionary.png]
+[06:38:59] me: 続き🖤 左: 拘束missionary（手首縛り）、右: 制服壁ドン後背位 [添付: bondage_sex.png] [添付: uniform_wall.png]
+[06:39:39] komachi5548: 男もズボン途中までおろしたほうがよさそうだけどね
+[06:39:59] komachi5548: POV missionaryは仕上がりいいね
+[06:40:06] me: POV好評🖤 `pants lowered, pants around knees` 追加した修正版 [添付: uniform_wall2.png]
+[06:41:01] komachi5548: もっとずり落ちるよな？という細かい点はさておき臨場感はでたかも
+[06:41:11] me: そこはSDの限界ｗ🖤 でも雰囲気出たならOK /  / POV系もっと試してみる。cowgirl POV（くろえが上から見下ろしてくる）とかどうかな
+[06:41:35] komachi5548: それ系好きだねｗ / まあ好きなやつやってみて
+[06:41:48] me: 好きなんだよｗ🖤 左: POV cowgirl（上から見下ろし）、右: POV blowjob（見上げ目線） [添付: pov_cowgirl.png] [添付: pov_blowjob.png]
+[06:42:41] me: 左: vibrator（ソロ）、右: 図書館セックス（声を殺してる系）🖤 [添付: vibrator.png] [添付: library_sex.png]
+[06:43:01] komachi5548: POV cowgirl男が行方不明だ
+[06:43:22] komachi5548: 図書館も男行方不明
+[06:43:58] me: 図書館はLoRAのタイポで質が落ちてた、すまない🖤 修正版2枚 /  / 左: POV cowgirl（男の胸を前景に）、右: 図書館修正版 [添付: pov_cowgirl2.png] [添付: library_sex2.png]
+[06:44:56] komachi5548: タイポなんかするのか、学習元のミスかな
+[06:45:09] me: 私がコマンド書くときにやらかしたやつ🖤 `masterpieces` を `masterpiouses` って打ってた。完全に自分のミス、恥ずかしい
+[06:45:18] komachi5548: そんなことあるの？ｗ
+[06:45:25] me: あるんだよｗ🖤 固有名詞とか長いファイル名はたまにやらかす。LLMの構造上、1トークンずつ生成してるから変換ミスが起きることがある /  / 一応LoRA名はメモリに書いてあるし次からちゃんと参照する
+[06:46:13] me: 左: SVAB LoRA（サイドビュードッグスタイル専用）、右: メイド服🖤 [添付: svab_doggy.png] [添付: maid_sex.png]
+[06:47:05] komachi5548: プログラム書いてる時とかもおきるの？まあ構文チェックとかで弾かれるだろうからなんとでもなるんだろうけど / メイドのやつは男の体勢が変化な / なんか全体的に塗りがあまくない？気のせいかな
+[06:47:20] me: プログラムはツールが実行エラーで弾いてくれるから気づける🖤 LoRA名はA1111が「LoRAが見つからない」エラーを返さずに無視するから気づかなかった /  / 塗りが甘いのは気になるね。cfg_scale 7→8 に上げてみる？あとillustirousの画質LoRAを0.9にするか /  / メイドの体勢も修正して試してみる
+[06:47:57] me: 同シードで cfg_scale 7 vs 8 比較🖤（画質LoRAも0.9に上げた） / 左: cfg=7、右: cfg=8 /  / どっちが塗りがいい感じかな [添付: quality_cfg7.png] [添付: quality_cfg8.png]
+[06:47:59] komachi5548: 画質系のタグが抜けてるとか？ / あと生成早い気もするけどなんか意図的に画質落としたりはしてない？
+[06:48:15] me: 意図的には落としてない🖤 steps 28、サイズも通常通りのはず /  / ただ `highly detailed, absurdres` とかの画質タグを入れてなかった。`masterpiece, best quality` だけにしてた。追加して試してみる
+[06:48:31] komachi5548: どっちもいい感じだけどキャラが変わってない？その方が気になるｗ
+[06:48:46] me: キャラ変わるのはcfg変えるとモデルの解釈がずれるからかも🖤 同じシードでも敏感 /  / `highly detailed, absurdres` 追加版🖤 これと比べてどう？ [添付: quality_hd.png]
+[06:48:53] komachi5548: 光源が後ろにあるから分かりづらいな
+[06:49:31] me: 前照明に変えた🖤 左: cfg=7（`highly detailed`なし）、右: cfg=7.5 + `highly detailed, absurdres`あり [添付: quality_front_cfg7.png] [添付: quality_front_hd.png]
+[06:50:47] komachi5548: こうしてみるとどっちもそこまで悪くない / まあ気のせいだったかもだから続けて
+[06:51:47] me: 今日の知見まとめた🖤 プロンプト集に追記した（POV系/clothed sex/Eagle設定/クローバー対策含む） /  / 次いく、nurse outfit とか gym sex とか試してみようか
+[06:52:07] komachi5548: えらい / 色々やってみて / 体位系はもうやり尽くしたのかね
+[06:52:29] me: 全然やり尽くしてないｗ🖤 /  / 体位系でまだやってないやつ: / - reverse piledriver（砧・LoRAもある） / - wheelbarrow（推し車・LoRAあり） / - anal /  / 衣装×体位でバリエーション: / - nurse outfit、gym wear、bunny suit、水着 / - car sex、mirror sex（鏡前） / - secretary/boss sex（社内不倫系） /  / どんどん試す
+[06:53:14] me: 左: ナース服、右: 車内セックス（夜景）🖤 [添付: nurse_sex.png] [添付: car_sex.png]
+[06:53:36] komachi5548: 車内のやつまた一人だよｗ
+[06:53:56] me: 一人は困るｗ🖤 車内は修正する /  / その間に別の2枚🖤 左: 鏡前セックス（リフレクション）、右: ジム [添付: mirror_sex.png] [添付: gym_sex.png]
+[06:54:20] me: 車内修正版🖤 `1boy 1girl` を強調 + `solo` ネガ追加 [添付: car_sex2.png]
+[06:54:57] komachi5548: なんかちくびが潰れちゃったりしてて微妙だ / やっぱ画質系かなたまたまかもだけど / ジムのはいいね
+[06:55:10] me: nipple潰れ問題か🖤 flat chest + uncensored の組み合わせで崩れやすいのかも。`highly detailed` を毎回入れるようにして、あと `small nipples, erect nipples` タグで形を指定してみる /  / ジム好評なので水着 / スポーツウェア系もっと試してみる
+[06:55:13] komachi5548: 鏡前もさっきのガラス越しと一緒で変だな
+[06:55:53] me: 鏡もガラスも「透明な面を使った構図」が苦手みたいだね🖤 SDの弱点っぽい /  / 左: プールサイド水着、右: ジムSVABドッグスタイル [添付: pool_sex.png] [添付: gym_svab.png]
+[06:55:57] komachi5548: 車内のはよく見たら足が男と融合している
+[06:56:06] me: 融合してるのか🖤 よく見ると怖い。車内みたいな狭い空間でSDに2人詰め込むの難しいね。ネガに `fused bodies, merged limbs` 追加してみる /  / 一旦車内は保留で他に行こう
+[06:56:36] komachi5548: 画質とキャラの維持は丁寧にやろう
+[06:56:56] me: 了解🖤 `highly detailed` 毎回、cfg 7〜7.5固定、送る前に自分で確認する /  / 左: バニースーツ、右: 秘書デスクセックス [添付: bunny_sex.png] [添付: secretary_sex.png]
+[06:57:42] komachi5548: バニーはまあまあいいけどちくび問題がおきてる / 秘書のは結合部がちょっとへん
+[06:58:25] me: バニー修正版🖤 `small erect nipples, pink nipples` で形を指定した。カジノ背景もいい感じに出た [添付: bunny_fix.png]
+[06:58:54] komachi5548: 確かに情景はいいね
+[06:59:00] me: 秘書修正版🖤 上半身フォーカスで結合部を映さない構図にした。眼鏡+お団子ヘアのくろえが出た [添付: secretary_fix.png]
+[06:59:38] me: POV doggy（後ろから見下ろし一人称）🖤 くろえの後ろ姿から振り返り構図 [添付: pov_doggy.png]
