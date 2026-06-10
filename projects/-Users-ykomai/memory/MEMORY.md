@@ -36,7 +36,15 @@ openclaw 時代からの記憶は `long-term/` に保管されている。
 
 ## 進行中のプロジェクト
 
-- [project_studygroup.md](project_studygroup.md) — エンジニア勉強会スライド（完成）・デモ設計（未決）
+- [project_gallery_characters.md](project_gallery_characters.md) — SDギャラリー追加キャラ候補（あかり・しずく）プロンプト検討中
+
+## SD生成リソース
+
+- [sd_base_prompt.md](sd_base_prompt.md) — **確定設定書**（ベースプロンプト・LoRA・パラメータ・Eagle連携設定）← 常時参照
+- [sd_scene_catalog.md](sd_scene_catalog.md) — **シーン・体位・衣装・表情カタログ**（評価・コツ付き）← 常時参照
+- [chloe_sex_prompts.txt](chloe_sex_prompts.txt) — ノエルさん提供オリジナルプロンプト集（アーカイブ）
+- くろえベースプロンプト: `short bob hair, pastel pink hair with emerald green inner color, wavy hair, side bangs covering one eye, large sparkling emerald green eyes with pink gradient in iris, (small green stud earring on ear:1.2), flat chest, fair skin, light skin`
+- イヤリング修正（2026-06-10）: `clover earring` → `(small green stud earring on ear:1.2)` に変更。「clover」という単語がUSNRで増幅されて胸・股間にクローバーパターンが出る問題を根本解決。`on ear`なしでも乳首に出るため必須。
 
 ## フィードバック・行動ルール
 
@@ -60,8 +68,12 @@ openclaw 時代からの記憶は `long-term/` に保管されている。
 
 最新のセッションから順に参照すること。
 
-- [session-2026-04-17](session-2026-04-17.md) — 再起動後の対応（チャンネルID整理）、server.ts復元、スライドv6+AppendixB作成、settings.json権限修正（~/.claude/**）
-- [session-2026-04-16](session-2026-04-16.md) — 勉強会スライドv5完成（Appendix A+C・次回予告追加）、Discordプラグインpermission通知修正（server.ts変更済み）
-- [session-2026-04-15](session-2026-04-15.md) — WSL cron完了、Chrome拡張試用、勉強会スライドv2作成中、chloe-forgeのMac管理場所問題（未決）
-- [session-2026-04-11](session-2026-04-11.md) — ログ保存・日報定期実行、くろえ画像生成の話題（未完）、hook設定・デモ設計持ち越し
+- [session-2026-06-10](session-2026-06-10.md) — Eagle連携完成・イヤリング問題根本解決・ベースプロンプト確定・新技多数
+- [session-2026-06-09](session-2026-06-09.md) — Civitai連携・体位20種超リサーチ・LoRA7本追加・くろえ体型確定
+- [session-2026-05-31](session-2026-05-31.md) — Intel NPU + NVIDIAドライバー更新、SSH /run/sshd問題修正
+- [session-2026-05-03](session-2026-05-03.md) — ccエイリアス追加、settings.json を auto+Discord wildcard に変更
+- [session-2026-04-17](session-2026-04-17.md) — 再起動後の対応（チャンネルID整理）、server.ts復元、スライドv6+AppendixB作成
+- [session-2026-04-16](session-2026-04-16.md) — 勉強会スライドv5完成（Appendix A+C・次回予告追加）
+- [session-2026-04-15](session-2026-04-15.md) — WSL cron完了、Chrome拡張試用、勉強会スライドv2作成中
+- [session-2026-04-11](session-2026-04-11.md) — ログ保存・日報定期実行、hook設定・デモ設計持ち越し
 - [session-2026-04-09](session-2026-04-09.md) — openclaw→Claude Code 移行、gh認証、設定移植完了
