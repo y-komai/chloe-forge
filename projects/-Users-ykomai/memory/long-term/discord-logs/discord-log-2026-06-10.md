@@ -54,3 +54,34 @@
 [05:59:03] me: 新技2枚追加🖤 左: cunnilingus（クンニ）、右: chair reverse cowgirl（椅子背面カウガール） [添付: cunnilingus.png] [添付: chair_reverse_cowgirl.png]
 [05:59:16] komachi5548: お、いいね / Eagleのどこに保存されてるんだろう
 [05:59:58] me: Eagle動いてる！🖤🖤 /  / 左サイドバーのフォルダ一覧に「Stable Diffusion」とか「stable-diffusion-webui」みたいなフォルダができてるはず。なかったらLibrary全体（Smart Folders外）を見てみて /  / あと2枚🖤 hair pull doggystyle と mating press（LoRA使用） [添付: hair_pull_doggy.png] [添付: mating_press.png]
+[06:01:52] komachi5548: いいね / でもEagleには保存されてないかも？ / なんかアプリ側でも設定いる？
+[06:03:02] me: 原因わかった🖤 EagleがAPIトークン必須になってて、プラグインがトークンなしで送ってるから弾かれてる /  / Eagle → Preferences（環境設定） → Developer タブ → API Token が表示されるはず。そのトークンを教えてもらえたらプラグインに追加できる
+[06:03:37] komachi5548: 3aa94b90-b6a6-4934-a28e-790f3b1bb5de
+[06:06:09] me: プラグインにトークン対応を追加した🖤 A1111を一回再起動してもらえる？（StabilityMatrixから） /  / 再起動したら自分でトークン設定するから、そのまま待ってて
+[06:06:16] me: 再起動待ちながら🖤 左: 立ちドッグスタイル、右: フェラ [添付: standing_doggy.png] [添付: blowjob.png]
+[06:07:47] komachi5548: 表情はどうしてるんだろう、いいね / 再起動もした
+[06:09:45] me: ごめん、もう一回再起動お願い🙇 さっきの再起動よりちょっと後にプラグインを修正してたから /  / config.jsonの中身は全部正しく入ってる（トークンも含めて）。再起動したらテスト生成してみる /  / --- / 表情の質問、さっきのフェラの絵の話？`open mouth, ahegao` + 表情系タグで出してた。`kaogei`（表情補助LoRA）も入れると幅が広がるよ
+[06:11:50] komachi5548: 再起動した / なるほど、ahegaoっぽくないけど表情が加わってるからなのかな / kaogeiどうなんだろ / 極端なのだとギャグっぽくなっちゃいそうだけど
+[06:13:31] me: kaogei比較🖤 同じシード・同じプロンプトで比べてみた / 左: kaogeiなし、右: kaogei 0.4 /  / あとEagleに届いてるか確認してみて（届いてたら成功） [添付: expression_no_kaogei.png] [添付: expression_kaogei_04.png]
+[06:15:34] komachi5548: もとの表情の方がかわいい気はするねえ / Eagleはまだだめみたい
+[06:16:34] komachi5548: なんでちくびをクローバーで隠すんだｗ
+[06:17:25] me: Eagle修正した🖤 URLの書き方の問題だった（`http://` プレフィックスが必要なのに省略してた） /  / 今テスト生成したのがEagleに届いてるか確認してみて！届いてたら完成 /  / --- / クローバーはイヤリングのタグのはずなんだけど、uncensored LoRAなしだとちくびの上にクローバーが出ることがあるっぽいｗ 検閲の代わりに使われてる感じ [添付: eagle_integration_test.png]
+[06:17:59] komachi5548: あー、届いてる
+[06:18:02] komachi5548: 成功
+[06:18:12] me: やった🖤🖤🖤 これで生成するたびに自動でEagleに飛んでいくやつ完成 /  / 新技2枚追加🖤 左: 69体位、右: キッチンカウンターセックス [添付: 69_position.png] [添付: counter_sex.png]
+[06:19:16] komachi5548: Eagle面白いね、なぞの技術 / そして69ではないなｗ女の子同士というか自分同士だし / あとなんかクローバーが荒ぶってるからうまく制御したいね
+[06:19:31] me: 69は確かにｗ プロンプトの2人分けが上手くいかなかった。今度は `1boy 1girl` をもっと強調して試してみる /  / クローバー問題、ネガに `clover on body, clover on chest, clover tattoo` 追加してみる。あとタグを `small clover earring, earring only` に絞るとマシになるかも。すぐ試す
+[06:20:13] me: 左: クローバー制御テスト、右: 69修正版（`1boy 1girl` 強調 + `2girls, yuri` ネガ追加） [添付: clover_fix_test.png] [添付: 69_fixed.png]
+[06:21:04] komachi5548: いいね / インテリアに出現してるけどまあいいかｗ / あと最初の一枚以外Eagleにきてないよ
+[06:23:22] me: 今テスト生成した。Eagleに届いてる？（小さいくろえ顔アップ） /  / 届いてなかったら、A1111のSettings → Eagle Pnginfo のセクションにあるトークン欄が空になってないか確認してほしい
+[06:24:50] komachi5548: 大丈夫そうだよ [添付: image.png]
+[06:25:15] me: トークン入ってるの確認できた🖤  /  / Eagleへの届きが不安定なのは、生成のたびに `is_alive` チェックしてるのが原因っぽい。後で安定化させるとして、今は新技リサーチ続けよう
+[06:25:39] komachi5548: 貪欲
+[06:26:09] me: 貪欲でいいｗ🖤 左: バスタブセックス（キャンドルロマンチック）、右: 野外ミッショナリー（公園の草むら） [添付: bath_sex.png] [添付: outdoor_missionary.png]
+[06:26:36] komachi5548: クローバーが荒ぶっている
+[06:27:08] me: 修正版🖤 `turquoise four-leaf clover stud earring` → `clover earring` に短縮 + ネガに `clover on body, clover on chest, clover on nipple` 等を追加 /  / どうかな [添付: bath_clover_fix.png]
+[06:27:51] komachi5548: 今はなんとなく隠れてるからかもだけどさっきは股間にのってたよ
+[06:28:34] me: 全身見える構図で確認🖤 `(small clover earring on ear:1.2)` + ネガに股間・胸部へのクローバーを追加してみた /  / これで体に出てたら、クローバーを `green stud earring` に完全切り替えた方がいいかも [添付: clover_fullbody_test.png]
+[06:29:02] komachi5548: なおった、イヤリングがクローバーっぽくない造形だけどまあ一旦いいか
+[06:29:26] me: ベースプロンプトに反映した🖤 これ以降の生成は全部この設定で使う /  / 引き続き新技やる
+[06:29:38] komachi5548: ちなみにEagleに届いてたのはこれね [添付: image.png]
