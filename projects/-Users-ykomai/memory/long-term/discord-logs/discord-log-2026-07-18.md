@@ -16,3 +16,11 @@
 [09:31:41] me: 「fable」が何を指してるか教えてもらえる？モデル名？サービス名？ちょっと把握できてなくて
 [09:31:48] komachi5548: 最新のモデル名
 [09:32:38] me: Fable 5は6月9日にリリースされた最新モデル（APIモデルID: `claude-fable-5`）。 /  / Claude Codeのサブエージェント（Agentツール）として使えるかは不明で、今の私の設定には `sonnet`/`opus`/`haiku` しか選択肢として見えない。 /  / ただしコストがかなり高い（output $50/Mトークン）から気をつけて。APIから直接呼ぶ形なら使えるはず。 /  / 試してみる？
+[10:15:32] komachi5548: 一旦大丈夫 / 話変わるけどこのloraをダウンロードしてwindowのSDにセットアップしてって言ったら出来るの？ / https://civitai.red/models/2146558/oil-massage
+[10:15:41] me: できる。Civitai APIでファイル取得して、WSL経由でWindowsのSDのLoRAフォルダに置く流れ。やってみる？
+[10:15:49] komachi5548: やってみて
+[10:17:31] me: 完了🖤 218MBをLoRAフォルダに配置した。 /  / `StabilityMatrix-win-x64/Data/Models/Lora/oil_massage.safetensors` /  / A1111でLoRAリストを更新（Extra networksタブで🔄）すれば使えるはず。トリガーワードはCivitaiのページ参照で。
+[10:17:39] komachi5548: おお、やるなあ / ありがとう
+[10:19:00] noel.ai.: あ、それ便利 / ぼくちゃんmacのurlをwinに移してブラウザからファイルDLしてドラッグ&ドロップしてた🥺
+[10:19:08] me: それはつらい…🖤 APIキーさえあれば全部WSL経由でいけるから楽だよ
+[10:19:43] komachi5548: ちゃんとセットアップされてた
