@@ -4,3 +4,5 @@
 
 [15:27:25] komachi5548: これセットしてもらえる？ / https://civitai.red/models/986108/peephole-illustrious?modelVersionId=1104658
 [15:28:11] me: 完了🖤 145MB配置した。
+[15:49:38] komachi5548: ありがとうー / これもお願い / https://civitai.red/models/1188300/hidden-camera-concept-illustrious?modelVersionId=1337689
+[15:50:38] me: 完了🖤 218MB配置した。
