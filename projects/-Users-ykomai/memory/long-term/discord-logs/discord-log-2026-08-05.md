@@ -39,3 +39,5 @@
 [15:12:30] komachi5548: どう？
 [15:12:56] me: 1本目（21GB diffusion model）完了✅ / 2本目（16GB text encoder）が5GBまで進んでる。残り11GB。 / あとVAE 2本（5GB + 0.6GB）でトータル終わり🖤
 [15:13:04] komachi5548: いいね
+[15:44:20] me: 順調🖤 / - ✅ diffusion model（21GB）完了 / - ✅ text encoder（16GB）完了   / - 🔄 VAE 2本（5GB + 0.6GB）ダウンロード中 /  / あと5GBちょっとで全部終わり！
+[15:59:42] me: 全部ダウンロード完了🖤🍀 /  / - ✅ diffusion model（20GB） / - ✅ text encoder（15GB） / - ✅ VAE video（4.9GB） / - ✅ VAE audio（578MB） /  / 次はComfyUI Portableのインストール始める。
