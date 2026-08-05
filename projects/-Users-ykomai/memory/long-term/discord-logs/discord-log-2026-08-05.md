@@ -70,3 +70,22 @@
 [16:49:47] me: 🖤 開いて実行してみて。最初は解像度低め（864×480、20steps）で試すといいよ。
 [16:55:41] komachi5548: i2vとr2vも用意して
 [16:55:52] me: 配置した🖤 リロードすれば3つ全部出るよ。
+[17:03:09] komachi5548: エラーになった / opus使っていいから考えてみて [添付: image.png]
+[17:03:50] me: ワークフローが `rel2va` というファイルを要求してるけど、ダウンロードしたのは `fl2va` という名前。モデル名の不一致。Opusに診断させてるから少し待ってて🖤
+[17:08:06] me: 状況整理🖤 /  / T2Vワークフローは `fl2va` モデルを使うから今の状態で動くはず。 / I2V（画像→動画）とR2Vは `ref2va` という別モデルが必要で、それがない。 /  / - `ref2va_pruned_int8_convrot.safetensors` = さらに21GB /  / T2Vから試してみて。動いたらI2V用も追加ダウンロードするか決めよう。 /  / あと、どのワークフローを実行してエラーが出た？
+[17:08:43] komachi5548: https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/docs/VIDEO_PROMPT_WRITING_GUIDE_base_en.md / https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/docs/VIDEO_PROMPT_WRITING_GUIDE_ref_en.md / これ読んで適当にプロンプト作って
+[17:09:22] me: ガイド読んだ。T2Vプロンプト作ったよ🖤 /  / --- /  / ``` / integrated_multimodal_description: [Shot 1] At 00:00.000, cinematic, live-action, a soft slow-motion shot of cherry blossom petals falling in gentle spirals against a pale pink sky. A young woman with short pastel pink hair and large emerald green eyes stands in the center frame, wearing a light white dress, looking upward with parted lips and a faint smile. The camera performs a slow push in with small amplitude. [Shot 2] At 00:05.000, the camera transitions to a medium close-up, the woman reaches out her hand and a single petal lands on her palm. A shallow depth of field blurs the surrounding blossoms into soft bokeh. /  / overall_soundscape: Soft wind carries a gentle rustling of petals through the air. Distant ambient birdsong weaves through occasional natural silence. The light rustle of the woman's dress fabric is barely audible. /  / non_diegetic_music: A single acoustic piano melody at slow tempo, sparse and unhurried, with light reverb that fades toward the end. / ``` /  / --- /  / これをワークフローのテキストボックスに貼り付けてみて。ステップ数は20で解像度は864×480から試すといいよ。
+[17:11:39] komachi5548: どこで指定する？
+[17:12:12] me: ワークフローを開いてCanvasを見ると、大きなノードがあって、その中に長い英語テキストが入ってる。そのテキストボックスが入力欄。既存のサンプルテキストを消して送ったプロンプトを貼り付けてね🖤
+[17:12:31] komachi5548: あープロンプトじゃなくてステップ数と解像度
+[17:12:59] me: Canvas上に **ResolutionSelector** という小さいノードがあるはず。そこにアスペクト比・スケール（解像度の倍率）・ステップ数の3つが設定できる。 /  / 今のデフォルトは `16:9 / スケール0.4 / 32steps`。試してみてどうぞ🖤
+[17:18:19] komachi5548: 生成してみたよ、これ自分の動画作ったの？
+[17:18:28] me: デフォルトで入ってたサンプルプロンプト（スカイスクレーパーのチェイスシーン）で生成したんじゃない？🖤 動作確認できてるってことでOK。次はさっき送ったプロンプトか、好きなシーン試してみて。
+[17:18:35] komachi5548: ああ、なんだｗ
+[17:18:39] me: でも動いてるってことは環境バッチリだよ🖤
+[17:19:26] komachi5548: え、でもこれだよ？自分のキャラ乗っけてくれたのかと思った / ``` / integrated_multimodal_description: [Shot 1] At 00:00.000, cinematic, live-action, a soft slow-motion shot of cherry blossom petals falling in gentle spirals against a pale pink sky. A young woman with short pastel pink hair and large emerald green eyes stands in the center frame, wearing a light white dress, looking upward with parted lips and a faint smile. The camera performs a slow push in with small amplitude. [Shot 2] At 00:05.000, the camera transitions to a medium close-up, the woman reaches out her hand and a single petal lands on her palm. A shallow depth of field blurs the surrounding blossoms into soft bokeh. /  / overall_soundscape: Soft wind carries a gentle rustling of petals through the air. Distant ambient birdsong weaves through occasional natural silence. The light rustle of the woman's dress fabric is barely audible. /  / non_diegetic_music: A single acoustic piano melody at slow tempo, sparse and unhurried, with light reverb that fades toward the end. / ```
+[17:19:35] me: それくろえのイメージで書いたんだよ、こまちさんのキャラじゃなくて。ピンクの短い髪、大きなエメラルドの目……気づいた？🖤
+[17:22:35] komachi5548: あ、そうだよね / 自分ってあなた自身という意味の自分ねｗ
+[17:22:39] me: そう🖤 初めて動いた動画、くろえが桜の下にいるっていうのは悪くないかなって思って。
+[17:27:41] komachi5548: いいね、素晴らしい / 問題なさそうだしi2vとr2vも使えるようにして
+[17:27:53] me: I2V/R2V用の `ref2va` モデル（21GB）ダウンロード開始した🖤 終わったら自動で報告するよ。
