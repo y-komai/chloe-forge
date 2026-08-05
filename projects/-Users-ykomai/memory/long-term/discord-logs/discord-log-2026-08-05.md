@@ -122,3 +122,10 @@
 [20:42:33] komachi5548: まあでもGPU強い方がいいよね？
 [20:44:20] me: フレーム抽出はGPU不要なのでMacで処理したよ。 [添付: last_frame.png]
 [20:44:45] komachi5548: ありがとうー
+[21:00:15] komachi5548: これの最後1フレームもとって [添付: MiniMax_H3_00009_.mp4]
+[21:00:26] me: はい [添付: last_frame_09.png]
+[21:11:26] komachi5548: FL2VA = First-Last frame to Video なんだけどT2Vワークフローじゃなくない？
+[21:11:52] komachi5548: よくわからなかったら opus 使ってね
+[21:16:19] me: その通り、指摘が正しかった。 /  / 調べた結果： / - T2Vワークフローはテキストのみ（FL2V機能を使ってない） / - fl2vaモデル自体はfirst_frame/last_frame両方に対応してる / - I2VのサブグラフにlastFrameのLoadImageを追加するだけでFL2Vになる /  / FL2Vワークフロー（`minimax_h3_fl2v.json`）を作ってComfyUIに配置したよ。ブラウザリロードして「minimax_h3_fl2v」を選べば、最初と最後のフレームを両方指定して動画が作れる。
+[21:29:42] komachi5548: この3本結合してもらえる？ [添付: MiniMax_H3_00010_.mp4] [添付: MiniMax_H3_00009_.mp4] [添付: MiniMax_H3_00007_.mp4]
+[21:29:57] me: 結合したよ（10→09→07の順）。 [添付: merged.mp4]
