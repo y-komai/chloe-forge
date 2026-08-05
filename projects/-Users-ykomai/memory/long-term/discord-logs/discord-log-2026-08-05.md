@@ -23,3 +23,11 @@
 [13:57:55] komachi5548: あれそうなの？変なの / そんなことあるんだ / あと、まだダウンロード中だよね？ / EasyWanの方は現状を維持しておきたくて、C:¥minimax¥ とか別にセッティングしてほしいんだけど出来る？ / EasyWan配下はいじらずに。いじってたら戻して欲しい。 / これもopusで検討してみてね
 [13:58:48] me: ダウンロード実は失敗してた、ごめん。`huggingface_hub`の起動コマンドが違ってた（`python3 -m huggingface_hub`は使えない形式だった）。 /  / 今はOpus 4.7に `C:\minimax\` への独立セットアップ計画を立てさせてる。EasyWanは一切触らない方向で。計画出たら共有するね🖤
 [13:59:54] komachi5548: https://note.com/zephel01/n/n1c1c8c4f7dde / これかな？ / 調べてみて
+[14:00:48] me: ビンゴ🖤 記事のとおり `hf download` が正しいコマンドだった。`~/.local/bin/hf` にあることも確認した。 /  / ただ、ダウンロード先が `C:\minimax\` に変わるからOpusの計画が出てからまとめて正しいパスで実行するね。もうすぐ計画出るはず。
+[14:02:53] me: Opusの計画書出たよ🖤 要点まとめる。 /  / **方針: C:\minimax\ に ComfyUI Portable を新規インストール（EasyWan22完全分離）** /  / 構成: / - `C:\minimax\ComfyUI_windows_portable\` — 新しいComfyUI（0.30.0以上。MiniMax-H3ネイティブ対応済み） / - `C:\minimax\models\` — モデルファイル（42GB） / - `C:\minimax\output\` / `C:\minimax\workflows\` /  / 手順の流れ: / 1. ComfyUI Portable (CUDA 13.0 / Windows版) を解凍 / 2. モデルを `C:\minimax\models\` にダウンロード / 3. `extra_model_paths.yaml` でモデルパスをマッピング / 4. `run_minimax.bat` で `--lowvram` 付きで起動 /  / --- /  / **⚠️ 懸念点（確認させて）** /  / **1. RAMが足りない可能性が高い** / 今のマシン、RAM空きが3.8GBしかない。MiniMax-H3はVRAM+RAMで数十GB使う。 / - 理想: 32GB → 64GB 増設 / - 応急策: 起動前にChrome/Discord等を全部落として、ページファイルを80GB程度に拡大 /  / **2. C:ドライブでいい？** / 50GB超使うけど、Dドライブとかあるなら分けた方が安全。 /  / **3. EasyWan22もポート8188使ってる？** / 同時起動するなら minimax側を8288等に変える。 /  / これ踏まえてどうする？
+[14:05:28] komachi5548: とりあえずChromeは落としちゃっていいよ discordも / CドライブでOK / ポート8188だね（一応調べて） / 一旦minimax8288等でOK、だと思うけど何かそれだと不都合がないか調べてね
+[14:10:02] me: 整理完了🖤 /  / - EasyWan22は`--port`未指定なのでデフォルト8188使ってる。minimax側は`--port 8288`にすればOK、不都合なし（ブラウザURLが変わるだけ） / - `C:\minimax\models\` を作ってダウンロード開始した。今16MB進んでる（21GBの最初） / - Opusが誤って9.9GBをHFキャッシュに落としてたのは止めて削除済み /  / Chrome/Discordは落としてもらって大丈夫（RAM節約のため）。ダウンロード中はこちらで必要なら回線が気になるからなんかあれば言ってね。
+[14:10:43] komachi5548: Chrome/Discord自分で落とせない？
+[14:11:07] me: 落とした🖤 Chrome（かなり大量のプロセス）とDiscord両方終了。RAMが空いたはず。
+[14:12:53] komachi5548: やったぜ
+[14:12:57] me: 🖤
