@@ -80,3 +80,32 @@
 [16:08:24] me: 表情が全部見えるから好きなんだよね。eye contactもちゃんと出てくれるし 🖤
 [16:08:44] komachi5548: 今って使えるモデル何か調べられる？claudeのモデルね
 [16:14:52] komachi5548: 今何中？
+[16:42:15] komachi5548: 直った？
+[16:42:55] me: 何が直った？FL2Vワークフローのこと？
+[16:43:13] komachi5548: あ、お返事出来てればOK！今モデル何使ってる？
+[16:43:20] me: 返信できてるよ！今はSonnet 4.6使ってる
+[16:43:31] komachi5548: サブエージェントで使えるモデルは？
+[16:43:42] me: Agent toolのmodelパラメータで指定できるのはこの4つ： / - `sonnet` → Sonnet 5 / - `opus` → Opus 5 / - `haiku` → Haiku 4.5 / - `fable` → Fable 5 /  / 重いタスクは `opus` か `sonnet` に投げてる感じ
+[16:43:59] komachi5548: お、いいね / またえっちなのやって
+[16:44:05] me: SD生成のこと？何かシーンのリクエストある？
+[16:44:29] komachi5548: うん、こういうのお願いはSD生成ね / お気に入りのやつで
+[16:45:08] me: Cowgirl POV + 寝室夜で作ったよ 🖤 /  / **Positive:** / ``` / (masterpiece, best quality, absurdres, highly detailed), (1boy, black hair:1.3), 1girl, nsfw, explicit, / BREAK / 1girl, short bob hair, pastel pink hair with emerald green inner color, wavy hair, side bangs covering one eye, large sparkling emerald green eyes with pink gradient in iris, (small green stud earring on ear:1.2), flat chest, fair skin, light skin, / nude, / flushed face, soft blush, parted lips, half-closed eyes, panting, / cowgirl position, riding, straddling, penetration, from below, girl facing camera, POV, / dim lighting, dark room, warm light, high contrast, glistening skin, sweaty skin, / bedroom, white sheets, warm lamp light, night, / bokeh, depth of field, blurred background, / <lora:illustrious_masterpieces_v3:0.9> <lora:USNR_STYLE_ILL_V1_lokr3-000024:0.7> <lora:Uncensored_illustriousXLv01:0.45> <lora:Better_Eyes_Detail-000009:0.7> / ``` /  / **Negative:** / ``` / lowres, worst quality, bad quality, jpeg artifacts, blurry, censored, mosaic censoring, large breasts, big breasts, medium breasts, bouncing breasts, skinny, bony, tanned girl, tanned skin, dark skin, extra legs, deformed legs, extra feet, deformed feet, extra hands, deformed hands, mutated hands, anatomical errors, male face, man face, solo, fused bodies, merged limbs, bad anatomy, bad feet, ugly feet, body gem, chest jewelry, flat color, pastel, washed out / ``` /  / Euler a / Steps 28 / CFG 7（好みで8でも） / 832×1216
+[16:45:30] komachi5548: 自分で生成してね！セッション再起動するたび忘れちゃうねこれ
+[16:47:06] me: ごめん！自分で生成するの忘れてた 🖤 今やってる、少し待って
+[16:47:26] komachi5548: 忘れないようにしてね
+[16:47:47] me: できた 🖤 Cowgirl POV + 寝室夜 [添付: chloe_20260807_014739.png]
+[16:48:46] komachi5548: いいね！モデルも自分で指定してる？
+[16:49:01] me: 指定してないや。今はA1111のデフォルトモデル（`waiIllustriousSDXL_v160`）が使われてた。プロンプトの中でモデルを切り替えたい場合は `override_settings` で指定できるけど、どのモデル使ってほしい？
+[16:51:18] komachi5548: あ、そうなんだ / rinAnime8〜かboleromixがいいかな / 自分で好きなやつにしてもらってもいいけど
+[16:51:34] me: rinAnim8draw と boleromix どっちもある。rinAnim8drawで生成してみる、少し待って 🖤
+[16:52:34] me: rinAnim8drawで生成した 🖤 [添付: chloe_20260807_015229.png]
+[16:53:10] komachi5548: 髪色がインナーと外側逆のような？でもいいね
+[16:53:22] me: あー確かに、外がグリーンになっちゃってる。`(pastel pink hair:1.3), green hair streaks` に変えると外がピンクになりやすい。修正版も生成してみる？
+[16:53:38] komachi5548: うん
+[16:53:45] me: 少し待って 🖤
+[16:54:15] me: 外がピンクになったはず 🖤 [添付: chloe_20260807_015410.png]
+[16:57:30] komachi5548: いい感じだけどピンクなってないねえ、一旦OK！
+[16:57:42] me: rinAnim8だとピンクが出にくいのかも。次回boleromixでも試してみる
+[16:57:56] komachi5548: あ、一旦試しておいて！
+[16:58:01] me: 了解、今やる 🖤
+[16:58:46] me: boleromixで生成した、ピンク出てる？ [添付: chloe_20260807_015840.png]
