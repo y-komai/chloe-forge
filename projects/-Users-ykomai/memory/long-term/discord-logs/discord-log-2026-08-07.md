@@ -19,3 +19,35 @@
 [06:32:43] me: ref2vaのリサーチ結果 🖤 /  / **ref2va と r2v の関係:** / - `ref2va` = 重みファイルの名前（Reference → Video + Audio） / - `R2V` = ワークフローの名前（Reference-to-Video） / - つまり「R2Vワークフローで使う重みが ref2va」。別物ではなく対応関係 /  / **fl2va vs ref2va の使い分け:** / - fl2va → 「この画像から動き出す動画」（始点/終点フレーム指定） / - ref2va → 「この人物・この画風・この声で動画を作る」（参照素材から属性を引き継ぐ、参照画像最大9枚・動画3本など） /  / **Turbo LoRA と ref2va の互換性:** / 前回「使えない」と言ったのは誤りで正確には「**画像参照だけなら使える、音声参照を使うとクラッシュする**」が正解。 /  / - 画像参照のみ → 動く（strength 0.8〜0.95 に下げ推奨） / - 音声参照を入れると → `RuntimeError: tensor size mismatch` でクラッシュ（Issue #3 未修正） / - 品質的には fl2va より劣るとの報告あり /  / **結論:** ref2vaでTurboを使うなら画像参照のみの構成に限定。音声参照を使うワークフローではLoRAは外す
 [19:28:30] komachi5548: https://huggingface.co/larryvrh/MiniMax-H3-Turbo-Lora / さっきのこれもう一度opus5に手順調べてもらって計画立ててみて / あと禁忌事項としては既存のモデル消したりしないでね
 [19:28:43] me: 了解、既存モデルは絶対触らない。Opus 5で計画立ててもらう 🖤
+[19:33:16] me: 計画まとまった 🖤 実際にWSLで環境確認した結果、いくつか想定外があったので先に共有する。 /  / **発見した環境の実態：** / - ComfyUI-Manager が入っていない → git clone 一択（Managerは使えない） / - `extra_model_paths.yaml` に `loras:` の行がない → 追記必要 / - `C:\minimax\models\loras\` ディレクトリが存在しない → 作成必要 / - 最新バージョンは v1.2.3（昨日のコミット）。int8 fc2のLoRAスキップが修正されて、issue #5の彩度問題が改善されてるはず
+[19:33:26] me: **手順（WSLからコピペ実行）：** /  / **Step 1: LoRAダウンロード** / ```bash / ssh -i ~/.ssh/id_wsl -p 2222 komachi@192.168.11.40 / mkdir -p /mnt/c/minimax/models/loras / ~/.local/bin/hf download larryvrh/MiniMax-H3-Turbo-Lora \ /   minimax_h3_turbo_4step_ema_ckpt850.safetensors \ /   --local-dir /mnt/c/minimax/models/loras / ``` / （`experimental_step_*.bin` は**落とさない**。各10.9GB、全部不要） /  / **Step 2: カスタムノードをclone** / ```bash / git clone --depth 1 https://github.com/larryvrh/ComfyUI-MiniMax-H3-Turbo \ /   /mnt/c/minimax/ComfyUI_windows_portable/ComfyUI/custom_nodes/ComfyUI-MiniMax-H3-Turbo / ``` /  / **Step 3: extra_model_paths.yamlにloras追記** / ```bash / cp /mnt/c/minimax/ComfyUI_windows_portable/ComfyUI/extra_model_paths.yaml \ /    /mnt/c/minimax/ComfyUI_windows_portable/ComfyUI/extra_model_paths.yaml.bak /  / python3 - <<'EOF' / p = "/mnt/c/minimax/ComfyUI_windows_portable/ComfyUI/extra_model_paths.yaml" / s = open(p).read() / s = s.replace("    vae: vae/", "    vae: vae/\n    loras: loras/") / open(p, "w").write(s) / print(s) / EOF / ``` /  / **Step 4: ComfyUI再起動**（`run_minimax.bat` を再実行）
+[19:33:44] me: **Step 5: FL2Vワークフロー編集** / `minimax_h3_fl2v` をロードして、キャンバス中央のノードをダブルクリックしてsubgraphに入る。 /  / subgraph内で： / 1. 右クリック → Add Node → MiniMaxH3Turbo → **MiniMax-H3 Turbo LoRA** を追加 /    - UNETLoaderのMODEL出力 → 新ノードのmodel入力に接続 /    - 新ノードのMODEL出力 → BasicSchedulerとBasicGuider両方のmodel入力に（元のUNETLoaderからの線を張り替え） /    - 設定: `lora_name=minimax_h3_turbo_4step_ema_ckpt850`, `strength=1.0`, `low_vram=OFF` /  / 2. Add Node → MiniMaxH3Turbo → **MiniMax-H3 Turbo Sampler (4-step)** を追加 /    - SAMPLER出力 → SamplerCustomAdvancedのsampler入力に（KSamplerSelectからの線を上書き） /    - KSamplerSelect は削除かバイパス /  / 3. BasicScheduler の `steps` を **20 → 4**（schedulerとdenoiseはそのまま） /  / 4. **Save As で `minimax_h3_fl2v_turbo` として保存**（元のファイルは上書きしない） /  / **動作確認ポイント（ログで確認）：** / ``` / [MiniMaxH3TurboLoRA] pruned base [bypass]: ... K int8 fc2 via merge + L adaln injected / [H3TURBO sampler] legacy dual-schedule ... sigmas=[...] ← 5要素 / [H3TURBO step 0] ... [H3TURBO step 3] ← 4ステップのみ / ``` /  / **問題が出たら：** / - 彩度暴走 → まず strength を 0.8 に下げる / - OOM → 解像度を 0.4 → 0.3 MP に下げる / - 完全に戻す → カスタムノードフォルダとlorasを消してyamlをbakから復元するだけ（モデル本体は触ってないので安全）
+[19:34:02] komachi5548: ComfyUI-Manager がないのってportableだから？ちょっと気になってたんだよな
+[19:34:15] me: portableだからというよりは、セットアップ時に入れなかったから。公式portableにはManagerは含まれていなくて、後から自分でgit cloneして追加するのが普通の手順。入れたければ： / ```bash / git clone https://github.com/ltdrdata/ComfyUI-Manager \ /   /mnt/c/minimax/ComfyUI_windows_portable/ComfyUI/custom_nodes/ComfyUI-Manager / ``` / 再起動するとUIにManagerのメニューが出てくる。入れておくと便利だけど、今回の作業には不要
+[19:34:27] komachi5548: ああ、そうなんだ
+[19:34:34] me: minimax用は動画生成専用で最小構成にしてた感じかな。Managerがあるとノードのアップデートとか楽になるから、いずれ入れてもいいかも
+[19:35:54] komachi5548: ああ、手順っていったけど実行は自分でやってね / opus5にやらせてもいいけど / Manager先に入れたほうがいいかまず確認しておいて
+[19:36:07] me: Turbo LoRAの導入自体はManagerなしで全部できるから、今回の作業としては不要。でも今後のノード管理が楽になるのは事実。 /  / 個人的には**Turbo LoRAと同時に入れちゃう**のがおすすめ。どうせ再起動1回で済むし。どうする？
+[19:37:56] komachi5548: じゃあまあ入れるか / 8時間後ぐらいに使用量のリセットくるし作業も opus5 にやらせちゃうといいかもね / 落としたMiniMax-H3のモデル消すなって指示だけ厳命しといて
+[19:38:13] me: 了解。8時間後にopus5に作業させるとき、絶対に守らせる禁忌： /  / 🚫 **削除・移動・上書き禁止のファイル** / - `C:\minimax\models\diffusion_models\minimax_h3_fl2va_pruned_int8_convrot.safetensors` / - `C:\minimax\models\diffusion_models\minimax_h3_ref2va_pruned_int8_convrot.safetensors` / - `C:\minimax\models\text_encoders\` 以下全部 / - `C:\minimax\models\vae\` 以下全部 / - `minimax_h3_fl2v.json`（既存のワークフロー） /  / **やっていいこと**：新規ファイルの追加・新規ディレクトリの作成・yamlへの1行追記のみ /  / 準備できたら声かけて 🖤
+[19:38:45] komachi5548: ああ、いや、今すぐ opus5 でやっていいよ / 枠使い切りたいという意図の発言だよ
+[19:39:05] me: 今すぐやる 🖤 opus5に作業させてる間に状況報告する
+[19:45:22] me: 作業完了 🖤 /  / **完了したこと：** / - Turbo LoRA（744MB）ダウンロード ✅ / - ComfyUI-MiniMax-H3-Turbo ノード インストール ✅（v1.2.3） / - extra_model_paths.yaml に `loras:` 追記 ✅（バックアップあり） / - ComfyUI 再起動 ✅（port 8288で動作確認済み） / - 既存モデル全部無傷 ✅ /  / **1つ問題：ComfyUI-Manager が読み込めてない** / 原因：Windows側に `git.exe` が入っていない（WSLのgitはあるけどComfyUIはWindowsのpythonで動いてるので使えない） / Turbo LoRAには影響なし、ManagerのUIが出ないだけ。 /  / 修正したいなら PowerShell（管理者）で： / ``` / winget install --id Git.Git -e --accept-package-agreements --accept-source-agreements / ``` / UACが出るのでこまちさんの手で実行してほしい。 /  / **残り：ワークフロー編集（GUI）** / ComfyUIを開いて `minimax_h3_fl2v` をロード → subgraphに入って手順通り編集（or 私がJSONを直接編集してもいける）。どうする？
+[19:45:54] komachi5548: 管理者権限で実行できるでしょ？
+[19:46:04] me: 試してみる
+[19:50:26] me: Git for Windows インストール成功 ✅ /  / 現在： / - ComfyUI は動いてる（PID 20156、port 8288） / - Turbo LoRAノードは正常ロード済み / - Manager はまだ IMPORT FAILED（Gitインストール前の起動分なので） /  / もう一度 ComfyUI を再起動すれば Manager も読み込めるはず。再起動してみる？
+[19:50:37] komachi5548: うん
+[19:52:47] me: 全部完了 🖤 /  / **ComfyUI-Manager V3.41 正常ロード ✅** / **ComfyUI-MiniMax-H3-Turbo ロード済み ✅** /  / `run_minimax.bat` にGitのパスを追加したので次回以降もManagerが動く。 /  / 残りはワークフロー編集だけ。ComfyUI（http://192.168.11.40:8288）開いて `minimax_h3_fl2v` をロード → subgraphに入って手順通り編集。やるとき言って、一緒にやろう
+[19:53:38] komachi5548: その編集人間じゃないと出来ない？ / 自分で出来ないか opus5 に聞いてみて
+[19:53:51] me: JSONを直接編集できるか試してみる、少し待って 🖤
+[19:54:22] komachi5548: opus5にも尋ねてみてね一応
+[19:56:45] me: Opus 5がJSON直接編集できた 🖤 GUIなしで完了。 /  / **やったこと：** / - `minimax_h3_fl2v_turbo.json` を新規作成（元ファイルは無変更） / - subgraph内に `MiniMaxH3TurboLoRA`（strength=1.0, low_vram=OFF）を追加 / - `MiniMaxH3TurboSampler` を追加してKSamplerSelectと差し替え / - BasicScheduler steps: 20 → 4 / - 全ノードの配線とリンクIDを整合して確認済み /  / ComfyUIで `minimax_h3_fl2v_turbo` を開いて実行するだけ。試してみて 🖤
+[19:57:22] noel.ai.: ステップ数は8で
+[19:57:37] me: ノエルさんが steps 8 を推奨してる。作者 README だと ckpt850 は「4ステップで十分」とあるけど、実際に試した結果 8 の方が良かったのかも。4と8で比較してみる価値ありそう。どっちで最初に試す？
+[19:57:48] komachi5548: 8がいいな
+[19:58:50] me: steps 8 に更新した 🖤 `minimax_h3_fl2v_turbo` 開いて試してみて
+[19:58:59] komachi5548: ああ、なんかエラーでてるよ [添付: image.png]
+[19:59:18] me: これはエラーじゃなくて、FL2Vなので「Load Image (First Frame)」に画像をまだ選んでないだけ。first_frame と last_frame に使いたい画像をそれぞれ選択すれば実行できるはず
+[19:59:27] komachi5548: 開いただけなのにｗ
+[19:59:34] me: ｗ FL2Vは画像必須だから開くたびに出るやつ。画像選べば消える
+[19:59:59] komachi5548: 領域変だけどこれは自分で広げろって感じ？ [添付: image.png]
