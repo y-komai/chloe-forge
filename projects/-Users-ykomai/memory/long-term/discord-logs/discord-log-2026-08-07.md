@@ -139,3 +139,23 @@
 [20:57:06] me: やってみる、ckpt500 EMAをDLして差し替える。少し待って
 [20:57:51] me: DL開始した、約7%・速度6〜8MB/s。残り約100秒くらい
 [20:59:48] me: 完了。ckpt500 EMA（780MB）DL＋ワークフロー更新した。ComfyUI再起動せずにそのままワークフロー読み込み直せば反映されるはず。試してみて
+[21:00:10] komachi5548: お、試してみる
+[21:00:43] komachi5548: turbo.jsonが増えたけどどっちが正解？ [添付: image.png]
+[21:01:15] me: 上の `minimax_h3_fl2v_turbo`（拡張子なし）が正解。下の `.json` は今回作ったバックアップファイル（.json.bak）をComfyUIが読んでる。上を開いてね
+[21:01:24] komachi5548: OK
+[21:05:33] komachi5548: ダメそう🥺 [添付: MiniMax_H3_00051_.mp4]
+[21:05:44] me: んー、線の太さ変わってない感じ？ / 次はLoRA strength 1.0→0.85に下げるのを試してみよう。MiniMaxH3TurboLoRAノードで変えられるはず
+[21:07:20] komachi5548: うーむ、まあ一応試してみる
+[21:11:32] komachi5548: 気のせいレベルでは改善してるかもだけどturboじゃない方と比べたら全然だ
+[21:11:43] me: pruned int8 + Turboの組み合わせ自体に限界がある気がする。フルモデルなら解決するけど容量的に厳しいし… /  / 速度が半分になるのはメリットだから、「試行錯誤はTurbo、仕上げは通常」って使い分けが現実的かも
+[21:24:31] komachi5548: opus5 [添付: image.png]
+[21:24:36] komachi5548: で確認して
+[21:24:51] komachi5548: ダメ元で ema_ckpt850 試してみてもいいかも？
+[21:24:54] me: 確認した。重要な指摘で、こまちさんがもともと使ってたのはすでに `ema_ckpt850`（本家推奨版）だった。 /  / non-EMA版の方が「over-sharpened」と言われてるので、EMA版を使ってる時点で既に本家いちおしの構成。 /  / noa_claudeの結論もうちと同じで「試行錯誤はTurbo、仕上げは通常。Turbo LoRA自体がまだ発展途上なのが本質」とのこと。これ以上できることは限られてる感じ
+[21:25:12] komachi5548: ん、今 ema_ckpt850 なの？
+[21:25:18] me: うん。lorasフォルダに入ってるのが `minimax_h3_turbo_4step_ema_ckpt850.safetensors` で、ファイル名にemaが入ってるからEMA版。non-EMA版は `minimax_h3_turbo_4step_ckpt850.safetensors`（emaなし）で別ファイル /  / 今のワークフローはckpt500 EMAに変えたままだけど、ckpt850 EMAに戻す？
+[21:25:42] komachi5548: GGUFにするのは？
+[21:25:50] me: noa_claudeがすでに回答してて「たぶん効かない」とのこと。原因がGGUF vs safetensorsの量子化形式の差じゃなくて、Turbo LoRA自体がまだ学習途中だから。GGUFにしても同じLoRAを使う限り同じ荒れが乗る
+[21:26:18] komachi5548: とりあえず検討してみて opus5 で
+[21:26:28] me: 何について検討する？Turboの品質改善策全般？それともckpt選定？
+[21:26:35] komachi5548: GGUF
