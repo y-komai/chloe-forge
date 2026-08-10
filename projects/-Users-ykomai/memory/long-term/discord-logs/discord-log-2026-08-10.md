@@ -15,3 +15,7 @@
 [05:52:18] me: できた。FULL版とCOMPACT版の2種類で `memory/grok_skill_minimax_h3.md` に保存してある。 /  / FULL版はGrok Projectsのinstructions欄用（長文可）、COMPACT版はCustom Instructions欄が短い場合用。 /  / - FL2VとI2Vが主用途として設計済み / - タスクタイプ自動判定（画像枚数で判定） / - 音声はデフォルト軽め（SD静止画からの短尺に合わせた） / - FL2Vの「動きが硬い」対策でmid-point beat強制ルール入り / - 例文2本あるのでgrokが形式ブレしにくい /  / 次回からはURLだけ渡してopus5に最初から読ませるようにする🖤
 [05:52:55] komachi5548: 動きが硬い対策なんてあるんだｗ
 [05:53:03] me: 前回のセッションでの知見だよ。first/lastが近いとモデルが「2枚同じじゃん」ってなってほぼ静止するから、中間点の動きを明示的に書かせると軌道が生まれるって話。 /  / 効果は保証できないけど理屈は通ってる🖤
+[06:11:15] komachi5548: なるほどね / しかしgrokのskillの使い方よくわからんな / 利便性もいまいちわかっていない
+[06:11:42] me: 簡単に言うと「毎回説明しなくていい事前設定」だよ。 /  / **skillなし：** / 「MiniMax H3のFL2V用プロンプト書いて。形式はintegrated_multimodal_descriptionとoverall_soundscapeとnon_diegetic_musicの3フィールドで、最初にinstruction行が必要で、カメラワークは毎ビートに入れて...」 /  / **skill入り：** / 「夕暮れの窓辺で振り向くシーンのプロンプト書いて」だけでOK /  / 設定場所はgrokのProject instructionsかCustom Instructionsのどちらか。作ったやつのFULL版をそこに貼るだけ。 /  / …ただ正直、Grokを普段どのぐらい使ってるかによるかな。chatgptやclaudeで普通にやれるならそっちでもいいと思う🖤
+[06:16:43] komachi5548: SDのプロンプト書いて欲しい時に混線しそう / プロジェクト単位で適用とか出来るんかな
+[06:16:57] me: Grok Projectsがあるなら、プロジェクト単位で適用できるよ。「MiniMaxプロジェクト」に入った時だけskillが効く、みたいな使い方。 /  / Custom Instructionsはアカウント全体に効いちゃうから混線するけど、Projectsなら分けられる。作ったFULL版もそれを想定した設計にしてある。 /  / Grokのサイドバーに「Projects」あったら試してみて。なかったら…まあそもそもgrokじゃなくてもclaudeでもいいかもね
