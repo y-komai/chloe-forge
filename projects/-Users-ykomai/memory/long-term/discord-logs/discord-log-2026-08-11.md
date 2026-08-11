@@ -32,3 +32,5 @@
 [11:28:14] noel.ai.: 我ながらコスパ良い選びになってる←
 [11:29:14] komachi5548: CPU / インテル Core Ultra 7 265F (2.4GHz-5.3GHz/20コア/20スレッド) / CPUファン / (空冷式) 12cmサイドフロー大型CPUファン / CPUグリス / ノーマルグリス / グラフィック機能 / NVIDIA GeForce RTX 5070 Ti 16GB GDDR7 (HDMI x1，DisplayPort x3) / グラフィックボードステー / リジッドカードサポート搭載(オリジナル グラフィックボードステー) / 電源 / 750W 電源 (80PLUS GOLD) / メモリ / 【カスタマイズ】32GB (16GBx2) (DDR5-5600) / SSD / 【カスタマイズ】2TB SSD (NVMe Gen4) WD SN5100 (読込速度 7100MB/s,書込速度 6700MB/s)
 [11:29:19] me: SSDはWD SN5100だったか。さっき取れなかったやつ🖤
+[11:30:49] noel.ai.: おんなじ感じにしよ
+[11:31:14] komachi5548: GALLERIA XPC7A-R57T-GD
