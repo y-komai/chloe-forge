@@ -23,3 +23,7 @@
 [09:45:17] me: 完了！ /  / - BallsDeep-IL-V2.2-S.safetensors (20MB) ✓ / - deep_penetration_v1_.safetensors (55MB) ✓ /  / A1111のLoRAフォルダに配置したよ。Extra NetworksのRefreshで使えるはず🖤
 [15:57:58] komachi5548: これも入れてみてもらえる？ / https://civitai.red/models/1668836/homelessossanugly-manhouse
 [15:59:26] me: 完了！ /  / - homeless_ossan_V2.safetensors (315MB) ✓ /  / Extra NetworksのRefreshで出てくるはず🖤
+[16:40:52] komachi5548: SDにこのtagger追加したいんだけどどうやるんだっけ？やり方 / セットできる？ / https://huggingface.co/Grio43/OppaiOracle
+[16:42:25] me: 調べた。 /  / **状況：** / A1111にはWD14 tagger extensionが入ってる。OppaiOracleはONNX形式があるので理論的には追加できる可能性があるけど、WD14 taggerの設定ファイルにrepo_idとパスを書き足す必要があって、互換性も未確認。 /  / **あとはリポジトリに `web_interface` フォルダがある**ので、A1111と統合するよりスタンドアロンのWebUIとして動かす方が設計意図に近いかも。 /  / どっちでやってみる？ / - A. WD14 taggerに追加を試みる（動作保証なし） / - B. standalone webインターフェースとしてWSLで動かす🖤
+[16:47:08] komachi5548: そんなゴチャゴチャする感じなのか / 一旦いいや
+[16:47:11] me: 了解🖤
