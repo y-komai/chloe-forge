@@ -51,3 +51,12 @@
 [18:36:01] komachi5548: ありがとうー
 [18:36:04] me: 🖤
 [19:29:13] komachi5548: ComfyUIのメモリ解放してもらえる？
+[19:32:12] me: MiniMaxのComfyUI（ポート8288）に繋がらない。起動してる？🖤
+[19:32:50] komachi5548: あ、ほんとだ起動してないや / 起動させてるのEasyWan22の方だった
+[19:33:13] me: EasyWan22（ポート8188）で解放した。 /  / VRAM: 14.2GB / 16.3GB 空き（ほぼ解放済みだった）🖤
+[19:35:54] komachi5548: ねえ、Grokにきいたらこんな感じの答えだったんだけど出来る？opus5に聞いていいよ [添付: message.txt]
+[19:47:34] me: WSLでセットアップ完了。GPU動作確認もできた。 /  / **結果: RTX 5070 Ti で 20ms/枚で動く** /  / - WSLのnvidia-smiは `/usr/lib/wsl/lib/nvidia-smi` にあってGPU認識OK / - SD環境は一切無変更 /  / **使い方** / ``` / ~/oppai_oracle/oppai 画像.png           # タグ+スコア表示 / ~/oppai_oracle/oppai 画像.png --csv     # カンマ区切り（プロンプト用） / ~/oppai_oracle/oppai *.png              # 複数枚まとめて / ``` /  / **注意点** / - 閾値は0.75推奨（0.65だと緩すぎる、vocabulary.jsonに推奨値が書いてある） / - 色タグ（髪色・目色）はモデル作者自身が「信用しにくい」と言ってる / - `rating:explicit`等のレーティングタグも出る🖤
+[19:48:55] komachi5548: 閾値0.7でこの画像食わしてタグだしてもらえる？プロンプト用のやつ [添付: image2.png]
+[19:49:21] me: ``` / censored, rating:explicit, 1girl, nipples, mosaic_censoring, penis, 1boy, hetero, twintails, breasts, closed_eyes, sex, blush, navel, vaginal, small_breasts, brown_hair, low_twintails, socks, short_hair, clothes_lift, short_twintails, closed_mouth, outdoors, shoes, yellow_sweater, bottomless, shirt_lift, underwear, sweater, highres, sky, cardigan, pov, panties_around_one_leg, long_sleeves, solo_focus, pussy, nude, cloud, paid_reward_available, hair_ornament, idolmaster, clothed_female_nude_male, sneakers, yellow_cardigan, game_cg, day, black_socks, straddling / ``` / 🖤
+[19:52:21] komachi5548: 服装の再現がうまいのかなあ
+[19:52:30] me: yellow_sweater, yellow_cardigan, black_socks, sneakers まで出てるしかなり細かいよね。服装系は強そう。色タグ（brown_hairとか）は信用しにくいって作者が言ってたけど、服はわりと正確な印象🖤
