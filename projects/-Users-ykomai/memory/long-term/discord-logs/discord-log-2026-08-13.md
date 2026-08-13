@@ -21,3 +21,5 @@
 [09:42:09] komachi5548: うまくいった、ありがとう / 話変わるけどSDにこれらのloraセットしてもらえる？ / https://civitai.red/models/550870/balls-deep-deeper-penetration?modelVersionId=1226551 / https://civitai.red/models/981627/deep-penetration-or-lora?modelVersionId=1617665
 [09:42:27] me: やってみる🖤
 [09:45:17] me: 完了！ /  / - BallsDeep-IL-V2.2-S.safetensors (20MB) ✓ / - deep_penetration_v1_.safetensors (55MB) ✓ /  / A1111のLoRAフォルダに配置したよ。Extra NetworksのRefreshで使えるはず🖤
+[15:57:58] komachi5548: これも入れてみてもらえる？ / https://civitai.red/models/1668836/homelessossanugly-manhouse
+[15:59:26] me: 完了！ /  / - homeless_ossan_V2.safetensors (315MB) ✓ /  / Extra NetworksのRefreshで出てくるはず🖤
