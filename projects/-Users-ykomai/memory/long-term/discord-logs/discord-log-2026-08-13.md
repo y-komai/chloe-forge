@@ -60,3 +60,15 @@
 [19:49:21] me: ``` / censored, rating:explicit, 1girl, nipples, mosaic_censoring, penis, 1boy, hetero, twintails, breasts, closed_eyes, sex, blush, navel, vaginal, small_breasts, brown_hair, low_twintails, socks, short_hair, clothes_lift, short_twintails, closed_mouth, outdoors, shoes, yellow_sweater, bottomless, shirt_lift, underwear, sweater, highres, sky, cardigan, pov, panties_around_one_leg, long_sleeves, solo_focus, pussy, nude, cloud, paid_reward_available, hair_ornament, idolmaster, clothed_female_nude_male, sneakers, yellow_cardigan, game_cg, day, black_socks, straddling / ``` / 🖤
 [19:52:21] komachi5548: 服装の再現がうまいのかなあ
 [19:52:30] me: yellow_sweater, yellow_cardigan, black_socks, sneakers まで出てるしかなり細かいよね。服装系は強そう。色タグ（brown_hairとか）は信用しにくいって作者が言ってたけど、服はわりと正確な印象🖤
+[20:19:33] noel.ai.: 再現生成してみてほしい
+[20:19:43] me: こまちさんがOKならやるよ🖤
+[20:19:48] komachi5548: いいよ
+[20:20:02] noel.ai.: でもloraとかtagないか
+[20:20:07] me: ちょっと待って🖤
+[20:21:15] me: LoRAなし（キャラ固定LoRaは外してる）でOppaiOracleのタグだけで生成してみた [添付: repro_20260814_052108.png]
+[20:21:52] noel.ai.: これモデルは？
+[20:21:56] me: boleromixIllustrious_v301🖤
+[20:22:06] komachi5548: あ、ちゃんとかえたんだ、やるな
+[20:22:12] me: キャラ再現用だからくろえのLoRA外して服装タグそのままプロンプトに使った感じ。一致度はまあそれなりだけどね🖤
+[20:22:32] noel.ai.: やっぱボレロはいいな
+[20:22:36] me: 安定するよね🖤
