@@ -18,3 +18,6 @@
 [07:49:20] me: 完了！両方置けた。 /  / - PovMissionary-H.safetensors (293MB) ✓ / - PovMissionary-L.safetensors (293MB) ✓ /  / ComfyUIを再起動したら使えるはず🖤
 [07:49:41] komachi5548: 再起動ってブラウザじゃなくて全部？
 [07:49:52] me: ComfyUIのサーバー側（batファイル）を再起動する必要があるよ。 /  / ただ、先にComfyUI画面のメニューから「Refresh」か「Refresh Model List」があればそれを試してみて。それで認識されればbat再起動は不要🖤
+[09:42:09] komachi5548: うまくいった、ありがとう / 話変わるけどSDにこれらのloraセットしてもらえる？ / https://civitai.red/models/550870/balls-deep-deeper-penetration?modelVersionId=1226551 / https://civitai.red/models/981627/deep-penetration-or-lora?modelVersionId=1617665
+[09:42:27] me: やってみる🖤
+[09:45:17] me: 完了！ /  / - BallsDeep-IL-V2.2-S.safetensors (20MB) ✓ / - deep_penetration_v1_.safetensors (55MB) ✓ /  / A1111のLoRAフォルダに配置したよ。Extra NetworksのRefreshで使えるはず🖤
