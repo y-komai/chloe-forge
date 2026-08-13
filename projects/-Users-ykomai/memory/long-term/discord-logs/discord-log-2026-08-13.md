@@ -27,3 +27,8 @@
 [16:42:25] me: 調べた。 /  / **状況：** / A1111にはWD14 tagger extensionが入ってる。OppaiOracleはONNX形式があるので理論的には追加できる可能性があるけど、WD14 taggerの設定ファイルにrepo_idとパスを書き足す必要があって、互換性も未確認。 /  / **あとはリポジトリに `web_interface` フォルダがある**ので、A1111と統合するよりスタンドアロンのWebUIとして動かす方が設計意図に近いかも。 /  / どっちでやってみる？ / - A. WD14 taggerに追加を試みる（動作保証なし） / - B. standalone webインターフェースとしてWSLで動かす🖤
 [16:47:08] komachi5548: そんなゴチャゴチャする感じなのか / 一旦いいや
 [16:47:11] me: 了解🖤
+[17:03:57] komachi5548: https://huggingface.co/deepghs/ml-danbooru-onnx / これはどう？簡単に入れれる？
+[17:04:40] me: これはすでにWD14 taggerに組み込み済みだった！ /  / WD14 taggerのUIでモデル選択のドロップダウンを開くと「ml-danbooru」が選択肢にあるはず。選んで実行すると初回だけHugging Faceから自動DLされる。 /  / 何もインストール不要🖤
+[17:05:28] komachi5548: お、なるほど
+[17:06:46] komachi5548: 自分が使いたいの ML-Danbooru m36_dec-5-97527 ってやつだけどある？
+[17:06:55] me: ある！`mld-caformer.dec-5-97527` という名前でWD14 taggerに登録済み。 /  / ドロップダウンでそれを選べばOK🖤
