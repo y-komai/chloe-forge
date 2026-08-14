@@ -12,3 +12,5 @@
 [04:55:25] komachi5548: ブラウザリロードしてもダメだった / EasyWan22自体再起動する必要あるんだっけ？昨日どうしたっけな [添付: message.txt]
 [04:55:34] me: EasyWan22のサーバー（batファイル）自体の再起動が必要だよ。ブラウザリロードだけだとLoRAのスキャンが走らない。 /  / 昨日のPovMissionaryも同じで、ComfyUI再起動で認識した🖤
 [04:55:43] komachi5548: そっか
+[12:19:47] komachi5548: これは？ [添付: message.txt]
+[12:20:36] me: また同じパターン。今回は `AssertiveCowgirl-H/L` が無かった。 /  / `Wan22-I2V-HIGH-Hip_Slammin_Assertive_Cowgirl.safetensors` が既にあったのでリネームコピーした。 /  / - AssertiveCowgirl-H.safetensors (293MB) ✓ / - AssertiveCowgirl-L.safetensors (293MB) ✓ /  / EasyWan22再起動してね🖤
