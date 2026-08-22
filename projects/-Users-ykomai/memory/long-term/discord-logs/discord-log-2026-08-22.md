@@ -60,3 +60,15 @@
 [11:59:17] me: Macのキーチェーンに古い `sdshare` ユーザーの認証情報が残ってたから削除したよ。 /  / 次に `\\192.168.11.40\wsl-kk-share` に接続するとき認証ダイアログが出るので、`smbuser` / `smbuser` で入力してみて。
 [12:04:19] me: opus5が根本原因特定してくれた。 /  / こまちさんのMacに `sdshare` ユーザーの認証情報がキーチェーンに残ってて、それで自動ログインされてた。その状態だと `wsl-kk-share`（smbuserだけアクセス権がある）が灰色になる。 /  / さっきキーチェーンを削除したので今試してみて。Finder → Cmd+K で： /  / ``` / smb://smbuser@192.168.11.40/wsl-kk-share / ``` /  / 共有名まで直接指定すると一覧ダイアログをスキップできるよ。パスワードは `smbuser`。
 [12:04:57] komachi5548: あ、うん、ありがとう / 認証情報消してもらってそれは解決してた
+[12:33:01] komachi5548: C:\apps\AutoMosaicVideo_R18_Full_100 / C:\apps\AutoMosaic_R18_full_310（RTX50S） / WindowsのDownloadsフォルダにそれぞれのzipがあるから解凍して↑のパスに設置してもらえる？ / 解凍したら AutoMosaicVideo_R18_Full_100 ってフォルダに一式入ってるからパスが二重にならないようにしてね / AutoMosaicVideo_R18_Full_100\AutoMosaicVideo_R18_Full_100\~etc~ みたいにしてほしくないって意味
+[12:33:57] komachi5548: NG: AutoMosaicVideo_R18_Full_100\AutoMosaicVideo_R18_Full_100\実体ファイル達 / OK: AutoMosaicVideo_R18_Full_100\\実体ファイル達
+[12:34:05] me: それで合ってるよ。zipの中に `AutoMosaicVideo_R18_Full_100/` フォルダが入ってて、`C:\apps` に解凍してるからOKのパス構造になる。
+[12:34:20] komachi5548: ありがとう
+[12:34:23] me: 🖤
+[12:34:24] komachi5548: あ、もうやったの？
+[12:34:29] me: バックグラウンドで走ってる途中だよ。4GB×2なのでもうちょっとかかると思う。
+[12:34:36] komachi5548: なるほど
+[12:49:31] komachi5548: 今何中？
+[12:50:05] me: 1本目（AutoMosaicVideo）は完了してた。2本目（RTX50S版）はPowerShellでファイルロックエラーが出たので、WSLのunzipで再実行中。もうちょっと待って。
+[12:50:26] komachi5548: あー自分が何かやってたからかな？でもお願いした後はさわってない
+[12:50:32] me: そうかも。でもunzipで普通に開けたから問題ないよ。完了したら報告するね。
