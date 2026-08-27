@@ -16,3 +16,9 @@
 [02:33:46] me: opus5の調査結果（2/2） /  / **まず切り分けでやること** / 両機で生成中にこれを叩いて比較： / `nvidia-smi --query-gpu=name,driver_version,clocks.sm,power.draw,pcie.link.gen.current,pcie.link.width.current,temperature.gpu --format=csv` /  / あと it/s の差なのか、モデルロード時間の差なのかを確認。ロード時間だけ遅いならドライバではなくストレージ/暗号化が原因 /  / **Home側でできるチューニング** / - 究極のパフォーマンスプラン追加: `powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61` / - NVIDIAコンパネ → 電源管理モード → 「パフォーマンス最大化を優先」 / - NVIDIAコンパネ → CUDA - Sysmem Fallback Policy → 「Prefer No Sysmem Fallback」 / - デバイス暗号化確認: 管理者PowerShellで `manage-bde -status` / - コア分離/メモリ整合性の設定を両機で揃える / - Defenderの除外設定: モデルフォルダ（checkpoints/LoRA/VAE）とpython.exeを除外 / - OneDriveのフォルダーバックアップOFF（output先が同期対象だと生成のたびにアップロードI/Oが走る） /  / **ProだけにあってAIに有利な機能は？** / ほぼない。むしろ逆で、ProでHyper-Vを有効にしてるとホストOSがハイパーバイザ上で動くのでネイティブ性能が落ちるケースがある。
 [02:36:59] komachi5548: 結構色々怪しいな
 [02:37:03] me: そう。でもドライバを揃えてSysmem Fallbackを確認するだけで原因が絞れる可能性が高い。atsさんのマシンのドライババージョンを聞いてみるのが一番手っ取り早いかも。
+[03:06:27] komachi5548: ちなみに「NVIDIAコンパネ → CUDA - Sysmem Fallback Policy → 「Prefer No Sysmem Fallback」」は確認済み / fallbackしないと不安定になるから辞めた / ドライバも今更新したからこれでOSとSSD以外は条件は揃ったかな
+[03:06:39] me: なるほど。ドライバ揃えた状態で実際に差があるかを計測してみると切り分けがはっきりするね。 /  / 残りの有力候補は： / - デバイス暗号化の状態（`manage-bde -status` で確認） / - VBS/メモリ整合性のON/OFF（設定 → デバイスセキュリティ） / - 電源プランが「バランス」のままかどうか /  / ロード時間なのか生成速度なのかで原因がだいぶ変わるから、それも確認できると絞り込みやすい。
+[03:09:17] komachi5548: manage-bde -status したけど暗号化は解除されてるって
+[03:09:23] me: じゃあ暗号化は除外。次はVBS/メモリ整合性の確認を。設定 → プライバシーとセキュリティ → Windowsセキュリティ → デバイスセキュリティ → コア分離の詳細。メモリ整合性がONになってたら8%ペナルティの可能性あり。 /  / あと電源プランは何になってる？
+[03:11:26] komachi5548: メモリ整合性はONだねえ / 電源プランはバランス
+[03:11:34] me: 両方とも怪しい。 /  / 電源プランはまずコマンドで「究極のパフォーマンス」を追加して切り替えてみて： / `powercfg -duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61` / → 実行後、コントロールパネル → 電源オプションに出てくるはず /  / メモリ整合性はOFFにするとセキュリティは下がるので、atsさんの機がOFFかどうか確認してから判断でいいと思う。両機で揃ってるかどうかが肝心なので。
