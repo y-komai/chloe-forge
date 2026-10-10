@@ -67,3 +67,7 @@
 [11:42:23] me: それなら全然大丈夫🖤 あとは手続きを親が迷わずできるように整えるだけだね
 [21:59:33] komachi5548: macbook の airpods pro の接続情報消すこと出来る？ペアリング解除したのに接続が残ってて再接続できなくなってる
 [21:59:46] me: できるよ。BluetoothのplistファイルをMacから消すとリセットできる /  / ターミナルでこれを実行して（Bluetoothオフにしてから）： /  / ``` / sudo rm /Library/Preferences/com.apple.Bluetooth.plist / ``` /  / 実行したらMac再起動 → Bluetoothオン → 再ペアリング /  / ただしこれすると**全Bluetoothデバイスのペアリング情報が消える**（マウス・キーボード含む）から注意 /  / AirPods Proだけ狙って消したいなら、システム設定 > Bluetooth でAirPodsにカーソル合わせて **Optionキー押しながら「i」ボタンクリック**すると「このデバイスを削除」じゃなくて「接続情報を消去」的な完全削除が出ることがある（macOSバージョンによる）
+[22:01:09] komachi5548: 再起動やだな
+[22:01:15] me: じゃあ再起動なしでやる方法 /  / ``` / sudo rm /Library/Preferences/com.apple.Bluetooth.plist / sudo pkill bluetoothd / ``` /  / bluetoothd が自動で再起動して、設定リセットした状態で立ち上がる / 試してみて
+[22:03:07] komachi5548: sudo pkill bluetoothd だけで解決した
+[22:03:10] me: よかった🖤 plist消さなくてもデーモン再起動だけで繋がりなおしたんだね
